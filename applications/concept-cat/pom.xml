@@ -5,7 +5,6 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>no.fdk</groupId>
     <artifactId>concept-cat</artifactId>
     <version>2.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
