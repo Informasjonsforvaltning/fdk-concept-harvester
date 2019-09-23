@@ -2,9 +2,8 @@
 
 ## Overview
 
-Module for harvesting and querying concepts. 
+Module for harvesting and querying concepts.
 
 ## Data types
 
 ### ApiDocument
-
