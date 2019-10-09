@@ -35,6 +35,7 @@ spring:
       clusterNodes: localhost:9300
       clusterName: elasticsearch
 application:
+  harvestAdminRootUrl: http://localhost:8135/api
   apiRootUrl: http://localhost:8080/api
   apiRootExternalURL: http://localhost:8080/api
   conceptsPath: /concepts
