@@ -1,12 +1,15 @@
 package no.ccat.service;
 
 import no.ccat.dto.HarvestDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -18,6 +21,7 @@ import static java.util.Collections.singletonList;
 
 @Service
 public class HarvestAdminClient {
+    private static final Logger logger = LoggerFactory.getLogger(HarvestAdminClient.class);
 
     private final RestTemplate restTemplate;
     private HttpHeaders defaultHeaders;
@@ -40,19 +44,21 @@ public class HarvestAdminClient {
     List<HarvestDataSource> getDataSources(MultiValueMap<String, String> queryParams) {
 
         String url = format("%s/datasources", this.apiHost);
-        HttpEntity request = new HttpEntity(defaultHeaders);
+        UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(url).queryParams(queryParams);
 
-        UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(url);
-        uriBuilder.queryParams(queryParams);
+        try {
+            ResponseEntity<List<HarvestDataSource>> response = restTemplate.exchange(
+                    uriBuilder.toUriString(),
+                    HttpMethod.GET,
+                    new HttpEntity(defaultHeaders),
+                    new ParameterizedTypeReference<List<HarvestDataSource>>() {});
 
-        ResponseEntity<List<HarvestDataSource>> response =
-                restTemplate.exchange(
-                        uriBuilder.toUriString(),
-                        HttpMethod.GET,
-                        request,
-                        new ParameterizedTypeReference<List<HarvestDataSource>>() {
-                        });
+            return response.hasBody() ? response.getBody() : emptyList();
 
-        return response.hasBody() ? response.getBody() : emptyList();
+        } catch (RestClientException e) {
+            logger.error(e.getMessage());
+        }
+
+        return emptyList();
     }
 }

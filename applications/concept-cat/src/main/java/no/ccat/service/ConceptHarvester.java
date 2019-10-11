@@ -1,15 +1,12 @@
 package no.ccat.service;
 
 import lombok.RequiredArgsConstructor;
-import no.ccat.config.HarvestURIList;
 import no.ccat.dto.HarvestDataSource;
 import no.ccat.model.ConceptDenormalized;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -33,15 +30,7 @@ public class ConceptHarvester {
     private final ConceptDenormalizedRepository conceptDenormalizedRepository;
     private final RDFToModelTransformer rdfToModelTransformer;
     private final HarvestAdminClient harvestAdminClient;
-    private final HarvestURIList harvestURIList;
     private boolean isRunningForDeveloperLocally = false;
-
-//    @Autowired
-//    public ConceptHarvester(ConceptDenormalizedRepository conceptDenormalizedRepository, RDFToModelTransformer rdfToModelTransformer, HarvestURIList harvestURIList) {
-//        this.conceptDenormalizedRepository = conceptDenormalizedRepository;
-//        this.rdfToModelTransformer = rdfToModelTransformer;
-//        this.harvestURIList = harvestURIList;
-//    }
 
     @PostConstruct
     @Scheduled(cron = "${application.harvestCron}")
@@ -50,16 +39,12 @@ public class ConceptHarvester {
 
         List<HarvestDataSource> harvestDataSources = this.harvestAdminClient.getDataSources();
         harvestDataSources.forEach(harvestDataSource ->
-                harvestFromSingleURLSource(harvestDataSource.getUrl())
+                harvestFromSingleURLSource(harvestDataSource.getUrl(), harvestDataSource.getAcceptHeaderValue())
         );
-
-//        for (String uri : harvestURIList.getUriList()) {
-//            harvestFromSingleURLSource(uri);
-//        }
         logger.info("Harvest of Concepts complete");
     }
 
-    private void harvestFromSingleURLSource(String harvestUri) {
+    private void harvestFromSingleURLSource(String harvestUri, String acceptHeader) {
         Reader reader;
 
         String theEntireDocument = null;
@@ -68,7 +53,7 @@ public class ConceptHarvester {
             logger.info("Harvester isRunningForDeveloperLocally==true");
             theEntireDocument = readFileFully("c:\\tmp\\localConceptsFile.txt");
         } else {
-            theEntireDocument = readURLFully(harvestUri);
+            theEntireDocument = readURLFully(harvestUri, acceptHeader);
         }
 
         reader = new StringReader(theEntireDocument);
@@ -93,12 +78,12 @@ public class ConceptHarvester {
         return null;
     }
 
-    private String readURLFully(String harvestSourceUri) {
+    private String readURLFully(String harvestSourceUri, String acceptHeader) {
         try {
             URL url = new URL(harvestSourceUri);
             logger.info("Start harvest from url: {}", url);
             URLConnection urlConnection = url.openConnection();
-            urlConnection.setRequestProperty("Accept", "text/turtle");
+            urlConnection.setRequestProperty("Accept", acceptHeader);
 
             InputStream inputStream = urlConnection.getInputStream();
 

@@ -16,7 +16,8 @@ import java.util.Map;
         "dataSourceType",
         "url",
         "publisherId",
-        "description"
+        "description",
+        "acceptHeaderValue"
 })
 public class HarvestDataSource {
     @JsonProperty("id")
@@ -29,6 +30,8 @@ public class HarvestDataSource {
     private String publisherId;
     @JsonProperty("description")
     private String description;
+    @JsonProperty("acceptHeaderValue")
+    private String acceptHeaderValue;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<>();
 }
