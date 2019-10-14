@@ -35,6 +35,11 @@ spring:
     elasticsearch:
       clusterNodes: localhost:9300
       clusterName: elasticsearch
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: secret
+    password: 12345
 application:
   harvestAdminRootUrl: http://localhost:8135/api
   apiRootUrl: http://localhost:8080/api
