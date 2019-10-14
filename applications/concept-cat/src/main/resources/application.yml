@@ -15,6 +15,7 @@ logging:
 application:
   apiRootUrl: http://nginx-search:8080/api
   apiRootExternalURL: https://fellesdatakatalog.brreg.no/api
+  harvestAdminRootUrl: https://admin-api.ut1.fellesdatakatalog.brreg.no/api
   conceptsPath: /concepts
   # harvest every sixth hour
   harvestCron: 0 0 */6 * * *
