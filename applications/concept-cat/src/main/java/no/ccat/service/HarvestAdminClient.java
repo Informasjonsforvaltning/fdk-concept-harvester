@@ -37,11 +37,6 @@ public class HarvestAdminClient {
         defaultHeaders.setContentType(MediaType.APPLICATION_JSON);
     }
 
-    // registration/fdk-harvest-admin will publish a message that contains actual queryparams
-    List<HarvestDataSource> getDataSources() {
-        return this.getDataSources(new LinkedMultiValueMap<>());
-    }
-
     List<HarvestDataSource> getDataSources(MultiValueMap<String, String> queryParams) {
 
         String url = format("%s/datasources", this.apiHost);
