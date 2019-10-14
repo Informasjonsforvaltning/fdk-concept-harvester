@@ -5,10 +5,8 @@ import no.ccat.dto.HarvestDataSource;
 import no.ccat.model.ConceptDenormalized;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -29,7 +27,6 @@ public class ConceptHarvester {
 
     private final ConceptDenormalizedRepository conceptDenormalizedRepository;
     private final RDFToModelTransformer rdfToModelTransformer;
-    private final HarvestAdminClient harvestAdminClient;
     private boolean isRunningForDeveloperLocally = false;
 
 //    @PostConstruct
@@ -44,14 +41,7 @@ public class ConceptHarvester {
 //        logger.info("Harvest of Concepts complete");
 //    }
 
-        List<HarvestDataSource> harvestDataSources = this.harvestAdminClient.getDataSources();
-        harvestDataSources.forEach(harvestDataSource ->
-                harvestFromSingleURLSource(harvestDataSource.getUrl(), harvestDataSource.getAcceptHeaderValue())
-        );
-        logger.info("Harvest of Concepts complete");
-    }
-
-    private void harvestFromSingleURLSource(String harvestUri, String acceptHeader) {
+    public void harvestFromSingleURLSource(HarvestDataSource dataSource) {
         Reader reader;
 
         String theEntireDocument = null;
@@ -60,7 +50,7 @@ public class ConceptHarvester {
             logger.info("Harvester isRunningForDeveloperLocally==true");
             theEntireDocument = readFileFully("c:\\tmp\\localConceptsFile.txt");
         } else {
-            theEntireDocument = readURLFully(harvestUri, acceptHeader);
+            theEntireDocument = readURLFully(dataSource.getUrl(), dataSource.getAcceptHeaderValue());
         }
 
         reader = new StringReader(theEntireDocument);
@@ -69,7 +59,7 @@ public class ConceptHarvester {
 
         List<ConceptDenormalized> concepts = rdfToModelTransformer.getConceptsFromStream(reader);
 
-        logger.info("Harvested {} concepts from Uri {}", concepts.size(), harvestUri);
+        logger.info("Harvested {} concepts from Uri {}", concepts.size(), dataSource.getUrl());
 
         concepts.stream().forEach(concept -> {
             conceptDenormalizedRepository.save(concept);
