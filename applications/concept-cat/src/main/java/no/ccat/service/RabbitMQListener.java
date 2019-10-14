@@ -1,13 +1,14 @@
 package no.ccat.service;
 
 import lombok.RequiredArgsConstructor;
+import no.ccat.dto.Concept;
 import no.ccat.dto.ConceptAllMessage;
+import no.ccat.dto.ConceptCatalogue;
 import no.ccat.dto.ConceptPublisherMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
-import org.springframework.util.MultiValueMap;
 
 @Service
 @RequiredArgsConstructor
@@ -18,21 +19,33 @@ public class RabbitMQListener {
 
     @RabbitListener(queues = "#{conceptPublisher.name}")
     public void receiveConceptPublisher(ConceptPublisherMessage conceptPublisherMessage) {
+        logger.info("concept publisher received");
 
-        logger.info("harvest message received");
-
-        MultiValueMap<String, String> p = conceptPublisherMessage.queryParams();
-        this.harvestAdminClient.getDataSources(p)
+        this.harvestAdminClient.getDataSources(conceptPublisherMessage.queryParams())
                 .forEach(conceptHarvester::harvestFromSingleURLSource);
     }
 
     @RabbitListener(queues = "#{conceptAll.name}")
     public void receiveConceptAll(ConceptAllMessage conceptAllMessage) {
+        logger.info("concept all received");
 
-        logger.info("conceptAll received");
+        this.harvestAdminClient.getDataSources(conceptAllMessage.queryParams())
+                .forEach(conceptHarvester::harvestFromSingleURLSource);
+    }
 
-        MultiValueMap<String, String> p = conceptAllMessage.queryParams();
-        this.harvestAdminClient.getDataSources(p)
+    @RabbitListener(queues = "#{concept.name}")
+    public void receiveConcept(Concept concept) {
+        logger.info("concept received");
+
+        this.harvestAdminClient.getDataSources(concept.queryParams())
+                .forEach(conceptHarvester::harvestFromSingleURLSource);
+    }
+
+    @RabbitListener(queues = "#{conceptCatalogue.name}")
+    public void receiveConceptCatalogue(ConceptCatalogue conceptCatalogue) {
+        logger.info("concept catalogue received");
+
+        this.harvestAdminClient.getDataSources(conceptCatalogue.queryParams())
                 .forEach(conceptHarvester::harvestFromSingleURLSource);
     }
 }

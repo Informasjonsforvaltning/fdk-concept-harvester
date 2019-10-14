@@ -32,6 +32,16 @@ public class RabbitMQConfig {
     }
 
     @Bean
+    public Queue concept() {
+        return new AnonymousQueue();
+    }
+
+    @Bean
+    public Queue conceptCatalogue() {
+        return new AnonymousQueue();
+    }
+
+    @Bean
     public Jackson2JsonMessageConverter converter() {
         return new Jackson2JsonMessageConverter();
     }
@@ -49,5 +59,15 @@ public class RabbitMQConfig {
     @Bean
     public Binding declareBindingConceptAll(TopicExchange topicExchange, Queue conceptAll) {
         return BindingBuilder.bind(conceptAll).to(topicExchange).with("conceptAll.HarvestTrigger");
+    }
+
+    @Bean
+    public Binding declareBindingConcept(TopicExchange topicExchange, Queue concept) {
+        return BindingBuilder.bind(concept).to(topicExchange).with("concept.HarvestTrigger");
+    }
+
+    @Bean
+    public Binding declareBindingConceptCatalogue(TopicExchange topicExchange, Queue conceptCatalogue) {
+        return BindingBuilder.bind(conceptCatalogue).to(topicExchange).with("conceptCatalogue.HarvestTrigger");
     }
 }
