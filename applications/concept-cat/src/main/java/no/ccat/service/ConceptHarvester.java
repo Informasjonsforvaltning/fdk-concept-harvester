@@ -32,10 +32,17 @@ public class ConceptHarvester {
     private final HarvestAdminClient harvestAdminClient;
     private boolean isRunningForDeveloperLocally = false;
 
-    @PostConstruct
-    @Scheduled(cron = "${application.harvestCron}")
-    public void harvestFromSource() {
-        logger.info("Harvest of Concepts start");
+//    @PostConstruct
+//    @Scheduled(cron = "${application.harvestCron}")
+//    public void harvestFromSource() {
+//        logger.info("Harvest of Concepts start");
+//
+//        List<HarvestDataSource> harvestDataSources = this.harvestAdminClient.getDataSources();
+//        harvestDataSources.forEach(harvestDataSource ->
+//                harvestFromSingleURLSource(harvestDataSource.getUrl(), harvestDataSource.getAcceptHeaderValue())
+//        );
+//        logger.info("Harvest of Concepts complete");
+//    }
 
         List<HarvestDataSource> harvestDataSources = this.harvestAdminClient.getDataSources();
         harvestDataSources.forEach(harvestDataSource ->
