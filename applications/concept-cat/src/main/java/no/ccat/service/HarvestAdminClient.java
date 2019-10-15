@@ -13,7 +13,9 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static java.lang.String.format;
 import static java.util.Collections.emptyList;
@@ -38,8 +40,8 @@ public class HarvestAdminClient {
     }
 
     List<HarvestDataSource> getDataSources(MultiValueMap<String, String> queryParams) {
-
         String url = format("%s/datasources", this.apiHost);
+
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(url).queryParams(queryParams);
 
         try {

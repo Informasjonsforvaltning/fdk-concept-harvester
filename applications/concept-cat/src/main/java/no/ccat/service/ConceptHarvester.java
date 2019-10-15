@@ -30,7 +30,6 @@ public class ConceptHarvester {
     private boolean isRunningForDeveloperLocally = false;
 
 //    @PostConstruct
-//    @Scheduled(cron = "${application.harvestCron}")
 //    public void harvestFromSource() {
 //        logger.info("Harvest of Concepts start");
 //
