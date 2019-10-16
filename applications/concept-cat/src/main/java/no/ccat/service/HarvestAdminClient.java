@@ -9,6 +9,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -37,13 +38,11 @@ public class HarvestAdminClient {
         defaultHeaders.setContentType(MediaType.APPLICATION_JSON);
     }
 
-    // registration/fdk-harvest-admin will publish a message that contains actual queryparams
     List<HarvestDataSource> getDataSources() {
         return this.getDataSources(new LinkedMultiValueMap<>());
     }
 
     List<HarvestDataSource> getDataSources(MultiValueMap<String, String> queryParams) {
-
         String url = format("%s/datasources", this.apiHost);
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(url).queryParams(queryParams);
 
@@ -56,6 +55,9 @@ public class HarvestAdminClient {
 
             return response.hasBody() ? response.getBody() : emptyList();
 
+        } catch (HttpClientErrorException e) {
+            logger.error(String.format("Error fetching harvest urls from GET / %s. %s (%d)",
+                    uriBuilder.toUriString(), e.getStatusText(), e.getStatusCode().value()));
         } catch (RestClientException e) {
             logger.error(e.getMessage());
         }
