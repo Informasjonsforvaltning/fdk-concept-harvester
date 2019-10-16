@@ -28,8 +28,7 @@ public class RabbitMQListener {
         // convert from map to multivaluemap for UriComponentBuilder
         Map<String, String> queryParams = objectMapper.convertValue(
                 body,
-                new TypeReference<Map<String, String>>() {
-                });
+                new TypeReference<Map<String, String>>() {});
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         queryParams.forEach(params::add);
