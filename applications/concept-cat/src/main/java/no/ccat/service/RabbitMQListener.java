@@ -13,7 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,19 +25,23 @@ public class RabbitMQListener {
     private final ConceptHarvester conceptHarvester;
     private final ObjectMapper objectMapper;
 
-    private MultiValueMap<String, String> createQueryParams(JsonNode body) {
-        // convert from map to multivaluemap for UriComponentBuilder
-        Map<String, String> queryParams = objectMapper.convertValue(
-                body,
-                new TypeReference<Map<String, String>>() {});
+    private static List<String> ALLOWED_FIELDS = Collections.singletonList("publisherId");
 
+    private Map<String, String> whitelistFields(Map<String, String> params) {
+         return params.entrySet()
+                .stream()
+                .filter(x -> ALLOWED_FIELDS.contains(x.getKey()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    private MultiValueMap<String, String> createQueryParams(Map<String, String> fields) {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        queryParams.forEach(params::add);
+        whitelistFields(fields).forEach(params::add);
         return params;
     }
 
-    private void harvest(JsonNode body) {
-        this.harvestAdminClient.getDataSources(createQueryParams(body))
+    private void harvest(Map<String, String> fields) {
+        this.harvestAdminClient.getDataSources(createQueryParams(fields))
                 .forEach(conceptHarvester::harvestFromSingleURLSource);
     }
 
@@ -44,6 +49,12 @@ public class RabbitMQListener {
     public void receiveConceptPublisher(@Payload JsonNode body, Message message) {
         String routingKey = message.getMessageProperties().getReceivedRoutingKey().split("\\.")[0];
         logger.info(String.format("Received message from key: %s", routingKey));
-        harvest(body);
+
+        // convert from map to multivaluemap for UriComponentBuilder
+        Map<String, String> fields = objectMapper.convertValue(
+                body,
+                new TypeReference<Map<String, String>>() {});
+
+        harvest(fields);
     }
 }
