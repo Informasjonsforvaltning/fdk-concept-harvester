@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -27,20 +28,18 @@ public class ConceptHarvester {
 
     private final ConceptDenormalizedRepository conceptDenormalizedRepository;
     private final RDFToModelTransformer rdfToModelTransformer;
+    private final HarvestAdminClient harvestAdminClient;
+
     private boolean isRunningForDeveloperLocally = false;
 
-//    @PostConstruct
-//    public void harvestFromSource() {
-//        logger.info("Harvest of Concepts start");
-//
-//        List<HarvestDataSource> harvestDataSources = this.harvestAdminClient.getDataSources();
-//        harvestDataSources.forEach(harvestDataSource ->
-//                harvestFromSingleURLSource(harvestDataSource.getUrl(), harvestDataSource.getAcceptHeaderValue())
-//        );
-//        logger.info("Harvest of Concepts complete");
-//    }
+    @PostConstruct
+    private void harvestOnce() {
+        logger.info("Harvest of Concepts start");
+        this.harvestAdminClient.getDataSources().forEach(this::harvestFromSingleURLSource);
+        logger.info("Harvest of Concepts complete");
+    }
 
-    public void harvestFromSingleURLSource(HarvestDataSource dataSource) {
+    void harvestFromSingleURLSource(HarvestDataSource dataSource) {
         Reader reader;
 
         String theEntireDocument = null;
