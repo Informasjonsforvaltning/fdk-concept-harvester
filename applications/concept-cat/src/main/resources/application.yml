@@ -5,7 +5,11 @@ spring:
     elasticsearch:
       clusterNodes: ${FDK_ES_CLUSTERNODES:elasticsearch5:9300}
       clusterName: ${FDK_ES_CLUSTERNAME:elasticsearch}
-
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: ${RABBIT_USERNAME}
+    password: ${RABBIT_PASSWORD}
 logging:
   level.root: WARN
   level.no.ccat: ${LOG_LEVEL:INFO}
@@ -17,15 +21,6 @@ application:
   apiRootExternalURL: https://fellesdatakatalog.brreg.no/api
   harvestAdminRootUrl: https://admin-api.ut1.fellesdatakatalog.brreg.no/api
   conceptsPath: /concepts
-  # harvest every sixth hour
-  harvestCron: 0 0 */6 * * *
-  harvestsourcesuris:
-    urlOverride : ${CONCEPT_CAT_HARVEST_URL_OVERRIDE:}
-    uriList:
-      - "https://data.brreg.no/begrep/"
-      - "https://data.skatteetaten.no/begreper/"
-      - "https://raw.githubusercontent.com/akhvidsten/skosmapping/master/Virksomhetsarkitektur"
-
 
 ---
 #Utv-miljø lokalt på egen PC
@@ -38,8 +33,8 @@ spring:
   rabbitmq:
     host: 127.0.0.1
     port: 5672
-    username: secret
-    password: 12345
+    username: admin
+    password: admin
 application:
   harvestAdminRootUrl: http://localhost:8135/api
   apiRootUrl: http://localhost:8080/api
