@@ -19,7 +19,7 @@ logging:
 application:
   apiRootUrl: http://nginx-search:8080/api
   apiRootExternalURL: https://fellesdatakatalog.brreg.no/api
-  harvestAdminRootUrl: https://admin-api.ut1.fellesdatakatalog.brreg.no/api
+  harvestAdminRootUrl: ${HARVEST_ADMIN_ROOT_URL}
   conceptsPath: /concepts
 
 ---
