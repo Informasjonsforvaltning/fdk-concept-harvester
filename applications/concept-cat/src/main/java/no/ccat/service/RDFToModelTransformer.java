@@ -366,7 +366,8 @@ public class RDFToModelTransformer {
     }
 
     private static String getOnlySchemeSpesificPartOfURIFromStatement(Statement statement) {
-        return parseUriFromStatement(statement).getSchemeSpecificPart();
+        URI statementUri = parseUriFromStatement(statement);
+        return statementUri==null ? null : statementUri.getSchemeSpecificPart();
     }
 
     private static URI parseUriFromStatement(Statement statement) {
