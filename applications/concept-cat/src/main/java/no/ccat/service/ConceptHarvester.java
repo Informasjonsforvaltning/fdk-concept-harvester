@@ -57,7 +57,7 @@ public class ConceptHarvester {
 
         List<ConceptDenormalized> concepts = rdfToModelTransformer.getConceptsFromStream(reader);
 
-        logger.info("Harvested {} concepts from Uri {}", concepts.size(), dataSource.getUrl());
+        logger.info("Harvested {} concepts from publisher {} at Uri {} ", concepts.size(), dataSource.getPublisherId(), dataSource.getUrl());
 
         concepts.stream().forEach(concept -> {
             conceptDenormalizedRepository.save(concept);
