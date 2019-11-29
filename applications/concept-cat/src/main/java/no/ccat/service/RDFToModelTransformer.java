@@ -278,10 +278,15 @@ public class RDFToModelTransformer {
 
     public ConceptDenormalized extractConceptFromModel(Resource conceptResource) {
         ConceptDenormalized concept = new ConceptDenormalized();
+
+        // Checking whether the concept is already harvested:
+        logger.debug("Query Elasticsearch to see if concept is previously harvested: " + conceptResource.getURI());
         ConceptDenormalized existingConcept = conceptDenormalizedRepository.findByIdentifier(conceptResource.getURI());
 
         Date harvestDate = new Date();
         HarvestMetadata oldMetadata = null;
+
+        // If concept is harvested earlier, we reuse the harvest-metadata:
         if (existingConcept != null) {
             oldMetadata = existingConcept.getHarvest();
         }
