@@ -271,7 +271,13 @@ public class RDFToModelTransformer {
 
         while (conceptIterator.hasNext()) {
             Resource conceptResource = conceptIterator.nextResource();
-            concepts.add(extractConceptFromModel(conceptResource));
+            try {
+              ConceptDenormalized conceptDenormalized = extractConceptFromModel(conceptResource);
+              concepts.add(conceptDenormalized);
+            }
+            catch (Exception e) {
+              logger.error("Got exception for Elasticsearch: {}", conceptResource.getURI(), e);
+            }
         }
         return concepts;
     }
@@ -280,7 +286,6 @@ public class RDFToModelTransformer {
         ConceptDenormalized concept = new ConceptDenormalized();
 
         // Checking whether the concept is already harvested:
-        logger.debug("Query Elasticsearch to see if concept is previously harvested: " + conceptResource.getURI());
         ConceptDenormalized existingConcept = conceptDenormalizedRepository.findByIdentifier(conceptResource.getURI());
 
         Date harvestDate = new Date();
