@@ -88,17 +88,18 @@ public class RDFToModelTransformer {
         //Sources are implemented as an array of rdfs:label & rdfs:seeAlso in a dct:source
 
         List<TextAndURI> results = new ArrayList<>();
-        Statement betydningsBeskrivelseContainingTheSources = resource.getProperty(SKOSNO.betydningsbeskrivelse);
 
-        if (betydningsBeskrivelseContainingTheSources != null) {
-            Resource realResource = betydningsBeskrivelseContainingTheSources.getResource();
-            Statement sourceStatement = realResource.getProperty(DCTerms.source);
-            Statement forholdTilKildeStmt = realResource.getProperty(SKOSNO.forholdTilKilde);
-            definition.setSourceRelationship(forholdTilKildeStmt.getObject().asResource().getLocalName());
-
+        Statement sourceStatement = resource.getProperty(DCTerms.source);
+        if (sourceStatement != null) {
             results.addAll(directlyExtractSources(sourceStatement.getResource()));
+        }
+
+        Statement forholdTilKildeStmt = resource.getProperty(SKOSNO.forholdTilKilde);
+        if (forholdTilKildeStmt != null) {
+            definition.setSourceRelationship(forholdTilKildeStmt.getObject().asResource().getLocalName());
             logger.debug(forholdTilKildeStmt.toString());
         }
+
         return results;
     }
 

@@ -20,18 +20,13 @@
 
 <https://registrering-begrep.ut1.fellesdatakatalog.brreg.no/910244132/750689fb-049e-4e5e-8162-9f8e850e010d>
         a                             skos:Concept ;
-        skosno:betydningsbeskrivelse  [ a                             skosno:Definisjon ;
-                                        rdfs:label                    "saft uten tilsatt sukker som er basert på epler"@nb ;
-                                        skosno:betydningsbeskrivelse  [ skosno:forholdTilKilde  skosno:egendefinert ;
-                                                                        dct:source              [ rdfs:label    "some more text"@nb , "some text"@nb , "even more text"@nb ;
-                                                                                                  rdfs:seeAlso  <www.uio.no> , <www.uib.no> , <https://vg.no>
-                                                                                                ]
-                                                                      ] ;
-                                        skosno:omfang                 [ rdfs:label
-                                                          ""@nb ] ;
-                                        dct:audience                  skosno:allmennheten ;
-                                        dct:modified                  "2019-06-21"^^xsd:date ;
-                                        skos:scopeNote                ""@nb
+        skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                        rdfs:label              "saft uten tilsatt sukker som er basert på epler"@nb ;
+                                        skosno:forholdTilKilde  skosno:egendefinert ;
+                                        dct:source              [ rdfs:label    "some more text"@nb , "some text"@nb , "even more text"@nb ;
+                                                                  rdfs:seeAlso  <www.uio.no> , <www.uib.no> , <https://vg.no>
+                                                                ] ;
+                                        skosno:omfang           [ rdfs:label    ""@nb ]
                                       ] ;
         skosno:bruksområde            "Særavgift/Særavgift - Avgift på alkoholfrie drikkevarer"@nb ;
         dct:identifier                "750689fb-049e-4e5e-8162-9f8e850e010d" ;
