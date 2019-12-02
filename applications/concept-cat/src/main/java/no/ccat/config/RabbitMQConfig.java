@@ -40,6 +40,6 @@ public class RabbitMQConfig {
 
     @Bean
     public Binding binding(TopicExchange topicExchange, Queue queue) {
-        return BindingBuilder.bind(queue).to(topicExchange).with("*.HarvestTrigger");
+        return BindingBuilder.bind(queue).to(topicExchange).with("concept.*.HarvestTrigger");
     }
 }
