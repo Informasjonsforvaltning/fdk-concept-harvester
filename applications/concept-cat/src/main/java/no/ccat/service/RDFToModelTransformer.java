@@ -138,16 +138,6 @@ public class RDFToModelTransformer {
         return results;
     }
 
-    public static List<Map<String, String>> extractLanguageLiteralFromListOfLabels(Resource resource, Property property) {
-        List<Map<String, String>> result = new ArrayList();
-
-        Map<String, String> tmp = extractLanguageLiteralFromLabel(resource, property);
-        if (tmp != null) {
-            result.add(tmp);
-        }
-        return result;
-    }
-
     private static List<Map<String, String>> extractLanguageMapList(Resource resource, Property property) {
         return resource.
             listProperties(property)
@@ -317,15 +307,26 @@ public class RDFToModelTransformer {
 
         concept.setPrefLabel(extractLanguageLiteralFromLabel(conceptResource, SKOSXL.prefLabel));
 
-        concept.setHiddenLabel(extractLanguageLiteralFromListOfLabels(conceptResource, SKOSXL.hiddenLabel));
+        concept.setHiddenLabel(extractLabels(conceptResource, SKOSXL.hiddenLabel));
 
-        concept.setAltLabel(extractLanguageLiteralFromListOfLabels(conceptResource, SKOSXL.altLabel));
+        concept.setAltLabel(extractLabels(conceptResource, SKOSXL.altLabel));
 
         concept.setDefinition(extractDefinition(conceptResource));
 
         concept.setContactPoint(extractContactPoint(conceptResource));
 
         return concept;
+    }
+
+    private List<Map<String, String>> extractLabels(Resource resource, Property property) {
+            return !resource.hasProperty(property) ? new ArrayList() : resource
+                    .getProperty(property)
+                    .getResource()
+                    .listProperties(SKOSXL.literalForm)
+                    .toList()
+                    .stream()
+                    .map(RDFToModelTransformer::extractLanguageMap)
+                    .collect(Collectors.toList());
     }
 
     private static TextAndURI extractTextAndUri(Resource resource, Property property) {
