@@ -103,39 +103,28 @@ public class RDFToModelTransformer {
         return results;
     }
 
-    public static List<TextAndURI> directlyExtractSources(Resource theSource) {
-        List<TextAndURI> results = new ArrayList<>();
+    public static List<TextAndURI> directlyExtractSources(Resource resource) {
+        List<TextAndURI> sources = new ArrayList<>();
 
-        StmtIterator iterator = theSource.listProperties(RDFS.label);
-        while (iterator.hasNext()) {
-            Statement stmt = iterator.next();
-            Map<String, String> theLabelContainingTheText = extractLiteralFromStatement(stmt);
+        StmtIterator labelIterator = resource.listProperties(RDFS.label);
+        StmtIterator seeAlsoIterator = resource.listProperties(RDFS.seeAlso);
 
-            TextAndURI tau = new TextAndURI();
-            tau.setText(theLabelContainingTheText);
-            results.add(tau);
-        }
+        while (labelIterator.hasNext() || seeAlsoIterator.hasNext()) {
+            TextAndURI textAndURI = new TextAndURI();
 
-        StmtIterator seeAlsoIterator = theSource.listProperties(RDFS.seeAlso);
-        int indexPointer = 0;
-
-        while (seeAlsoIterator.hasNext()) {
-            Statement stmt = seeAlsoIterator.next();
-            Resource uriResource = stmt.getObject().asResource();
-            String theURI;
-            try {
-                theURI = new URI(uriResource.getURI()).getScheme().equalsIgnoreCase("file")
-                    ? uriResource.getLocalName()
-                    : uriResource.getURI();
-            } catch (Exception e) {
-                theURI = uriResource.toString();
+            if (labelIterator.hasNext()) {
+                textAndURI.setText(extractLiteralFromStatement(labelIterator.next()));
             }
 
-            results.get(indexPointer).setUri(theURI); //This is by design brittle.
-            indexPointer++;
+            if (seeAlsoIterator.hasNext()) {
+                Resource seeAlsoResource = seeAlsoIterator.next().getResource();
+                textAndURI.setUri(seeAlsoResource.getURI().startsWith("file") ? seeAlsoResource.getLocalName() : seeAlsoResource.getURI());
+            }
+
+            sources.add(textAndURI);
         }
 
-        return results;
+        return sources;
     }
 
     private static List<Map<String, String>> extractLanguageMapList(Resource resource, Property property) {
