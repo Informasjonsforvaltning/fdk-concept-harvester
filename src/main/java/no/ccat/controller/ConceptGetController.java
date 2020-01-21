@@ -39,7 +39,6 @@ public class ConceptGetController {
         }
         ConceptDenormalized concept = conceptDenormalizedOptional.get();
         stripEmptyObject(concept);
-        logger.info("usagecount concept 1");
         return concept;
     }
 
