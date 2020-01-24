@@ -1,11 +1,12 @@
 package no.ccat.service;
 
-import no.ccat.model.ConceptDenormalized;
+
+import no.ccat.common.model.ConceptDenormalized;
 import org.springframework.data.elasticsearch.annotations.Query;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
-import java.util.List;
+
 
 @RepositoryRestResource(itemResourceRel = "concept", collectionResourceRel = "concepts", exported = false)
 public interface ConceptDenormalizedRepository
