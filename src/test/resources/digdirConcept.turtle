@@ -1,0 +1,64 @@
+@prefix schema: <http://schema.org/> .
+@prefix adms:  <http://www.w3.org/ns/adms#> .
+@prefix spdx:  <http://spdx.org/rdf/terms#> .
+@prefix iso:   <http://iso.org/25012/2008/dataquality/> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix skosxl: <http://www.w3.org/2008/05/skos-xl#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix dqv:   <http://www.w3.org/ns/dqv#> .
+@prefix skosno: <http://difi.no/skosno#> .
+@prefix skos:  <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
+@prefix xkos:  <http://rdf-vocabulary.ddialliance.org/xkos#> .
+@prefix oa:    <http://www.w3.org/ns/prov#> .
+@prefix dct:   <http://purl.org/dc/terms/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix dcatno: <http://difi.no/dcatno#> .
+@prefix dcat:  <http://www.w3.org/ns/dcat#> .
+@prefix foaf:  <http://xmlns.com/foaf/0.1/> .
+
+<https://registrering-begrep.fellesdatakatalog.brreg.no/123456789/concept-id>
+        a                             skos:Concept ;
+        rdfs:seeAlso                  "http://localhost/see-also-reference-1" , "http://localhost/see-also-reference-2" ;
+        skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                        rdfs:label              "definition-en"@en , "definition-nn"@nn , "definition-nb"@nb ;
+                                        skosno:forholdTilKilde  skosno:basertPåKilde ;
+                                        skosno:omfang           [ rdfs:label    "scope-text"@nb ;
+                                                                  rdfs:seeAlso  <http://scope-uri.com>
+                                                                ] ;
+                                        dct:source              [ rdfs:label    "source-text-2"@nb , "source-text-1"@nb ;
+                                                                  rdfs:seeAlso  <http://localhost/source-uri-2> , <http://localhost/source-uri-1>
+                                                                ] ;
+                                        skos:scopeNote          "scope-note-en"@en , "scope-note-nn"@nn , "scope-note-nb"@nb
+                                      ] ;
+        skosno:bruksområde            "domain-of-use-nn-1"@nn , "domain-of-use-nn-2"@nn , "domain-of-use-en-1"@en , "domain-of-use-en-2"@en , "domain-of-use-nb-1"@nb , "domain-of-use-nb-2"@nb ;
+        dct:identifier                "concept-id" ;
+        dct:modified                  "2020-01-28"^^xsd:date ;
+        dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/123456789> ;
+        dct:subject                   "subject-nn"@nn , "subject-nb"@nb , "subject-en"@en ;
+        dct:temporal                  [ a                 dct:PeriodOfTime ;
+                                        schema:endDate    "2020-01-02"^^xsd:date ;
+                                        schema:startDate  "2020-01-01"^^xsd:date
+                                      ] ;
+        skos:example                  "example-en"@en , "example-nb"@nb , "example-nn"@nn ;
+        skosxl:altLabel               [ a                   skosxl:Label ;
+                                        skosxl:literalForm  "alt-label-en-2"@en , "alt-label-en-1"@en , "alt-label-nn-2"@nn , "alt-label-nn-1"@nn , "alt-label-nb-2"@nb , "alt-label-nb-1"@nb
+                                      ] ;
+        skosxl:hiddenLabel            [ a                   skosxl:Label ;
+                                        skosxl:literalForm  "hidden-label-en-2"@en , "hidden-label-en-1"@en , "hidden-label-nn-2"@nn , "hidden-label-nn-1"@nn , "hidden-label-nb-2"@nb , "hidden-label-nb-1"@nb
+                                      ] ;
+        skosxl:prefLabel              [ a                   skosxl:Label ;
+                                        skosxl:literalForm  "pref-label-en"@en , "pref-label-nn"@nn , "pref-label-nb"@nb
+                                      ] ;
+        dcat:contactPoint             [ a                   vcard:Organization ;
+                                        vcard:hasEmail      <mailto:email@test.com> ;
+                                        vcard:hasTelephone  <tel:123456789>
+                                      ] .
+
+<https://registrering-begrep.fellesdatakatalog.brreg.no/123456789>
+        a               skos:Collection ;
+        rdfs:label      "Concept collection belonging to 123456789" ;
+        dct:identifier  "https://registrering-begrep.fellesdatakatalog.brreg.no/123456789" ;
+        dct:publisher   <https://data.brreg.no/enhetsregisteret/api/enheter/123456789> ;
+        skos:member     <https://registrering-begrep.fellesdatakatalog.brreg.no/123456789/concept-id> .

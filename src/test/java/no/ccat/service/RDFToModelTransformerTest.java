@@ -8,12 +8,12 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.springframework.core.io.ClassPathResource;
 
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
 @Category(UnitTest.class)
@@ -83,5 +83,18 @@ public class RDFToModelTransformerTest {
         assertEquals("www.uib.no", sources.get(1).getUri());
         assertEquals("www.uio.no", sources.get(2).getUri());
 
+    }
+
+    @Test
+    public void testConceptShouldHaveSeeAlsoReferencesIfSet() throws IOException {
+        Reader reader = new InputStreamReader(new ClassPathResource("digdirConcept.turtle").getInputStream());
+
+        List<ConceptDenormalized> concepts = transformer.getConceptsFromStream(reader);
+
+        ConceptDenormalized conceptOfInterest = concepts.get(0);
+
+        List<String> seeAlsoReferences = conceptOfInterest.getSeeAlso();
+
+        assertFalse("Expect concept to have see also references", seeAlsoReferences.isEmpty());
     }
 }

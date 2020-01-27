@@ -304,6 +304,8 @@ public class RDFToModelTransformer {
 
         concept.setContactPoint(extractContactPoint(conceptResource));
 
+        concept.setSeeAlso(extractSeeAlso(conceptResource));
+
         return concept;
     }
 
@@ -400,5 +402,22 @@ public class RDFToModelTransformer {
         }
 
         return null;
+    }
+
+    private List<String> extractSeeAlso(Resource resource) {
+        if (resource.hasProperty(RDFS.seeAlso)) {
+            try {
+                return resource
+                        .listProperties(RDFS.seeAlso)
+                        .toList()
+                        .stream()
+                        .map(Statement::getString)
+                        .filter(item-> !item.trim().isEmpty())
+                        .collect(Collectors.toList());
+            } catch (Exception e) {
+                logger.error("Error when extracting property {} from resource {}", RDFS.seeAlso, resource.getURI(), e);
+            }
+        }
+        return Collections.emptyList();
     }
 }
