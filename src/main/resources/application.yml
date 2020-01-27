@@ -37,8 +37,8 @@ spring:
     password: admin
 application:
   harvestAdminRootUrl: http://localhost:8135/api
-  apiRootUrl: http://localhost:8080/api
-  apiRootExternalURL: http://localhost:8080/api
+  apiRootUrl: http://localhost:8112/api
+  apiRootExternalURL: http://localhost:8112/api
   conceptsPath: /concepts
 server:
   port: 8105

@@ -4,6 +4,7 @@ import com.google.common.base.Predicates;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.domain.Pageable;
@@ -29,8 +30,9 @@ public class CcatApiApplication {
     @Value("${springfox.documentation.swagger.v2.path}")
     private String swagger2Endpoint;
 
+
     public static void main(String[] args) {
-        SpringApplication.run(CcatApiApplication.class, args);
+        ApplicationContext context= SpringApplication.run(CcatApiApplication.class, args);
     }
 
     @Bean
