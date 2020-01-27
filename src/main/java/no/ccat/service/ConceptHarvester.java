@@ -59,9 +59,7 @@ public class ConceptHarvester {
 
         logger.info("Harvested {} concepts from publisher {} at Uri {} ", concepts.size(), dataSource.getPublisherId(), dataSource.getUrl());
 
-        concepts.stream().forEach(concept -> {
-            conceptDenormalizedRepository.save(concept);
-        });
+        concepts.forEach(conceptDenormalizedRepository::save);
     }
 
     private String readFileFully(String fileURI) {

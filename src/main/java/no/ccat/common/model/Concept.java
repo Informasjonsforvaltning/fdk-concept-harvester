@@ -45,4 +45,6 @@ public class Concept {
     @ApiModelProperty("Example  [skos:example]")
     private Map<String, String> example;
 
+    private List<String> seeAlso;
+
 }
