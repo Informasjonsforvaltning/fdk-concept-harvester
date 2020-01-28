@@ -29,8 +29,10 @@ class ConceptSearchParamHandlers {
     }
 
     static QueryBuilder uris(String value, ConceptSearchESQueryBuilder queryBuilder) {
-            String[] uris = value.split(",");
-            return QueryBuilders.termsQuery("uri", uris);
-        }
+        return QueryBuilders.termsQuery("uri", value.split(","));
+    }
 
+    static QueryBuilder identifiers(String value, ConceptSearchESQueryBuilder queryBuilder) {
+        return QueryBuilders.termsQuery("identifier", value.split(","));
+    }
 }
