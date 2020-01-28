@@ -2,7 +2,6 @@ package no.ccat.service;
 
 import no.ccat.common.model.ConceptDenormalized;
 import no.ccat.common.model.TextAndURI;
-
 import no.fdk.test.testcategories.UnitTest;
 import org.junit.Before;
 import org.junit.Test;
