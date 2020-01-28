@@ -5,9 +5,11 @@ import no.ccat.common.model.ConceptDenormalized;
 import no.ccat.dto.HarvestDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -32,8 +34,9 @@ public class ConceptHarvester {
 
     private boolean isRunningForDeveloperLocally = false;
 
-    @PostConstruct
-    private void harvestOnce() {
+    @Async
+    @EventListener(ApplicationReadyEvent.class)
+    void harvestOnce() {
         logger.info("Harvest of Concepts start");
         this.harvestAdminClient.getDataSources().forEach(this::harvestFromSingleURLSource);
         logger.info("Harvest of Concepts complete");
