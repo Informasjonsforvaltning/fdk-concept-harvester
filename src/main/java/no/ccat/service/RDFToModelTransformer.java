@@ -1,11 +1,7 @@
 package no.ccat.service;
 
 import no.ccat.SKOSNO;
-import no.ccat.common.model.ContactPoint;
-import no.ccat.common.model.Definition;
-import no.ccat.common.model.Source;
-import no.ccat.common.model.TextAndURI;
-import no.ccat.model.ConceptDenormalized;
+import no.ccat.common.model.*;
 import no.dcat.shared.HarvestMetadata;
 import no.dcat.shared.HarvestMetadataUtil;
 import no.dcat.shared.Publisher;

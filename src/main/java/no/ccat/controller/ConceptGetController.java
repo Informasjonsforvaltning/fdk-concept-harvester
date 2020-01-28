@@ -3,7 +3,7 @@ package no.ccat.controller;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiOperation;
 import no.ccat.common.model.Source;
-import no.ccat.model.ConceptDenormalized;
+import no.ccat.common.model.ConceptDenormalized;
 import no.ccat.service.ConceptDenormalizedRepository;
 import no.fdk.webutils.exceptions.NotFoundException;
 import org.slf4j.Logger;

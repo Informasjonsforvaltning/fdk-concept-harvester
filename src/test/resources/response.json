@@ -1,0 +1,593 @@
+{
+  "took": 7,
+  "timed_out": false,
+  "_shards": {
+    "total": 5,
+    "successful": 5,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "total": 213,
+    "max_score": 21.958767,
+    "hits": [
+      {
+        "_index": "ccat_v74",
+        "_type": "concept",
+        "_id": "7a932a43-7c9b-4004-a458-d1fe62d81062",
+        "_score": 21.958767,
+        "_source": {
+          "id": "7a932a43-7c9b-4004-a458-d1fe62d81062",
+          "uri": "http://localhost:8112/api/concepts/7a932a43-7c9b-4004-a458-d1fe62d81062",
+          "identifier": "http://begrepskatalogen/begrep/49e69804-5955-11e6-86bf-12156fd09fb5",
+          "application": [],
+          "definition": {
+            "text": {
+              "nb": "logisk avgrenset informasjonsmengde som er lagret på et medium for senere lesing, lytting, framføring, overføring eller lignende"
+            },
+            "remark": {},
+            "source": {
+              "uri": null,
+              "prefLabel": {
+                "nb": "Forvaltningsloven Kap.1 §2 (f)"
+              }
+            },
+            "targetGroup": null,
+            "sourceRelationship": null,
+            "range": null,
+            "sources": [
+              {
+                "text": {
+                  "nb": "Forvaltningsloven Kap.1 §2 (f)"
+                },
+                "uri": null
+              }
+            ],
+            "lastUpdated": null
+          },
+          "alternativeDefinition": null,
+          "subject": {
+            "nb": "Arkiv"
+          },
+          "prefLabel": {
+            "nb": "dokument"
+          },
+          "altLabel": [
+            {
+              "nb": "elektronisk dokument"
+            }
+          ],
+          "hiddenLabel": [],
+          "contactPoint": {
+            "email": "begrepskatalogen@skatteetaten.no",
+            "telephone": null
+          },
+          "example": null,
+          "publisher": {
+            "uri": "http://data.brreg.no/enhetsregisteret/enhet/974761076",
+            "id": "974761076",
+            "name": "SKATTEETATEN",
+            "orgPath": "/STAT/972417807/974761076"
+          },
+          "harvestSourceUri": null,
+          "harvest": {
+            "firstHarvested": 1580126300325,
+            "lastHarvested": 1580132082227,
+            "lastChanged": null,
+            "changed": null
+          }
+        }
+      },
+      {
+        "_index": "ccat_v74",
+        "_type": "concept",
+        "_id": "a573821b-b0d3-4366-9e32-eb44261f4b39",
+        "_score": 19.845644,
+        "_source": {
+          "id": "a573821b-b0d3-4366-9e32-eb44261f4b39",
+          "uri": "http://localhost:8112/api/concepts/a573821b-b0d3-4366-9e32-eb44261f4b39",
+          "identifier": "http://data.brreg.no/begrep/49220",
+          "application": [],
+          "definition": {
+            "text": {
+              "nn": "\"[...] ei logisk avgrensa informasjonsmengd som er lagra på eit medium for seinare lesing, lytting, framsyning, overføring eller liknande\"",
+              "nb": "logisk avgrenset informasjonsmengde som er lagret på et medium for senere lesing, lytting, framvisning, overføring eller lignende"
+            },
+            "remark": {
+              "nb": "Et dokument kan foreligge på papir, elektronisk medium, mikrofiche, mikrofilm eller et hvilket som helst annet medium som kan inneholde informasjon. Dokumenter kan inneholde tekst, tegninger, grafikk, fotografier, video, tale og så videre."
+            },
+            "source": {
+              "uri": null,
+              "prefLabel": {
+                "nb": "Offentleglova. _Lov 19. mai 2006 nr. 16 om rett til innsyn i dokument i offentleg verksemd §4._ Tilgjengelig fra: https://lovdata.no/NL/lov/2006-05-19-16/"
+              }
+            },
+            "targetGroup": null,
+            "sourceRelationship": null,
+            "range": null,
+            "sources": [
+              {
+                "text": {
+                  "nb": "Offentleglova. _Lov 19. mai 2006 nr. 16 om rett til innsyn i dokument i offentleg verksemd §4._ Tilgjengelig fra: https://lovdata.no/NL/lov/2006-05-19-16/"
+                },
+                "uri": null
+              }
+            ],
+            "lastUpdated": null
+          },
+          "alternativeDefinition": null,
+          "subject": {
+            "nb": "Arkiv"
+          },
+          "prefLabel": {
+            "nb": "dokument"
+          },
+          "altLabel": [],
+          "hiddenLabel": [],
+          "contactPoint": {
+            "email": "informasjonsforvaltning@brreg.no",
+            "telephone": "+4775007500"
+          },
+          "example": null,
+          "publisher": {
+            "uri": "http://data.brreg.no/enhetsregisteret/enhet/974760673",
+            "id": "974760673",
+            "name": "REGISTERENHETEN I BRØNNØYSUND",
+            "orgPath": "/STAT/912660680/974760673",
+            "prefLabel": {
+              "no": "Brønnøysundregistrene"
+            }
+          },
+          "harvestSourceUri": null,
+          "harvest": {
+            "firstHarvested": 1580134766394,
+            "lastHarvested": 1580134766394,
+            "lastChanged": null,
+            "changed": null
+          }
+        }
+      },
+      {
+        "_index": "ccat_v74",
+        "_type": "concept",
+        "_id": "0003597d-1d4b-4348-b173-c226f196682e",
+        "_score": 18.481411,
+        "_source": {
+          "id": "0003597d-1d4b-4348-b173-c226f196682e",
+          "uri": "http://localhost:8112/api/concepts/0003597d-1d4b-4348-b173-c226f196682e",
+          "identifier": "http://begrepskatalogen/begrep/5138d9e9-be20-11e6-8004-005056825ca0",
+          "application": [],
+          "definition": {
+            "text": {
+              "nb": "en logisk avgrenset informasjonsmengde som er lagret på et medium for senere lesing, lytting, framføring, overføring eller lignende"
+            },
+            "remark": {},
+            "source": {
+              "uri": null,
+              "prefLabel": {
+                "nb": "Forvaltningsloven §2 f"
+              }
+            },
+            "targetGroup": null,
+            "sourceRelationship": null,
+            "range": null,
+            "sources": [
+              {
+                "text": {
+                  "nb": "Forvaltningsloven §2 f"
+                },
+                "uri": null
+              }
+            ],
+            "lastUpdated": null
+          },
+          "alternativeDefinition": null,
+          "subject": {
+            "nb": "Folkeregister"
+          },
+          "prefLabel": {
+            "nb": "dokument"
+          },
+          "altLabel": [],
+          "hiddenLabel": [],
+          "contactPoint": {
+            "email": "begrepskatalogen@skatteetaten.no",
+            "telephone": null
+          },
+          "example": null,
+          "publisher": {
+            "uri": "http://data.brreg.no/enhetsregisteret/enhet/974761076",
+            "id": "974761076",
+            "name": "SKATTEETATEN",
+            "orgPath": "/STAT/972417807/974761076"
+          },
+          "harvestSourceUri": null,
+          "harvest": {
+            "firstHarvested": 1580126308081,
+            "lastHarvested": 1580132187461,
+            "lastChanged": null,
+            "changed": null
+          }
+        }
+      },
+      {
+        "_index": "ccat_v74",
+        "_type": "concept",
+        "_id": "c3dc3f85-10b0-4d44-946b-14f6715d4674",
+        "_score": 17.309792,
+        "_source": {
+          "id": "c3dc3f85-10b0-4d44-946b-14f6715d4674",
+          "uri": "http://localhost:8112/api/concepts/c3dc3f85-10b0-4d44-946b-14f6715d4674",
+          "identifier": "http://begrepskatalogen/begrep/8ef7c43a-0ef8-11e7-a910-005056821322",
+          "application": [],
+          "definition": {
+            "text": {
+              "nb": "dokument produsert i eget organ, dvs. utgående og/eller internt dokument"
+            },
+            "remark": {},
+            "source": {
+              "uri": null,
+              "prefLabel": null
+            },
+            "targetGroup": null,
+            "sourceRelationship": null,
+            "range": null,
+            "sources": [],
+            "lastUpdated": null
+          },
+          "alternativeDefinition": null,
+          "subject": {
+            "nb": "Arkiv"
+          },
+          "prefLabel": {
+            "nb": "egenprodusert dokument"
+          },
+          "altLabel": [],
+          "hiddenLabel": [],
+          "contactPoint": {
+            "email": "begrepskatalogen@skatteetaten.no",
+            "telephone": null
+          },
+          "example": null,
+          "publisher": {
+            "uri": "http://data.brreg.no/enhetsregisteret/enhet/974761076",
+            "id": "974761076",
+            "name": "SKATTEETATEN",
+            "orgPath": "/STAT/972417807/974761076"
+          },
+          "harvestSourceUri": null,
+          "harvest": {
+            "firstHarvested": 1580126309484,
+            "lastHarvested": 1580132204340,
+            "lastChanged": null,
+            "changed": null
+          }
+        }
+      },
+      {
+        "_index": "ccat_v74",
+        "_type": "concept",
+        "_id": "b4c61bca-20db-4faf-b4f7-d3c6d43b24e4",
+        "_score": 16.552725,
+        "_source": {
+          "id": "b4c61bca-20db-4faf-b4f7-d3c6d43b24e4",
+          "uri": "http://localhost:8112/api/concepts/b4c61bca-20db-4faf-b4f7-d3c6d43b24e4",
+          "identifier": "http://begrepskatalogen/begrep/8ef7c445-0ef8-11e7-a910-005056821322",
+          "application": [],
+          "definition": {
+            "text": {
+              "nb": "dokument som et organ mottar fra en annan instans; se også eksternt dokument"
+            },
+            "remark": {},
+            "source": {
+              "uri": null,
+              "prefLabel": null
+            },
+            "targetGroup": null,
+            "sourceRelationship": null,
+            "range": null,
+            "sources": [],
+            "lastUpdated": null
+          },
+          "alternativeDefinition": null,
+          "subject": {
+            "nb": "Arkiv"
+          },
+          "prefLabel": {
+            "nb": "inngående dokument"
+          },
+          "altLabel": [],
+          "hiddenLabel": [],
+          "contactPoint": {
+            "email": "begrepskatalogen@skatteetaten.no",
+            "telephone": null
+          },
+          "example": null,
+          "publisher": {
+            "uri": "http://data.brreg.no/enhetsregisteret/enhet/974761076",
+            "id": "974761076",
+            "name": "SKATTEETATEN",
+            "orgPath": "/STAT/972417807/974761076"
+          },
+          "harvestSourceUri": null,
+          "harvest": {
+            "firstHarvested": 1580126295362,
+            "lastHarvested": 1580131993847,
+            "lastChanged": null,
+            "changed": null
+          }
+        }
+      },
+      {
+        "_index": "ccat_v74",
+        "_type": "concept",
+        "_id": "cfaafbe3-f56d-43c8-8f9f-d06a62ea572a",
+        "_score": 16.50781,
+        "_source": {
+          "id": "cfaafbe3-f56d-43c8-8f9f-d06a62ea572a",
+          "uri": "http://localhost:8112/api/concepts/cfaafbe3-f56d-43c8-8f9f-d06a62ea572a",
+          "identifier": "http://begrepskatalogen/begrep/8ef7c43c-0ef8-11e7-a910-005056821322",
+          "application": [],
+          "definition": {
+            "text": {
+              "nb": "dokument som inngår i korrespondanse med instanser utenfor organet, dvs. inngående eller utgående dokument"
+            },
+            "remark": {},
+            "source": {
+              "uri": null,
+              "prefLabel": null
+            },
+            "targetGroup": null,
+            "sourceRelationship": null,
+            "range": null,
+            "sources": [],
+            "lastUpdated": null
+          },
+          "alternativeDefinition": null,
+          "subject": {
+            "nb": "Arkiv"
+          },
+          "prefLabel": {
+            "nb": "eksternt dokument"
+          },
+          "altLabel": [],
+          "hiddenLabel": [],
+          "contactPoint": {
+            "email": "begrepskatalogen@skatteetaten.no",
+            "telephone": null
+          },
+          "example": null,
+          "publisher": {
+            "uri": "http://data.brreg.no/enhetsregisteret/enhet/974761076",
+            "id": "974761076",
+            "name": "SKATTEETATEN",
+            "orgPath": "/STAT/972417807/974761076"
+          },
+          "harvestSourceUri": null,
+          "harvest": {
+            "firstHarvested": 1580126289801,
+            "lastHarvested": 1580131895369,
+            "lastChanged": null,
+            "changed": null
+          }
+        }
+      },
+      {
+        "_index": "ccat_v74",
+        "_type": "concept",
+        "_id": "c35fc419-bb60-4be3-b565-e6437cc83d3a",
+        "_score": 16.50781,
+        "_source": {
+          "id": "c35fc419-bb60-4be3-b565-e6437cc83d3a",
+          "uri": "http://localhost:8112/api/concepts/c35fc419-bb60-4be3-b565-e6437cc83d3a",
+          "identifier": "http://begrepskatalogen/begrep/54f7f1bb-af50-11e8-89d2-005056821322",
+          "application": [],
+          "definition": {
+            "text": {
+              "nb": "dokument eller referanse til dokument som i denne sammenheng gir spesielle rettigheter, eksempelvis rett til utsatt avgiftsbetaling, tollnedsettelse eller automatisk kvotetildeling"
+            },
+            "remark": {},
+            "source": {
+              "uri": null,
+              "prefLabel": null
+            },
+            "targetGroup": null,
+            "sourceRelationship": null,
+            "range": null,
+            "sources": [],
+            "lastUpdated": null
+          },
+          "alternativeDefinition": null,
+          "subject": {
+            "nb": "Vareførsel"
+          },
+          "prefLabel": {
+            "nb": "fremlagt dokument"
+          },
+          "altLabel": [],
+          "hiddenLabel": [],
+          "contactPoint": {
+            "email": "begrepskatalogen@skatteetaten.no",
+            "telephone": null
+          },
+          "example": null,
+          "publisher": {
+            "uri": "http://data.brreg.no/enhetsregisteret/enhet/974761076",
+            "id": "974761076",
+            "name": "SKATTEETATEN",
+            "orgPath": "/STAT/972417807/974761076"
+          },
+          "harvestSourceUri": null,
+          "harvest": {
+            "firstHarvested": 1580126310735,
+            "lastHarvested": 1580132252002,
+            "lastChanged": null,
+            "changed": null
+          }
+        }
+      },
+      {
+        "_index": "ccat_v74",
+        "_type": "concept",
+        "_id": "38919be1-dc61-476e-8e45-652df5a5e66d",
+        "_score": 16.227371,
+        "_source": {
+          "id": "38919be1-dc61-476e-8e45-652df5a5e66d",
+          "uri": "http://localhost:8112/api/concepts/38919be1-dc61-476e-8e45-652df5a5e66d",
+          "identifier": "http://begrepskatalogen/begrep/8ef7c447-0ef8-11e7-a910-005056821322",
+          "application": [],
+          "definition": {
+            "text": {
+              "nb": "dokument som er utarbeidet for et forvaltningsorgans interne saksforbedrelse, enten av organet selv eller av et underliggende organ, av særlige rådgivere eller sakkyndige eller av et departement til bruk i et annet departement; se også organinternt dokument"
+            },
+            "remark": {},
+            "source": {
+              "uri": null,
+              "prefLabel": null
+            },
+            "targetGroup": null,
+            "sourceRelationship": null,
+            "range": null,
+            "sources": [],
+            "lastUpdated": null
+          },
+          "alternativeDefinition": null,
+          "subject": {
+            "nb": "Arkiv"
+          },
+          "prefLabel": {
+            "nb": "internt dokument"
+          },
+          "altLabel": [],
+          "hiddenLabel": [],
+          "contactPoint": {
+            "email": "begrepskatalogen@skatteetaten.no",
+            "telephone": null
+          },
+          "example": null,
+          "publisher": {
+            "uri": "http://data.brreg.no/enhetsregisteret/enhet/974761076",
+            "id": "974761076",
+            "name": "SKATTEETATEN",
+            "orgPath": "/STAT/972417807/974761076"
+          },
+          "harvestSourceUri": null,
+          "harvest": {
+            "firstHarvested": 1580126314738,
+            "lastHarvested": 1580132302347,
+            "lastChanged": null,
+            "changed": null
+          }
+        }
+      },
+      {
+        "_index": "ccat_v74",
+        "_type": "concept",
+        "_id": "d8a1e76b-4f8a-4fdd-ba9c-ca56e1a43d37",
+        "_score": 16.05756,
+        "_source": {
+          "id": "d8a1e76b-4f8a-4fdd-ba9c-ca56e1a43d37",
+          "uri": "http://localhost:8112/api/concepts/d8a1e76b-4f8a-4fdd-ba9c-ca56e1a43d37",
+          "identifier": "http://begrepskatalogen/begrep/8ef7c478-0ef8-11e7-a910-005056821322",
+          "application": [],
+          "definition": {
+            "text": {
+              "nb": "dokument som et organ sender til en annen instans; se også eksternt dokument"
+            },
+            "remark": {},
+            "source": {
+              "uri": null,
+              "prefLabel": null
+            },
+            "targetGroup": null,
+            "sourceRelationship": null,
+            "range": null,
+            "sources": [],
+            "lastUpdated": null
+          },
+          "alternativeDefinition": null,
+          "subject": {
+            "nb": "Arkiv"
+          },
+          "prefLabel": {
+            "nb": "utgående dokument"
+          },
+          "altLabel": [],
+          "hiddenLabel": [],
+          "contactPoint": {
+            "email": "begrepskatalogen@skatteetaten.no",
+            "telephone": null
+          },
+          "example": null,
+          "publisher": {
+            "uri": "http://data.brreg.no/enhetsregisteret/enhet/974761076",
+            "id": "974761076",
+            "name": "SKATTEETATEN",
+            "orgPath": "/STAT/972417807/974761076"
+          },
+          "harvestSourceUri": null,
+          "harvest": {
+            "firstHarvested": 1580126311737,
+            "lastHarvested": 1580132263929,
+            "lastChanged": null,
+            "changed": null
+          }
+        }
+      },
+      {
+        "_index": "ccat_v74",
+        "_type": "concept",
+        "_id": "226f1e16-4445-467e-a8e2-dc06bcf9c286",
+        "_score": 16.05756,
+        "_source": {
+          "id": "226f1e16-4445-467e-a8e2-dc06bcf9c286",
+          "uri": "http://localhost:8112/api/concepts/226f1e16-4445-467e-a8e2-dc06bcf9c286",
+          "identifier": "http://begrepskatalogen/begrep/8ef7c460-0ef8-11e7-a910-005056821322",
+          "application": [],
+          "definition": {
+            "text": {
+              "nb": "dokument som et offentlig organ har utarbeidet for sin interne saksforberedelser; se også internt dokument"
+            },
+            "remark": {},
+            "source": {
+              "uri": null,
+              "prefLabel": null
+            },
+            "targetGroup": null,
+            "sourceRelationship": null,
+            "range": null,
+            "sources": [],
+            "lastUpdated": null
+          },
+          "alternativeDefinition": null,
+          "subject": {
+            "nb": "Arkiv"
+          },
+          "prefLabel": {
+            "nb": "organinternt dokument"
+          },
+          "altLabel": [],
+          "hiddenLabel": [],
+          "contactPoint": {
+            "email": "begrepskatalogen@skatteetaten.no",
+            "telephone": null
+          },
+          "example": null,
+          "publisher": {
+            "uri": "http://data.brreg.no/enhetsregisteret/enhet/974761076",
+            "id": "974761076",
+            "name": "SKATTEETATEN",
+            "orgPath": "/STAT/972417807/974761076"
+          },
+          "harvestSourceUri": null,
+          "harvest": {
+            "firstHarvested": 1580126313521,
+            "lastHarvested": 1580132286398,
+            "lastChanged": null,
+            "changed": null
+          }
+        }
+      }
+    ]
+  }
+}

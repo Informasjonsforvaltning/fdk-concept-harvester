@@ -12,6 +12,7 @@ import java.util.Map;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 public class ConceptSearchESQueryBuilder {
+
     private static Logger logger = LoggerFactory.getLogger(ConceptSearchESQueryBuilder.class);
 
     private BoolQueryBuilder composedQuery;
@@ -56,15 +57,23 @@ public class ConceptSearchESQueryBuilder {
         if (preflabel == null || preflabel.isEmpty()) {
             return this;
         }
-        QueryBuilder nbQuery = QueryBuilders.matchPhrasePrefixQuery("prefLabel.nb", preflabel).analyzer("norwegian").maxExpansions(15);
-        QueryBuilder noQuery = QueryBuilders.matchPhrasePrefixQuery("prefLabel.no", preflabel).analyzer("norwegian").maxExpansions(15);
-        QueryBuilder nnQuery = QueryBuilders.matchPhrasePrefixQuery("prefLabel.nn", preflabel).analyzer("norwegian").maxExpansions(15);
-        QueryBuilder enQuery = QueryBuilders.matchPhrasePrefixQuery("prefLabel.en", preflabel).analyzer("english").maxExpansions(15);
+        QueryBuilder nbQuery = QueryBuilders.matchQuery("prefLabel.nb", preflabel).analyzer("norwegian").maxExpansions(15);
+        QueryBuilder noQuery = QueryBuilders.matchQuery("prefLabel.no", preflabel).analyzer("norwegian").maxExpansions(15);
+        QueryBuilder nnQuery = QueryBuilders.matchQuery("prefLabel.nn", preflabel).analyzer("norwegian").maxExpansions(15);
+        QueryBuilder enQuery = QueryBuilders.matchQuery("prefLabel.en", preflabel).analyzer("english").maxExpansions(15);
+        QueryBuilder nbPrefixQuery = QueryBuilders.matchPhrasePrefixQuery("prefLabel.nb", preflabel).analyzer("norwegian").maxExpansions(15);
+        QueryBuilder noPrefixQuery = QueryBuilders.matchPhrasePrefixQuery("prefLabel.no", preflabel).analyzer("norwegian").maxExpansions(15);
+        QueryBuilder nnPrefixQuery = QueryBuilders.matchPhrasePrefixQuery("prefLabel.nn", preflabel).analyzer("norwegian").maxExpansions(15);
+        QueryBuilder enPrefixQuery = QueryBuilders.matchPhrasePrefixQuery("prefLabel.en", preflabel).analyzer("norwegian").maxExpansions(15);
 
-        composedQuery.should(nbQuery.boost(2));
-        composedQuery.should(noQuery.boost(2));
-        composedQuery.should(nnQuery.boost(2));
-        composedQuery.should(enQuery.boost(2));
+        composedQuery.should(nbQuery.boost(3));
+        composedQuery.should(noQuery.boost(3));
+        composedQuery.should(nnQuery.boost(3));
+        composedQuery.should(enQuery.boost(3));
+        composedQuery.should(nbPrefixQuery.boost(2));
+        composedQuery.should(noPrefixQuery.boost(2));
+        composedQuery.should(nnPrefixQuery.boost(2));
+        composedQuery.should(enPrefixQuery.boost(2));
         return this;
     }
 }

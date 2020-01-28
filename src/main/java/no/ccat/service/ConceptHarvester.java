@@ -1,8 +1,8 @@
 package no.ccat.service;
 
 import lombok.RequiredArgsConstructor;
+import no.ccat.common.model.ConceptDenormalized;
 import no.ccat.dto.HarvestDataSource;
-import no.ccat.model.ConceptDenormalized;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
