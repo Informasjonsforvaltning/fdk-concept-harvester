@@ -30,13 +30,10 @@ class ConceptHarvester (
     private val harvestAdminClient: HarvestAdminClient
 ) {
 
-    private var isRunningForDeveloperLocally: Boolean = false
-
     @PostConstruct
     private fun harvestOnce() {
         logger.info("Harvest of Concepts start")
         harvest(harvestAdminClient.dataSources)
-        logger.info("Harvest of Concepts complete")
     }
 
     fun harvest(dataSources: List<HarvestDataSource>) {
@@ -44,42 +41,22 @@ class ConceptHarvester (
     }
 
     private fun harvestFromSingleURLSource(dataSource: HarvestDataSource) {
-        val reader: Reader
-        var theEntireDocument: String? = null
+        val concepts = StringReader(readURLFully(dataSource.url, dataSource.acceptHeaderValue))
+            .let { rdfToModelTransformer.getConceptsFromStream(it) }
 
-        theEntireDocument = if (isRunningForDeveloperLocally) {
-            logger.info("Harvester isRunningForDeveloperLocally==true")
-            readFileFully("c:\\tmp\\localConceptsFile.txt")
-        } else {
-            readURLFully(dataSource.url, dataSource.acceptHeaderValue)
-        }
+        logger.info("Harvested {} concepts from publisher {} at Uri {} ", concepts.size, dataSource.publisherId, dataSource.url)
 
-        if (theEntireDocument == null) return
-        else {
-            reader = StringReader(theEntireDocument)
-            val concepts = rdfToModelTransformer.getConceptsFromStream(reader)
-            logger.info("Harvested {} concepts from publisher {} at Uri {} ", concepts.size, dataSource.publisherId, dataSource.url)
-            concepts.forEach(Consumer { s: ConceptDenormalized -> conceptDenormalizedRepository.save(s) })
-        }
-    }
-
-    private fun readFileFully(fileURI: String): String? {
-        try {
-            return String(Files.readAllBytes(Paths.get(fileURI)))
-        } catch (ie: IOException) {
-            logger.warn("File load failed for File URI $fileURI")
-        }
-        return null
+        concepts.forEach(Consumer { s: ConceptDenormalized -> conceptDenormalizedRepository.save(s) })
     }
 
     private fun readURLFully(harvestSourceUri: String?, acceptHeader: String?): String {
         try {
-            val url = URL(harvestSourceUri)
-            logger.info("Start harvest from url: {}", url)
-            val urlConnection = url.openConnection()
+            logger.info("Start harvest from url: {}", harvestSourceUri)
+            val urlConnection = URL(harvestSourceUri).openConnection()
             urlConnection.setRequestProperty("Accept", acceptHeader)
-            val inputStream = urlConnection.getInputStream()
-            val s = Scanner(inputStream).useDelimiter("\\A")
+
+            val s = Scanner(urlConnection.getInputStream()).useDelimiter("\\A")
+
             return if (s.hasNext()) s.next() else ""
         } catch (e: IOException) {
             logger.warn("Downloading concepts from url failed: {} Exception {}", harvestSourceUri, e.toString())
