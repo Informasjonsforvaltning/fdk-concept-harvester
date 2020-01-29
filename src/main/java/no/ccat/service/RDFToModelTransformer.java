@@ -268,13 +268,8 @@ public class RDFToModelTransformer {
         List<ConceptDenormalized> existingConcepts = conceptDenormalizedRepository.findByIdentifier(conceptResource.getURI());
 
         if(existingConcepts.size() > 1) {
-            logger.warn("size: {} when searching for {}, removing removing excess.", existingConcepts.size(), conceptResource.getURI());
-
-            for(int i=1; i < existingConcepts.size(); i++) {
-                conceptDenormalizedRepository.delete(existingConcepts.get(i));
-            }
-            
-            existingConcept = existingConcepts.get(0);
+            logger.warn("size: {} when searching for {}, removing removing all.", existingConcepts.size(), conceptResource.getURI());
+            conceptDenormalizedRepository.deleteAll(existingConcepts);
         } else if (existingConcepts.size() == 1) {
             existingConcept = existingConcepts.get(0);
         }
