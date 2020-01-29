@@ -27,6 +27,9 @@
         <maven.exec.skip>false</maven.exec.skip>
         <!--end standard properties-->
 
+        <testcontainers.version>1.12.1</testcontainers.version>
+        <kotlin.version>1.3.61</kotlin.version>
+
         <start-class>no.ccat.CcatApiApplication</start-class>
 
         <unittest.category/>
@@ -36,6 +39,7 @@
     </properties>
 
     <dependencies>
+        <!-- Spring -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>
@@ -60,6 +64,18 @@
           <groupId>org.springframework.security</groupId>
           <artifactId>spring-security-core</artifactId>
         </dependency>
+        <!-- Kotlin -->
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-reflect</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
+        <!-- /Kotlin-->
         <dependency>
             <groupId>com.github.fge</groupId>
             <artifactId>json-patch</artifactId>
@@ -81,7 +97,20 @@
             <artifactId>springfox-swagger2</artifactId>
             <version>2.9.2</version>
         </dependency>
-
+        <!--Testcontainers-->
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- Mock http server -->
+        <dependency>
+            <groupId>com.github.tomakehurst</groupId>
+            <artifactId>wiremock</artifactId>
+            <version>2.25.1</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
