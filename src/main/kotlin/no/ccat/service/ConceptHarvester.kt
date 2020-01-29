@@ -1,5 +1,7 @@
 package no.ccat.service
 
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import lombok.RequiredArgsConstructor
 import no.ccat.common.model.ConceptDenormalized
 import no.ccat.dto.HarvestDataSource
@@ -37,11 +39,11 @@ class ConceptHarvester (
         logger.info("Harvest of Concepts complete")
     }
 
-    fun harvest(datasources: List<HarvestDataSource>) {
-        datasources.forEach(this::harvestFromSingleURLSource)
+    fun harvest(dataSources: List<HarvestDataSource>) {
+        GlobalScope.launch { dataSources.forEach{ harvestFromSingleURLSource(it) } }
     }
 
-    fun harvestFromSingleURLSource(dataSource: HarvestDataSource) {
+    private fun harvestFromSingleURLSource(dataSource: HarvestDataSource) {
         val reader: Reader
         var theEntireDocument: String? = null
 
