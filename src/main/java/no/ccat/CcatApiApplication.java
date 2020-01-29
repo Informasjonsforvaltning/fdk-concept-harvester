@@ -1,12 +1,15 @@
 package no.ccat;
 
 import com.google.common.base.Predicates;
+import no.ccat.dev.utils.LocalHarvester;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -31,10 +34,18 @@ public class CcatApiApplication {
     private String swagger2Endpoint;
 
 
-    public static void main(String[] args) {
-        SpringApplication.run(CcatApiApplication.class, args);
-    }
 
+    public static void main(String[] args) {
+        ApplicationContext context= SpringApplication.run(CcatApiApplication.class, args);
+
+        //harvest local data if profile is dev-with-harvest
+        String activeProfile = context.getEnvironment().getActiveProfiles()[0];
+
+        if(activeProfile.equals("dev-with-harvester")){
+            context.getBean(LocalHarvester.class)
+                    .harvestFromSingleURLSource();
+        }
+    }
     @Bean
     public Docket swaggerDocket() {
 

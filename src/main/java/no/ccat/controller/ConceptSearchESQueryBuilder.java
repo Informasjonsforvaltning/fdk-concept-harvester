@@ -64,7 +64,7 @@ public class ConceptSearchESQueryBuilder {
         QueryBuilder nbPrefixQuery = QueryBuilders.matchPhrasePrefixQuery("prefLabel.nb", preflabel).analyzer("norwegian").maxExpansions(15);
         QueryBuilder noPrefixQuery = QueryBuilders.matchPhrasePrefixQuery("prefLabel.no", preflabel).analyzer("norwegian").maxExpansions(15);
         QueryBuilder nnPrefixQuery = QueryBuilders.matchPhrasePrefixQuery("prefLabel.nn", preflabel).analyzer("norwegian").maxExpansions(15);
-        QueryBuilder enPrefixQuery = QueryBuilders.matchPhrasePrefixQuery("prefLabel.en", preflabel).analyzer("norwegian").maxExpansions(15);
+        QueryBuilder enPrefixQuery = QueryBuilders.matchPhrasePrefixQuery("prefLabel.en", preflabel).analyzer("english").maxExpansions(15);
 
         composedQuery.should(nbQuery.boost(3));
         composedQuery.should(noQuery.boost(3));

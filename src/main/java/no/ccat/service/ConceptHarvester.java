@@ -67,8 +67,8 @@ public class ConceptHarvester {
             return new String(Files.readAllBytes(Paths.get(fileURI)));
         } catch (IOException ie) {
             logger.warn("File load failed for File URI " + fileURI);
+            return null;
         }
-        return null;
     }
 
     private String readURLFully(String harvestSourceUri, String acceptHeader) {
