@@ -260,18 +260,24 @@ public class RDFToModelTransformer {
     public ConceptDenormalized extractConceptFromModel(Resource conceptResource) {
         ConceptDenormalized concept = new ConceptDenormalized();
 
-        // Checking whether the concept is already harvested:
+        Date harvestDate = new Date();
+        HarvestMetadata oldMetadata = null;
         ConceptDenormalized existingConcept = null;
+
+        // Checking whether the concept is already harvested:
         List<ConceptDenormalized> existingConcepts = conceptDenormalizedRepository.findByIdentifier(conceptResource.getURI());
 
         if(existingConcepts.size() > 1) {
-            logger.warn("size: " + existingConcepts.size() + " when searching for " + conceptResource.getURI());
+            logger.warn("size: {} when searching for {}, removing removing excess.", existingConcepts.size(), conceptResource.getURI());
+
+            for(int i=1; i < existingConcepts.size(); i++) {
+                conceptDenormalizedRepository.delete(existingConcepts.get(i));
+            }
+            
+            existingConcept = existingConcepts.get(0);
         } else if (existingConcepts.size() == 1) {
             existingConcept = existingConcepts.get(0);
         }
-
-        Date harvestDate = new Date();
-        HarvestMetadata oldMetadata = null;
 
         // If concept is harvested earlier, we reuse the harvest-metadata:
         if (existingConcept != null) {
