@@ -12,7 +12,6 @@ class ConceptContractTest : ApiTestContainer() {
 
     @Nested
     inner class GetWithQuery{
-
     }
 
     @Nested
