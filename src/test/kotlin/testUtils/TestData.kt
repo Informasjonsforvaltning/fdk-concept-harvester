@@ -1,4 +1,4 @@
-package utils
+package testUtils
 
 const val API_PORT = 8080
 const val LOCAL_SERVER_PORT = 5000
