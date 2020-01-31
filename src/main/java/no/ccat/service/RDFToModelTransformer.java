@@ -262,8 +262,24 @@ public class RDFToModelTransformer {
     public ConceptDenormalized extractConceptFromModel(Resource conceptResource) {
         ConceptDenormalized concept = new ConceptDenormalized();
 
+        Publisher publisher = extractPublisher(conceptResource, DCTerms.publisher);
+
+        if (publisher != null && publisher.getId().equals("974761076")) {
+            List<Object> deleted = conceptDenormalizedRepository.deleteByIdentifier(conceptResource.getURI());
+            logger.info("Deleted " + deleted.size() + " concepts");
+        }
+
+        ConceptDenormalized existingConcept = null;
+
         // Checking whether the concept is already harvested:
-        ConceptDenormalized existingConcept = conceptDenormalizedRepository.findByIdentifier(conceptResource.getURI());
+        List<ConceptDenormalized> existingConcepts = conceptDenormalizedRepository.findByIdentifier(conceptResource.getURI());
+
+        if (existingConcepts.size() > 1) {
+            logger.warn("size: {} when searching for {}, removing removing all.", existingConcepts.size(), conceptResource.getURI());
+            conceptDenormalizedRepository.deleteAll(existingConcepts);
+        } else if (existingConcepts.size() == 1) {
+            existingConcept = existingConcepts.get(0);
+        }
 
         Date harvestDate = new Date();
         HarvestMetadata oldMetadata = null;
