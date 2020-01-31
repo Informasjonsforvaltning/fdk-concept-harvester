@@ -11,7 +11,7 @@ import org.springframework.core.io.ClassPathResource;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -107,8 +107,8 @@ public class RDFToModelTransformerTest {
 
         ConceptDenormalized conceptOfInterest = concepts.get(0);
 
-        Date validFromIncluding = conceptOfInterest.getValidFromIncluding();
-        Date validToIncluding = conceptOfInterest.getValidToIncluding();
+        LocalDate validFromIncluding = conceptOfInterest.getValidFromIncluding();
+        LocalDate validToIncluding = conceptOfInterest.getValidToIncluding();
 
         assertNotNull("Expect concept to have valid from including date", validFromIncluding);
         assertNotNull("Expect concept to have valid to including date", validToIncluding);
