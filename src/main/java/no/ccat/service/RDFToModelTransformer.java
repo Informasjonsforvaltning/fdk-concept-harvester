@@ -18,7 +18,7 @@ import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -423,16 +423,11 @@ public class RDFToModelTransformer {
         return Collections.emptyList();
     }
 
-    private Date extractDateFromResource(Resource resource, Property property) {
+    private LocalDate extractDateFromResource(Resource resource, Property property) {
         if (resource.hasProperty(DCTerms.temporal)) {
             Resource temporalResource = resource.getProperty(DCTerms.temporal).getResource();
             if (temporalResource.hasProperty(property)) {
-                String date = temporalResource.getProperty(property).getString();
-                try {
-                    return new SimpleDateFormat("yyyy-MM-dd").parse(date);
-                } catch (Exception e) {
-                    logger.error("Error when extracting property {} from resource {}", property, resource.getURI(), e);
-                }
+                return LocalDate.parse(temporalResource.getProperty(property).getString());
             }
         }
         return null;
