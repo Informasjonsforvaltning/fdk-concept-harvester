@@ -3,6 +3,7 @@ package no.ccat.common.model;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -44,6 +45,10 @@ public class Concept {
 
     @ApiModelProperty("Example  [skos:example]")
     private Map<String, String> example;
+
+    private Date validFromIncluding;
+
+    private Date validToIncluding;
 
     private List<String> seeAlso;
 
