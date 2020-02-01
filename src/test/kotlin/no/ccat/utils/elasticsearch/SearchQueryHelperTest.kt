@@ -1,8 +1,8 @@
 package no.ccat.utils.elasticsearch
 
 import org.junit.jupiter.api.*
-import utils.elasticsearch.LanguageProperties
-import utils.elasticsearch.LanguageUtils
+import utils.LanguageProperties
+import utils.LanguageUtils
 import testUtils.assertions.Expect as expect
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

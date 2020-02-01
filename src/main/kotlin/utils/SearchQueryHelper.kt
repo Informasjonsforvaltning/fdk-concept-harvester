@@ -1,4 +1,4 @@
-package utils.elasticsearch
+package utils
 
 data class LanguageProperties(val key : String = "nb", val interpreter: String = "norwegian", val stemmer: String? = null) {
 }

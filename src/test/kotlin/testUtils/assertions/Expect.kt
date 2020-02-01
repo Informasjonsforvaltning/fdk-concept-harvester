@@ -2,8 +2,8 @@ package testUtils.assertions
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assumptions
-import utils.elasticsearch.LanguageProperties
-import utils.elasticsearch.LanguageUtils
+import utils.LanguageProperties
+
 
 class Expect(_result: Any?){
 
