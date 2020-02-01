@@ -5,6 +5,7 @@ import no.ccat.common.model.*;
 import no.dcat.shared.HarvestMetadata;
 import no.dcat.shared.HarvestMetadataUtil;
 import no.dcat.shared.Publisher;
+import no.dcat.shared.Schema;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.vocabulary.*;
 import org.slf4j.Logger;
@@ -17,6 +18,7 @@ import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -260,8 +262,24 @@ public class RDFToModelTransformer {
     public ConceptDenormalized extractConceptFromModel(Resource conceptResource) {
         ConceptDenormalized concept = new ConceptDenormalized();
 
+        Publisher publisher = extractPublisher(conceptResource, DCTerms.publisher);
+
+        if (publisher != null && publisher.getId().equals("974761076")) {
+            List<Object> deleted = conceptDenormalizedRepository.deleteByIdentifier(conceptResource.getURI());
+            logger.info("Deleted " + deleted.size() + " concepts");
+        }
+
+        ConceptDenormalized existingConcept = null;
+
         // Checking whether the concept is already harvested:
-        ConceptDenormalized existingConcept = conceptDenormalizedRepository.findByIdentifier(conceptResource.getURI());
+        List<ConceptDenormalized> existingConcepts = conceptDenormalizedRepository.findByIdentifier(conceptResource.getURI());
+
+        if (existingConcepts.size() > 1) {
+            logger.warn("size: {} when searching for {}, removing removing all.", existingConcepts.size(), conceptResource.getURI());
+            conceptDenormalizedRepository.deleteAll(existingConcepts);
+        } else if (existingConcepts.size() == 1) {
+            existingConcept = existingConcepts.get(0);
+        }
 
         Date harvestDate = new Date();
         HarvestMetadata oldMetadata = null;
@@ -299,6 +317,10 @@ public class RDFToModelTransformer {
         concept.setDefinition(extractDefinition(conceptResource));
 
         concept.setContactPoint(extractContactPoint(conceptResource));
+
+        concept.setValidFromIncluding(extractDateFromResource(conceptResource, Schema.startDate));
+
+        concept.setValidToIncluding(extractDateFromResource(conceptResource, Schema.endDate));
 
         concept.setSeeAlso(extractSeeAlso(conceptResource));
 
@@ -415,5 +437,15 @@ public class RDFToModelTransformer {
             }
         }
         return Collections.emptyList();
+    }
+
+    private LocalDate extractDateFromResource(Resource resource, Property property) {
+        if (resource.hasProperty(DCTerms.temporal)) {
+            Resource temporalResource = resource.getProperty(DCTerms.temporal).getResource();
+            if (temporalResource.hasProperty(property)) {
+                return LocalDate.parse(temporalResource.getProperty(property).getString());
+            }
+        }
+        return null;
     }
 }

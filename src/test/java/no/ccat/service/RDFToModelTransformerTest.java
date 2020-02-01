@@ -11,6 +11,7 @@ import org.springframework.core.io.ClassPathResource;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -96,5 +97,20 @@ public class RDFToModelTransformerTest {
         List<String> seeAlsoReferences = conceptOfInterest.getSeeAlso();
 
         assertFalse("Expect concept to have see also references", seeAlsoReferences.isEmpty());
+    }
+
+    @Test
+    public void testConceptShouldHaveVadlidToIncludingAndFromIncludingDatesIfSet() throws IOException {
+        Reader reader = new InputStreamReader(new ClassPathResource("digdirConcept.turtle").getInputStream());
+
+        List<ConceptDenormalized> concepts = transformer.getConceptsFromStream(reader);
+
+        ConceptDenormalized conceptOfInterest = concepts.get(0);
+
+        LocalDate validFromIncluding = conceptOfInterest.getValidFromIncluding();
+        LocalDate validToIncluding = conceptOfInterest.getValidToIncluding();
+
+        assertNotNull("Expect concept to have valid from including date", validFromIncluding);
+        assertNotNull("Expect concept to have valid to including date", validToIncluding);
     }
 }
