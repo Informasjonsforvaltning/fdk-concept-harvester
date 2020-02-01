@@ -2,10 +2,8 @@ package no.ccat.service;
 
 import no.ccat.common.model.ConceptDenormalized;
 import no.ccat.common.model.TextAndURI;
-import no.fdk.test.testcategories.UnitTest;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
@@ -17,7 +15,6 @@ import java.util.List;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
-@Category(UnitTest.class)
 public class RDFToModelTransformerTest {
 
     private RDFToModelTransformer transformer;
