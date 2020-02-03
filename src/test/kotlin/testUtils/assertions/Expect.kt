@@ -1,6 +1,5 @@
 package testUtils.assertions
 
-import issue.wattevs
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assumptions
 import utils.LanguageProperties
@@ -11,7 +10,6 @@ class Expect(_result: Any?){
     val result = _result
 
     fun to_equal(expected: String) {
-        print(wattevs)
         Assertions.assertEquals(expected,result)
     }
     fun to_equal(expected: Int) {
@@ -49,6 +47,10 @@ class Expect(_result: Any?){
 
         Assertions.assertTrue(hasFirsLanguage)
         Assertions.assertTrue(hasSecondLanguage)
+    }
+
+    fun to_be_true(){
+        Assertions.assertTrue(result as Boolean);
     }
 }
 

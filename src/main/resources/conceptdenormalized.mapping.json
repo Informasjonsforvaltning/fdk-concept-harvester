@@ -62,6 +62,11 @@
             "fielddata": true,
             "type": "text",
             "analyzer": "norwegian"
+          },
+          "nn": {
+            "fielddata": true,
+            "type": "text",
+            "analyzer": "norwegian"
           }
         }
       },

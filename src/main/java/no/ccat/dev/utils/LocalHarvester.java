@@ -27,12 +27,15 @@ public class LocalHarvester {
     @Autowired
     ConceptDenormalizedRepository conceptDenormalizedRepository;
 
-    public void harvestFromSingleURLSource() {
+    public void harvestFromSingleURLSource(String source) {
         Reader reader;
 
+        if(source == null){
+            source = "/Users/bbreg/Documents/concept-catalouge/fdk-concept-harvester/src/main/resources/dev.data/arkivverket_fdk.turtle";
+        }
         String theEntireDocument = null;
 
-        theEntireDocument = readFileFully("/Users/bbreg/Documents/concept-catalouge/fdk-concept-harvester/src/main/resources/dev.data/arkivverket_fdk.turtle");
+        theEntireDocument = readFileFully(source);
 
 
         reader = new StringReader(theEntireDocument);

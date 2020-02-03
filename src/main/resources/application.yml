@@ -25,7 +25,7 @@ application:
 ---
 #Utv-miljø lokalt på egen PC
 spring:
-  profiles: develop, unit-integration, dev-with-harvester
+  profiles: develop, unit-integration, dev-with-harvester, unit
   data:
     elasticsearch:
       clusterNodes: localhost:9300
