@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import no.ccat.common.model.ConceptDenormalized;
 import no.fdk.webutils.aggregation.ResponseUtil;
+import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -95,7 +96,8 @@ public class ConceptSearchController {
             .withQuery(searchQuery)
             .withIndices("ccat").withTypes("concept")
             .withPageable(pageable)
-            .build();
+            .withSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+            .build(); 
 
         if (isNotEmpty(aggregations)) {
             finalQuery = addAggregations(finalQuery, aggregations);
