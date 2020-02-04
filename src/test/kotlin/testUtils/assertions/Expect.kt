@@ -2,7 +2,8 @@ package testUtils.assertions
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assumptions
-import utils.LanguageProperties
+import no.ccat.utils.LanguageProperties
+import org.skyscreamer.jsonassert.JSONAssert
 
 
 class Expect(_result: Any?){
@@ -20,10 +21,14 @@ class Expect(_result: Any?){
         when(result){
             is LanguageProperties -> {
                 Assertions.assertEquals(expected.key, result.key)
-                Assertions.assertEquals(expected.interpreter, result.interpreter)
+                Assertions.assertEquals(expected.analyzer, result.analyzer)
                 Assertions.assertEquals(expected.stemmer,result.stemmer)
             }
         }
+    }
+
+    fun json_to_equal(expected: String){
+        JSONAssert.assertEquals(expected,result as String, false)
     }
 
     fun to_be_null(){
@@ -51,6 +56,10 @@ class Expect(_result: Any?){
 
     fun to_be_true(){
         Assertions.assertTrue(result as Boolean);
+    }
+
+    fun to_be_false(){
+        Assertions.assertFalse(result as Boolean);
     }
 }
 
