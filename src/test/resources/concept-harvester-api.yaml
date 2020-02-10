@@ -31,7 +31,7 @@ paths:
       parameters:
         - name: q
           in: query
-          description: the word to search for in our concept collection
+          description: The word to perform a fulltext search for our concept collection, ommit for seraches on preferred term only
           required: false
           schema:
             type: string
@@ -50,7 +50,7 @@ paths:
             default: "false"
         - name: preflabel
           in: query
-          description: The prefLabel text.
+          description: The text to perform a search on preferred terms only
           required: false
           schema:
             type: string

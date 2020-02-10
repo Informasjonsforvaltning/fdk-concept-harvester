@@ -42,3 +42,25 @@ application:
   conceptsPath: /concepts
 server:
   port: 8105
+
+---
+
+spring:
+  profiles: test
+  data:
+    elasticsearch:
+      clusterNodes: localhost:9300
+      clusterName: elasticsearch
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: admin
+    password: admin
+application:
+  harvestAdminRootUrl: ${WIREMOCK_TEST_HOST}/api
+  apiRootUrl: ${WIREMOCK_TEST_HOST}/api
+  apiRootExternalURL: ${WIREMOCK_TEST_HOST}/api
+  conceptsPath: /concepts
+server:
+  port: 8080
+

@@ -115,6 +115,10 @@ class Expect(_result: Any?) {
         return false
     }
 
+    fun to_be_less_exact_than(lastHit: String) {
+
+    }
+
 }
 
 fun assume_authenticated(status: String) {

@@ -31,8 +31,6 @@ class EsSearchServiceTest {
 
         expect(resultScoreScript).to_equal(expectedScoreScript)
         expect(jsonPathParser.parse(result)).json_to_have_entries_like(jsonPathParser.parse(expectedString))
-
-
     }
 
     @Test
