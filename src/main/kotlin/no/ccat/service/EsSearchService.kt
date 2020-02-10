@@ -1,22 +1,18 @@
 package no.ccat.service
 
 import mbuhot.eskotlin.query.compound.bool
+import mbuhot.eskotlin.query.compound.dis_max
 import org.springframework.stereotype.Service
 import mbuhot.eskotlin.query.term.match_all
 import no.ccat.utils.*
-import org.elasticsearch.index.query.BoolQueryBuilder
-import org.elasticsearch.index.query.MatchAllQueryBuilder
-import org.elasticsearch.index.query.QueryBuilder
-import org.elasticsearch.index.query.QueryBuilders
-import org.springframework.data.elasticsearch.core.query.NativeSearchQuery
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder
+import org.elasticsearch.index.query.*
 
 @Service
 class EsSearchService {
 
     fun buildSearch(queryParams: QueryParams): QueryBuilder? =
          if(queryParams.isPrefLabelSearch()) {
-            buildPrefLabelSearch()
+            buildPrefLabelSearch(queryParams)
         } else {
             buildDocumentSearch(queryParams)
         }
@@ -32,8 +28,21 @@ class EsSearchService {
         }
     }
 
-    fun buildPrefLabelSearch(): MatchAllQueryBuilder {
-        return MatchAllQueryBuilder()
+    private fun buildPrefLabelSearch(params: QueryParams): QueryBuilder{
+        val langProperties = LanguageProperties(params.lang)
+        val normalizedExactScore = buildExactMatchScoreBoost(params.prefLabel, langProperties, true)
+
+        val matchPrefixPhrase = buildMatchPhrasePrefixBoost(params.prefLabel,langProperties)
+
+        val disMaxQueries = mutableListOf<QueryBuilder>(
+                normalizedExactScore
+        )
+
+        disMaxQueries.addAll(matchPrefixPhrase)
+
+        return dis_max {
+            queries= disMaxQueries
+        }
     }
 
     private fun buildQueryString(queryParams: QueryParams) : QueryBuilder? {
@@ -52,28 +61,23 @@ class EsSearchService {
         return builder;
     }
 
-
-
-
-    fun buildWithSearchString(searchString: String, preferredLanguage: String): BoolQueryBuilder {
+    private fun buildWithSearchString(searchString: String, preferredLanguage: String): DisMaxQueryBuilder{
         val langProperties =
                 if (preferredLanguage == "") LanguageProperties()
                 else LanguageProperties(preferredLanguage)
 
-        val  titleBoost = buildMatchInTitleBoost(searchString,langProperties);
+        val  titleBoost = buildMatchPhrasePrefixBoost(searchString,langProperties);
 
         val queryList = mutableListOf<QueryBuilder>(
-                buildConstantScoreForExactMatch(searchString),
+                buildExactMatchScoreBoost(searchString, langProperties),
                 QueryBuilders.simpleQueryStringQuery("$searchString $searchString*"))
         queryList.addAll(titleBoost)
 
-        val query = bool {
-            must {
-                bool {
-                    should = queryList
+        val query =
+                dis_max {
+                    queries = queryList
                 }
-            }
-        }
+
         return query
     }
 }

@@ -1,0 +1,14 @@
+{
+  "simple_query_string" : {
+    "query" : "søke noe søke noe*",
+    "fields" : [
+      "prefLabel.nb^1.0"
+    ],
+    "analyzer" : "norwegian",
+    "flags" : -1,
+    "default_operator" : "or",
+    "lenient" : false,
+    "analyze_wildcard" : false,
+    "boost" : 3.0
+  }
+}

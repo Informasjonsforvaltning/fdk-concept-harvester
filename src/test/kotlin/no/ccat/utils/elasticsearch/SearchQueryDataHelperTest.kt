@@ -36,9 +36,23 @@ class SearchQueryHelperTest {
             expect(result.key).to_equal(key)
             expect(result.analyzer).to_equal(interpreter)
             expect(result.stemmer).to_equal(stemmer)
-        }
 
+         @Test
+         fun `default object should have secondaryLanguage keys nn,no and en`() {
+             val result: List<String> = LanguageProperties().secondaryKeys()
+             val expected = listOf<String>("nn","no","en")
+             expect(result).to_contain(result);
+            }
+
+            @Test
+        fun `en object should have secondaryLanguages keys nn,no and nb`() {
+                val result: List<String> = LanguageProperties(key="en").secondaryKeys()
+                val expected = listOf<String>("nn","no","nb")
+                expect(result).to_contain(result);
+            }
+        }
     }
+
     @Nested
     inner class LanguageUtilsTest {
         @Nested
@@ -53,12 +67,11 @@ class SearchQueryHelperTest {
             }
 
             @Test
-            fun `should return an array containg en and nb when language is set to nn`(){
-                val expectedKey1 = "nb"
-                val expectedkey2 = "en"
-
+            fun `should return an array containg en,nb and no when language is set to nn`(){
+                val expected = arrayOf(LanguageProperties("nb"),LanguageProperties("en", analyzer = "english"),LanguageProperties("no"))
                 val result = languageUtils.getSecondaryLanguage("nn");
-                expect(result).to_contain(expectedKey1,expectedkey2)
+
+                expect(result).to_contain(expected)
 
             }
         }

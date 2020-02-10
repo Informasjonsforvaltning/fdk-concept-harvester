@@ -3,11 +3,30 @@
 package no.ccat.utils
 
 
-data class LanguageProperties(val key : String = "nb", val analyzer: String = "norwegian", val stemmer: String? = null)
+data class LanguageProperties(var key : String = "nb", val analyzer: String = "norwegian", val stemmer: String? = null){
+
+    init {
+        if(key=="")
+            key="nb"
+    }
+
+    fun secondaryKeys() : List<String> {
+        val secondary : Array<LanguageProperties> = LanguageUtils().getSecondaryLanguage(key)
+
+        val keyList = mutableListOf<String>();
+        for (lang in secondary) {
+            keyList.add(lang.key)
+        }
+
+        return keyList;
+    }
+
+}
 
 data class LanguageUtils(val nb : LanguageProperties = LanguageProperties()){
     private val nn = LanguageProperties("nn", "norwegian")
     private val en = LanguageProperties("en", "english")
+    private val no = LanguageProperties("no", "norwegian")
 
     /**
      * @param langParam: language code from request
@@ -19,6 +38,7 @@ data class LanguageUtils(val nb : LanguageProperties = LanguageProperties()){
             nb.key -> nb
             nn.key -> nn
             en.key -> en
+            no.key -> no
             else -> nb;
         }
     }
@@ -30,10 +50,11 @@ data class LanguageUtils(val nb : LanguageProperties = LanguageProperties()){
      */
     fun getSecondaryLanguage(langParam: String ): Array<LanguageProperties>{
         return when (langParam) {
-            nb.key -> arrayOf(nn,en)
-            nn.key -> arrayOf(nb,en)
-            en.key ->  arrayOf(nn,nb)
-            else -> arrayOf(nn,en)
+            nb.key -> arrayOf(nn,en,no)
+            nn.key -> arrayOf(nb,en,no)
+            en.key ->  arrayOf(nn,nb,no)
+            no.key -> arrayOf(nn,en,nb)
+            else -> arrayOf(nn,en,no)
         }
     }
 }
@@ -69,6 +90,7 @@ data class QueryParams(val queryString: String = "",
     fun isPrefLabelSearch() : Boolean {
         return queryString == "" && prefLabel != ""
     }
+
 }
 
 
