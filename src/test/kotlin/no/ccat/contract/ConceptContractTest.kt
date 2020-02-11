@@ -4,6 +4,7 @@ import com.google.gson.JsonArray
 import org.junit.jupiter.api.*
 import testUtils.ApiTestContainer
 import testUtils.SortResponse
+import testUtils.assertions.apiGet
 import testUtils.jsonPathParser
 import testUtils.assertions.Expect as expect
 import testUtils.jsonValueParser
@@ -32,11 +33,11 @@ class ConceptContractTest : ApiTestContainer() {
         @Nested
         inner class FullTextSearch {
             lateinit var result: String;
-            val prefLabelPath = "$..concepts.prefLabel"
+            val prefLabelPath = "$._embedded.concepts.prefLabel"
             val testString = "dokument"
             @BeforeAll
                 fun setup(){
-                result = "placeholder http request"
+                result = apiGet("/concepts?q=$testString")
             }
 
 
@@ -44,12 +45,12 @@ class ConceptContractTest : ApiTestContainer() {
             fun `expect full text search to return list of concepts sorted on exact matches in preferredLanguage nb`(){
                 val prefLabelPaths = jsonPathParser.parse(result).read<List<String>>(prefLabelPath);
                 val valueParser = jsonValueParser.parse(result)
-                val sortResult = SortResponse(sortWord = "dokument");
+                val sortResult = SortResponse(sortWord = "$testString");
 
 
                 for (i in prefLabelPaths.indices){
                     val currentValue = valueParser.read<String>(prefLabelPaths[i])
-                    val currentId = valueParser.read<JsonArray>("$..concept[$i]").toString()
+                    val currentId = valueParser.read<JsonArray>("$..concepts[$i].id").toString()
                     expect(sortResult.isLessRelevant(prefLabelPaths[i], currentValue, i, currentId)).to_be_true()
                 }
             }

@@ -5,8 +5,10 @@ import no.ccat.common.model.ConceptDenormalized;
 import no.ccat.dto.HarvestDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -26,13 +28,14 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ConceptHarvester {
+    @Autowired
+    private Environment env;
+
     private static final Logger logger = LoggerFactory.getLogger(ConceptHarvester.class);
 
     private final ConceptDenormalizedRepository conceptDenormalizedRepository;
     private final RDFToModelTransformer rdfToModelTransformer;
     private final HarvestAdminClient harvestAdminClient;
-
-    private boolean isRunningForDeveloperLocally = false;
 
     @Async
     @EventListener(ApplicationReadyEvent.class)
@@ -47,9 +50,8 @@ public class ConceptHarvester {
 
         String theEntireDocument = null;
 
-        if (isRunningForDeveloperLocally) {
-            logger.info("Harvester isRunningForDeveloperLocally==true");
-            theEntireDocument = readFileFully("c:\\tmp\\localConceptsFile.txt");
+        if (readFromLocalFile()) {
+            theEntireDocument = readFileFully("/src/test/resources/contract/conceptsmock.turtle");
         } else {
             theEntireDocument = readURLFully(dataSource.getUrl(), dataSource.getAcceptHeaderValue());
         }
@@ -92,5 +94,17 @@ public class ConceptHarvester {
             logger.trace("Got exception when trying to harvest from url {} {}", harvestSourceUri, e.getStackTrace());
         }
         return "";
+    }
+
+    private boolean readFromLocalFile(){
+        boolean local = false;
+
+        for (String profile :  env.getActiveProfiles()){
+            if(profile.equals("dev-with-harvest") ){
+                logger.info("Starting concept harvest from local file");
+                local = true;
+            }
+        }
+        return local;
     }
 }

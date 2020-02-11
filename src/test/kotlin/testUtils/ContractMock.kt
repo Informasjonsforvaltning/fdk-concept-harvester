@@ -24,9 +24,17 @@ fun startMockServer() {
 
         mockserver.stubFor(get(urlEqualTo("/api/publishers/87654321"))
                 .willReturn(okJson(File("src/test/resources/contract/org-1.json").readText())))
-
+        mockserver.stubFor(get(urlEqualTo("/api/publishers/961181399"))
+                .willReturn(okJson(File("src/test/resources/contract/org-1.json").readText())))
+        mockserver.stubFor(get(urlEqualTo("/api/publishers/974761076"))
+                .willReturn(okJson(File("src/test/resources/contract/org-1.json").readText())))
+        mockserver.stubFor(get(urlEqualTo("/api/publishers/974760673"))
+                .willReturn(okJson(File("src/test/resources/contract/org-1.json").readText())))
         mockserver.stubFor(get(urlEqualTo("/api/datasources"))
-                .willReturn(okJson("{}")))
+                .willReturn(okJson(File("src/test/resources/contract/datasource.json").readText())))
+        mockserver.stubFor(get(urlEqualTo("/mockconcepts"))
+                .willReturn(aResponse().withBody(File("src/test/resources/contract/conceptsmock.turtle").readText()))
+        )
 
         mockserver.start()
     }

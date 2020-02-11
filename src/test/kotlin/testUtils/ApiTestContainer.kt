@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory
 import org.testcontainers.Testcontainers
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.Network
+import org.testcontainers.containers.output.Slf4jLogConsumer
 import org.testcontainers.containers.wait.strategy.HttpWaitStrategy
 import java.io.IOException
 import java.time.Duration
@@ -17,6 +18,7 @@ abstract class ApiTestContainer {
         var elasticContainer: KGenericContainer
         var TEST_API: KGenericContainer
         var rabbitContainer: KGenericContainer
+        val apiLogger = Slf4jLogConsumer(logger).withPrefix("API")
 
         init {
 
@@ -42,18 +44,23 @@ abstract class ApiTestContainer {
                     .withNetwork(apiNetwork)
                     .withNetworkAliases(RABBIT_NETWORK_NAME)
 
+            //legg inn count
+
+            rabbitContainer.start()
+            elasticContainer.start()
+
             TEST_API = KGenericContainer(API_IMAGE)
                     .withExposedPorts(API_PORT)
-                    .dependsOn(elasticContainer, rabbitContainer)
+                    .dependsOn(elasticContainer)
                     .waitingFor(HttpWaitStrategy()
                             .forPort(API_PORT)
-                            .forPath("/ready")
-                            .forStatusCode(200)
-                            .withStartupTimeout(Duration.ofMinutes(2)))
+                            .forPath("/count")
+                            .forResponsePredicate { response -> response?.let { it.toLong() >  50 } ?: false }
+                            .withStartupTimeout(Duration.ofMinutes(3)))
                     .withNetwork(apiNetwork)
-                    .withEnv(API_ENV_VALUES)
+                    .withEnv(API_ENV_VALUES(elasticContainer))
+                    .withLogConsumer(apiLogger)
 
-            elasticContainer.start()
             TEST_API.start()
 
 

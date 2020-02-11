@@ -49,11 +49,11 @@ spring:
   profiles: test
   data:
     elasticsearch:
-      clusterNodes: localhost:9300
-      clusterName: elasticsearch
+      clusterNodes: ${FDK_ES_CLUSTERNODES:elasticsearch5:9300}
+      clusterName: ${FDK_ES_CLUSTERNAME:elasticsearch}
   rabbitmq:
-    host: 127.0.0.1
-    port: 5672
+    host: ${RABBIT_HOST}
+    port: ${RABBIT_PORT}
     username: admin
     password: admin
 application:

@@ -1,0 +1,1001 @@
+@prefix schema: <http://schema.org/> .
+@prefix iso:   <http://iso.org/25012/2008/dataquality/> .
+@prefix spdx:  <http://spdx.org/rdf/terms#> .
+@prefix adms:  <http://www.w3.org/ns/adms#> .
+@prefix skosxl: <http://www.w3.org/2008/05/skos-xl#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix skosno: <http://difi.no/skosno#> .
+@prefix dqv:   <http://www.w3.org/ns/dqv#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:  <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
+@prefix xkos:  <http://rdf-vocabulary.ddialliance.org/xkos#> .
+@prefix oa:    <http://www.w3.org/ns/prov#> .
+@prefix dct:   <http://purl.org/dc/terms/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix dcatno: <http://difi.no/dcatno#> .
+@prefix dcat:  <http://www.w3.org/ns/dcat#> .
+@prefix foaf:  <http://xmlns.com/foaf/0.1/> .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/f3a466c7-4cba-466b-987d-083f2610eac7>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "saker som gjelder en bestemt type oppgave eller arbeidsprosess"@nb ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "forskrift 19. desember 2017 nr. 2286 om utfyllende tekniske og arkivfaglige bestemmelser om behandling av offentlige arkiver"@nb ;
+                                                              rdfs:seeAlso  <https://lovdata.no/forskrift/2017-12-19-2286/§7-2>
+                                                            ]
+                                  ] ;
+    dct:identifier                "f3a466c7-4cba-466b-987d-083f2610eac7" ;
+    dct:modified                  "2019-11-08"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "sakstype"@nb
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/b1af69aa-0c56-40ca-ba2d-37f1e920efbf>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "dato som er påført selve dokumentet"@nb ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "Noark 5-standarden"@nb ;
+                                                              rdfs:seeAlso  <>
+                                                            ]
+                                  ] ;
+    dct:identifier                "b1af69aa-0c56-40ca-ba2d-37f1e920efbf" ;
+    dct:modified                  "2019-12-19"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "dokumentdato"@nb
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/640b53b1-3469-4ce1-825e-e4363fd8d231>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "en enkelt fil som overføres parallelt med en avleverings- eller deponeringspakke og inneholder informasjon om avleverings- eller deponeringspakken"@nb ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "forskrift 19. desember 2017 nr. 2286 om utfyllende tekniske og arkivfaglige bestemmelser om behandling av offentlige arkiver"@nb ;
+                                                              rdfs:seeAlso  <https://lovdata.no/forskrift/2017-12-19-2286/§5-2>
+                                                            ]
+                                  ] ;
+    dct:identifier                "640b53b1-3469-4ce1-825e-e4363fd8d231" ;
+    dct:modified                  "2019-11-08"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "overføringsfil"@nb
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/0c44bb76-8d22-4430-ba9d-b6165bf14a1e>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "én avgrenset rekkefølge av aktiviteter som gjentatte ganger utøves i en virksomhet for å oppnå et bestemt resultat i samsvar med fastsatte regler"@nb ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "forskrift 19. desember 2017 nr. 2286 om utfyllende tekniske og arkivfaglige bestemmelser om behandling av offentlige arkiver"@nb ;
+                                                              rdfs:seeAlso  <https://lovdata.no/forskrift/2017-12-19-2286/§7-2>
+                                                            ]
+                                  ] ;
+    dct:identifier                "0c44bb76-8d22-4430-ba9d-b6165bf14a1e" ;
+    dct:modified                  "2019-11-07"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "arbeidsprosess"@nb
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/4233f299-7943-4dc0-9f12-fd16fdeaf3ed>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "statleg, fylkeskommunal eller kommunal institusjon eller eining"@nn ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "lov 4. desember 1992 nr. 126 om arkiv"@nb ;
+                                                              rdfs:seeAlso  <https://lovdata.no/lov/1992-12-04-126/§2>
+                                                            ]
+                                  ] ;
+    dct:identifier                "4233f299-7943-4dc0-9f12-fd16fdeaf3ed" ;
+    dct:modified                  "2019-11-06"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "offentleg organ"@nn
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/7a53f97c-54cc-4852-8233-c85897071eca>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "register over saksdokumenter som behandles i et organ"@nb ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "Noark 5"@nb ;
+                                                              rdfs:seeAlso  <>
+                                                            ]
+                                  ] ;
+    dct:identifier                "7a53f97c-54cc-4852-8233-c85897071eca" ;
+    dct:modified                  "2019-12-19"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "journal"@nb
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/4075de1f-d5a5-426a-a9e4-ed0c58738049>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "den som avleverer eller deponerer en arkivversjon til arkivdepot"@nb ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "forskrift 19. desember 2017 nr. 2286 om utfyllende tekniske og arkivfaglige bestemmelser om behandling av offentlige arkiver"@nb ;
+                                                              rdfs:seeAlso  <https://lovdata.no/forskrift/2017-12-19-2286/§5-2>
+                                                            ]
+                                  ] ;
+    dct:identifier                "4075de1f-d5a5-426a-a9e4-ed0c58738049" ;
+    dct:modified                  "2019-11-07"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "avgiver"@nb
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/08d938f3-b6ce-4a9b-aa27-df4d09855e3e>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "arkiv skapt av fylkeskommunalt eller kommunalt organ"@nn ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "lov 4. desember 1992 nr. 126 om arkiv"@nb ;
+                                                              rdfs:seeAlso  <https://lovdata.no/lov/1992-12-04-126/§2>
+                                                            ]
+                                  ] ;
+    dct:identifier                "08d938f3-b6ce-4a9b-aa27-df4d09855e3e" ;
+    dct:modified                  "2019-11-06"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "kommunalt arkiv"@nn
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/e7e1a7b2-7463-4f7d-b1d9-b81d4bb6688b>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "dokument som skal inngå i et arkiv"@nb ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "forskrift 19. desember 2017 nr. 2286 om utfyllende tekniske og arkivfaglige bestemmelser om behandling av offentlige arkiver"@nb ;
+                                                              rdfs:seeAlso  <https://lovdata.no/forskrift/2017-12-19-2286/§3-1>
+                                                            ]
+                                  ] ;
+    dct:identifier                "e7e1a7b2-7463-4f7d-b1d9-b81d4bb6688b" ;
+    dct:modified                  "2019-11-07"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "arkivdokument"@nb
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/5181097f-090c-4dcb-bc50-b4f83e40adab>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "et ansvarsområde som en virksomhet forvalter for å oppnå bestemte mål, og som består av en gruppe arbeidsprosesser"@nb ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "forskrift 19. desember 2017 nr. 2286 om utfyllende tekniske og arkivfaglige bestemmelser om behandling av offentlige arkiver"@nb ;
+                                                              rdfs:seeAlso  <https://lovdata.no/forskrift/2017-12-19-2286/§7-2>
+                                                            ]
+                                  ] ;
+    dct:identifier                "5181097f-090c-4dcb-bc50-b4f83e40adab" ;
+    dct:modified                  "2019-11-08"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "funksjon"@nb
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/18fad975-9bf7-43e1-be13-07d9ac26eeab>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "saker som gjelder offentlige organers egenforvaltning"@nb ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "forskrift 19. desember 2017 nr. 2286 om utfyllende tekniske og arkivfaglige bestemmelser om behandling av offentlige arkiver"@nb ;
+                                                              rdfs:seeAlso  <https://lovdata.no/forskrift/2017-12-19-2286/§7-2>
+                                                            ]
+                                  ] ;
+    dct:identifier                "18fad975-9bf7-43e1-be13-07d9ac26eeab" ;
+    dct:modified                  "2019-11-08"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "egenforvaltningssaker"@nb
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/ef94a67c-69dd-4d6c-88a9-a74a99d0cdd4>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "dato som angir når et dokument er sendt (ekspedert)"@nb ;
+                                    skosno:forholdTilKilde  skosno:egendefinert
+                                  ] ;
+    dct:identifier                "ef94a67c-69dd-4d6c-88a9-a74a99d0cdd4" ;
+    dct:modified                  "2019-12-19"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "ekspedisjonsdato"@nb
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/35b21126-c2ae-474c-9665-a3dc1288ab31>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "system bestående av klasser som beskriver arkivskapers funksjoner og aktiviteter"@nb ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "Noark 5"@nb ;
+                                                              rdfs:seeAlso  <>
+                                                            ]
+                                  ] ;
+    dct:identifier                "35b21126-c2ae-474c-9665-a3dc1288ab31" ;
+    dct:modified                  "2019-12-19"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skos:example                  "arkivnøkkel, K-kodesystemet"@nb ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "klassifikasjonssystem"@nb
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/dca7a82b-7f1a-43e1-9ba9-5eda1c4ec9a7>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "saker som gjelder offentlige organers kjernevirksomhet knyttet til samfunnsoppdrag som organene er opprettet for å ivareta"@nb ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "forskrift 19. desember 2017 nr. 2286 om utfyllende tekniske og arkivfaglige bestemmelser om behandling av offentlige arkiver"@nb ;
+                                                              rdfs:seeAlso  <https://lovdata.no/forskrift/2017-12-19-2286/§7-2>
+                                                            ]
+                                  ] ;
+    dct:identifier                "dca7a82b-7f1a-43e1-9ba9-5eda1c4ec9a7" ;
+    dct:modified                  "2019-11-08"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "fagsaker"@nb
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/24143b44-1d91-4dbc-bb68-f2102d3b7579>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "fysisk overføring av arkivmateriale til arkivdepot. Ved avlevering fra statlige organer til arkivverket_fdk.turtle overføres råderetten over arkivet til Riksarkivaren."@nb ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "forskrift 19. desember 2017 nr. 2286 om utfyllende tekniske og arkivfaglige bestemmelser om behandling av offentlige arkiver"@nb ;
+                                                              rdfs:seeAlso  <https://lovdata.no/forskrift/2017-12-19-2286/§5-2>
+                                                            ]
+                                  ] ;
+    dct:identifier                "24143b44-1d91-4dbc-bb68-f2102d3b7579" ;
+    dct:modified                  "2019-11-08"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "avlevering"@nb
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/c12f144e-e9d4-4581-9351-5af37abd8a68>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "ei logisk avgrensa informasjonsmengd som er lagra på eit medium for seinare lesing, lyding, framsyning eller overføring"@nn ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "lov 4. desember 1992 nr. 126 om arkiv"@nb ;
+                                                              rdfs:seeAlso  <https://lovdata.no/lov/1992-12-04-126/§2>
+                                                            ]
+                                  ] ;
+    dct:identifier                "c12f144e-e9d4-4581-9351-5af37abd8a68" ;
+    dct:modified                  "2019-11-07"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "dokument"@nn
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/a5ddfcdf-4217-4195-bd5a-b068a95f2936>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "registrering av opplysninger i journalen om når og hvordan behandlingen av et inngående dokument er blitt avsluttet"@nb ;
+                                    skosno:forholdTilKilde  skosno:egendefinert
+                                  ] ;
+    dct:identifier                "a5ddfcdf-4217-4195-bd5a-b068a95f2936" ;
+    dct:modified                  "2019-12-19"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "avskrivning"@nb
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/ce7faf8b-3889-438d-8d5b-5aad689027d4>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "fysisk overføring av arkivmateriale uten overføring av råderetten"@nb ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "forskrift 19. desember 2017 nr. 2286 om utfyllende tekniske og arkivfaglige bestemmelser om behandling av offentlige arkiver"@nb ;
+                                                              rdfs:seeAlso  <https://lovdata.no/forskrift/2017-12-19-2286/§5-2>
+                                                            ]
+                                  ] ;
+    dct:identifier                "ce7faf8b-3889-438d-8d5b-5aad689027d4" ;
+    dct:modified                  "2019-11-07"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "deponering"@nb
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/42598056-b90a-41e8-bfe6-cb4d2c29027a>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "bestanddel i et klassifikasjonssystem"@nb ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "Noark 5"@nb ;
+                                                              rdfs:seeAlso  <>
+                                                            ]
+                                  ] ;
+    dct:identifier                "42598056-b90a-41e8-bfe6-cb4d2c29027a" ;
+    dct:modified                  "2019-12-19"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skos:example                  "arkivkode"@nb ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "klasse"@nb
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/c817d592-1247-41a3-a56d-180bbd9c34ee>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "å ta ut og destruere arkivmateriale som ikke skal bevares"@nb ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "forskrift 19. desember 2017 nr. 2286 om utfyllende tekniske og arkivfaglige bestemmelser om behandling av offentlige arkiver"@nb ;
+                                                              rdfs:seeAlso  <https://lovdata.no/forskrift/2017-12-19-2286/§7-2>
+                                                            ]
+                                  ] ;
+    dct:identifier                "c817d592-1247-41a3-a56d-180bbd9c34ee" ;
+    dct:modified                  "2020-01-17"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "kassasjon"@nb
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/8ca9b8fd-03c1-488b-9325-7ecc74b87eaa>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "rom der offentlige organ oppbevarer arkiv"@nb ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "forskrift 19. desember 2017 nr. 2286 om utfyllende tekniske og arkivfaglige bestemmelser om behandling av offentlige arkiver"@nb ;
+                                                              rdfs:seeAlso  <https://lovdata.no/forskrift/2017-12-19-2286/§2-1>
+                                                            ]
+                                  ] ;
+    dct:identifier                "8ca9b8fd-03c1-488b-9325-7ecc74b87eaa" ;
+    dct:modified                  "2019-11-07"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "arkivlokale"@nb
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/9f17e1de-6e49-43e4-9658-8ad4f98d2589>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "frist som angir når saken som er gjenstand for kassasjon tidligst kan kasseres"@nb ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "forskrift 19. desember 2017 nr. 2286 om utfyllende tekniske og arkivfaglige bestemmelser om behandling av offentlige arkiver"@nb ;
+                                                              rdfs:seeAlso  <https://lovdata.no/forskrift/2017-12-19-2286/§7-3>
+                                                            ]
+                                  ] ;
+    dct:identifier                "9f17e1de-6e49-43e4-9658-8ad4f98d2589" ;
+    dct:modified                  "2019-11-08"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "kassasjonsfrist"@nb
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/fc1e93a2-2452-44f7-9455-f495402ad39d>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "bevaring av arkivmateriale som det i henhold til bevarings- og kassasjonsbestemmelser for fylkeskommunale og kommunale arkiv er tillatt å kassere"@nb ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "forskrift 19. desember 2017 nr. 2286 om utfyllende tekniske og arkivfaglige bestemmelser om behandling av offentlige arkiver"@nb ;
+                                                              rdfs:seeAlso  <https://lovdata.no/forskrift/2017-12-19-2286/§7-2>
+                                                            ]
+                                  ] ;
+    dct:identifier                "fc1e93a2-2452-44f7-9455-f495402ad39d" ;
+    dct:modified                  "2019-11-08"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "merbevaring"@nb
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/821b40b3-edb9-40d1-919f-40d571757ddf>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "dokument som vert til som lekk i ei verksemd"@nn ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "lov 4. desember 1992 nr. 126 om arkiv"@nb ;
+                                                              rdfs:seeAlso  <https://lovdata.no/lov/1992-12-04-126/§2>
+                                                            ]
+                                  ] ;
+    dct:identifier                "821b40b3-edb9-40d1-919f-40d571757ddf" ;
+    dct:modified                  "2019-11-21"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "arkiv"@nn
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399>
+    a               skos:Collection ;
+    rdfs:label      "Concept collection belonging to 961181399" ;
+    dct:identifier  "https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399" ;
+    dct:publisher   <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skos:member     <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/dca7a82b-7f1a-43e1-9ba9-5eda1c4ec9a7> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/4075de1f-d5a5-426a-a9e4-ed0c58738049> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/491c5baf-30de-4427-85b9-158ad4fde201> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/8ca9b8fd-03c1-488b-9325-7ecc74b87eaa> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/ef94a67c-69dd-4d6c-88a9-a74a99d0cdd4> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/18fad975-9bf7-43e1-be13-07d9ac26eeab> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/42598056-b90a-41e8-bfe6-cb4d2c29027a> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/e7e1a7b2-7463-4f7d-b1d9-b81d4bb6688b> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/2e57e1ba-b3cb-44cb-b5de-0f53ddb91bda> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/3fbd830e-c1da-446c-8131-f7bbfd5f1abf> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/b4860633-a9ce-405a-abd7-bed978e0c13e> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/0c44bb76-8d22-4430-ba9d-b6165bf14a1e> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/4233f299-7943-4dc0-9f12-fd16fdeaf3ed> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/bbc0e673-f0d1-4e89-beba-c40ff4d3f124> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/35b21126-c2ae-474c-9665-a3dc1288ab31> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/f3a466c7-4cba-466b-987d-083f2610eac7> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/9f17e1de-6e49-43e4-9658-8ad4f98d2589> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/fc1e93a2-2452-44f7-9455-f495402ad39d> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/f1213019-c6cc-4581-bcd9-dd931ca34138> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/a5ddfcdf-4217-4195-bd5a-b068a95f2936> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/640b53b1-3469-4ce1-825e-e4363fd8d231> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/08d938f3-b6ce-4a9b-aa27-df4d09855e3e> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/c817d592-1247-41a3-a56d-180bbd9c34ee> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/3eb46a60-3d7d-4471-a7b3-e8fd1ad2e01d> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/07d56d9d-86d5-40f5-925e-019eebb9973a> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/c12f144e-e9d4-4581-9351-5af37abd8a68> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/b1af69aa-0c56-40ca-ba2d-37f1e920efbf> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/a9be3c41-49db-421f-8b31-c79eb65b0f6e> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/5181097f-090c-4dcb-bc50-b4f83e40adab> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/d223c1de-7682-42f9-bd94-45e339a5052f> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/6461722f-7c99-4d8d-ab99-c67eaaab584d> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/ce7faf8b-3889-438d-8d5b-5aad689027d4> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/7a53f97c-54cc-4852-8233-c85897071eca> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/821b40b3-edb9-40d1-919f-40d571757ddf> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/235e211f-3b8a-4492-9e0c-1c3ad60acaef> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/1be1c28e-b429-4f8b-9e0a-747cb0d3724f> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/a6be75b5-2705-4ea5-b1f2-e887f5619a5b> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/9f3850b8-6eaf-40f3-97b1-7e048d440197> , <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/24143b44-1d91-4dbc-bb68-f2102d3b7579> .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/07d56d9d-86d5-40f5-925e-019eebb9973a>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "arkiv som ikkje er offentleg arkiv"@nn ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "lov 4. desember 1992 nr. 126 om arkiv"@nb ;
+                                                              rdfs:seeAlso  <https://lovdata.no/lov/1992-12-04-126/§2>
+                                                            ]
+                                  ] ;
+    dct:identifier                "07d56d9d-86d5-40f5-925e-019eebb9973a" ;
+    dct:modified                  "2019-11-06"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "privat arkiv"@nn
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/491c5baf-30de-4427-85b9-158ad4fde201>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "arkiv skapt av statleg organ"@nn ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "lov 4. desember 1992 nr. 126 om arkiv"@nb ;
+                                                              rdfs:seeAlso  <https://lovdata.no/lov/1992-12-04-126/§2>
+                                                            ]
+                                  ] ;
+    dct:identifier                "491c5baf-30de-4427-85b9-158ad4fde201" ;
+    dct:modified                  "2019-11-05"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "statleg arkiv"@nn
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/9f3850b8-6eaf-40f3-97b1-7e048d440197>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "lokaler som er spesielt tilpasset langtidslagring av ulike typer arkivmateriale"@nb ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "forskrift 19. desember 2017 nr. 2286 om utfyllende tekniske og arkivfaglige bestemmelser om behandling av offentlige arkiver"@nb ;
+                                                              rdfs:seeAlso  <https://lovdata.no/forskrift/2017-12-19-2286/§2-1>
+                                                            ]
+                                  ] ;
+    dct:identifier                "9f3850b8-6eaf-40f3-97b1-7e048d440197" ;
+    dct:modified                  "2019-11-07"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "spesialrom for arkiv"@nb
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/f1213019-c6cc-4581-bcd9-dd931ca34138>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "en enkelt registrering i en journal"@nb ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "Noark 5"@nb ;
+                                                              rdfs:seeAlso  <>
+                                                            ]
+                                  ] ;
+    dct:identifier                "f1213019-c6cc-4581-bcd9-dd931ca34138" ;
+    dct:modified                  "2019-12-19"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "journalpost"@nb
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/d223c1de-7682-42f9-bd94-45e339a5052f>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "statleg eller kommunalt arkiv"@nn ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "lov 4. desember 1992 nr. 126 om arkiv"@nb ;
+                                                              rdfs:seeAlso  <https://lovdata.no/lov/1992-12-04-126/§2>
+                                                            ]
+                                  ] ;
+    dct:identifier                "d223c1de-7682-42f9-bd94-45e339a5052f" ;
+    dct:modified                  "2019-11-06"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "offentleg arkiv"@nn
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/3eb46a60-3d7d-4471-a7b3-e8fd1ad2e01d>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "dokumentasjon skapt som ledd i utførelsen av en enkeltstående oppgave eller arbeidsprosess"@nb ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "forskrift 19. desember 2017 nr. 2286 om utfyllende tekniske og arkivfaglige bestemmelser om behandling av offentlige arkiver"@nb ;
+                                                              rdfs:seeAlso  <https://lovdata.no/forskrift/2017-12-19-2286/§7-2>
+                                                            ]
+                                  ] ;
+    dct:identifier                "3eb46a60-3d7d-4471-a7b3-e8fd1ad2e01d" ;
+    dct:modified                  "2019-11-07"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "sak"@nb
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/a9be3c41-49db-421f-8b31-c79eb65b0f6e>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "systematisk og fortløpende registrering av opplysninger i en journal"@nb ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "Noark 5"@nb ;
+                                                              rdfs:seeAlso  <>
+                                                            ]
+                                  ] ;
+    dct:identifier                "a9be3c41-49db-421f-8b31-c79eb65b0f6e" ;
+    dct:modified                  "2019-12-19"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "journalføring"@nb
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/bbc0e673-f0d1-4e89-beba-c40ff4d3f124>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "det datainnhold som skal hentes ut av et system og inngå som arkivversjonens hoveddel"@nb ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "forskrift 19. desember 2017 nr. 2286 om utfyllende tekniske og arkivfaglige bestemmelser om behandling av offentlige arkiver"@nb ;
+                                                              rdfs:seeAlso  <https://lovdata.no/forskrift/2017-12-19-2286/§5-2>
+                                                            ]
+                                  ] ;
+    dct:identifier                "bbc0e673-f0d1-4e89-beba-c40ff4d3f124" ;
+    dct:modified                  "2019-11-07"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "arkivuttrekk"@nb
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/1be1c28e-b429-4f8b-9e0a-747cb0d3724f>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "å ta vare på arkivmateriale for ettertiden"@nb ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "forskrift 19. desember 2017 nr. 2286 om utfyllende tekniske og arkivfaglige bestemmelser om behandling av offentlige arkiver"@nb ;
+                                                              rdfs:seeAlso  <https://lovdata.no/forskrift/2017-12-19-2286/§7-2>
+                                                            ]
+                                  ] ;
+    dct:identifier                "1be1c28e-b429-4f8b-9e0a-747cb0d3724f" ;
+    dct:modified                  "2020-01-17"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "bevaring"@nb
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/b4860633-a9ce-405a-abd7-bed978e0c13e>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "offentlige organers administrative funksjoner knyttet til forvaltning av eget organ"@nb ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "forskrift 19. desember 2017 nr. 2286 om utfyllende tekniske og arkivfaglige bestemmelser om behandling av offentlige arkiver"@nb ;
+                                                              rdfs:seeAlso  <https://lovdata.no/forskrift/2017-12-19-2286/§7-2>
+                                                            ]
+                                  ] ;
+    dct:identifier                "b4860633-a9ce-405a-abd7-bed978e0c13e" ;
+    dct:modified                  "2019-11-08"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "egenforvaltning"@nb
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/3fbd830e-c1da-446c-8131-f7bbfd5f1abf>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "måten en journalpost har blitt avskrevet på"@nb ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "Noark 5"@nb ;
+                                                              rdfs:seeAlso  <>
+                                                            ]
+                                  ] ;
+    dct:identifier                "3fbd830e-c1da-446c-8131-f7bbfd5f1abf" ;
+    dct:modified                  "2019-12-19"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skos:example                  "besvart med brev, besvart med e-post, besvart på telefon, tatt til etterretning, tatt til orientering"@nb ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "avskrivningsmåte"@nb
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/235e211f-3b8a-4492-9e0c-1c3ad60acaef>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "en logisk sammenstilling av utvalgte data fra en database fremstilt som en avledet databasetabell eller et arkivdokument"@nb ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "forskrift 19. desember 2017 nr. 2286 om utfyllende tekniske og arkivfaglige bestemmelser om behandling av offentlige arkiver"@nb ;
+                                                              rdfs:seeAlso  <https://lovdata.no/forskrift/2017-12-19-2286/§5-2>
+                                                            ]
+                                  ] ;
+    dct:identifier                "235e211f-3b8a-4492-9e0c-1c3ad60acaef" ;
+    dct:modified                  "2019-11-08"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "rapport"@nb
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/2e57e1ba-b3cb-44cb-b5de-0f53ddb91bda>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "identifikasjonsnummer for registrerte saker og dokumenter i et arkivsystem"@nb ;
+                                    skosno:forholdTilKilde  skosno:egendefinert
+                                  ] ;
+    dct:identifier                "2e57e1ba-b3cb-44cb-b5de-0f53ddb91bda" ;
+    dct:modified                  "2019-12-19"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "saks- og dokumentnummer"@nb
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/a6be75b5-2705-4ea5-b1f2-e887f5619a5b>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "dato et dokument ble avskrevet"@nb ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "Noark 5"@nb ;
+                                                              rdfs:seeAlso  <>
+                                                            ]
+                                  ] ;
+    dct:identifier                "a6be75b5-2705-4ea5-b1f2-e887f5619a5b" ;
+    dct:modified                  "2019-12-19"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "avskrivningsdato"@nb
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/6461722f-7c99-4d8d-ab99-c67eaaab584d>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "dato for når et dokument er ført inn i journalen"@nb ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "Noark 5"@nb ;
+                                                              rdfs:seeAlso  <>
+                                                            ]
+                                  ] ;
+    dct:identifier                "6461722f-7c99-4d8d-ab99-c67eaaab584d" ;
+    dct:modified                  "2019-12-19"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "journalføringsdato"@nb
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+<http://data.brreg.no/begrep/49220>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a               skosno:Definisjon ;
+                                    rdfs:label      "logisk avgrenset informasjonsmengde som er lagret på et medium for senere lesing, lytting, framvisning, overføring eller lignende"@nb , "\"[...] ei logisk avgrensa informasjonsmengd som er lagra på eit medium for seinare lesing, lytting, framsyning, overføring eller liknande\""@nn ;
+                                    dct:source      [ rdfs:label  "Offentleglova. _Lov 19. mai 2006 nr. 16 om rett til innsyn i dokument i offentleg verksemd §4._ Tilgjengelig fra: https://lovdata.no/NL/lov/2006-05-19-16/"@nb ] ;
+                                    skos:scopeNote  "Et dokument kan foreligge på papir, elektronisk medium, mikrofiche, mikrofilm eller et hvilket som helst annet medium som kan inneholde informasjon. Dokumenter kan inneholde tekst, tegninger, grafikk, fotografier, video, tale og så videre."@nb
+                                  ] ;
+    dct:identifier                "https://jira.brreg.no/rest/api/2/issue/49220" ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/974760673> ;
+    dct:subject                   "Arkiv"@nb ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "dokument"@nb
+                                  ] ;
+    dcat:contactPoint             [ a                   vcard:Organization ;
+                                    vcard:hasEmail      <mailto:informasjonsforvaltning@brreg.no> ;
+                                    vcard:hasTelephone  <tel:+4775007500>
+                                  ] .
+<http://data.brreg.no/begrep/53615>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a               skosno:Definisjon ;
+                                    rdfs:label      "løpende nummer for hver registrering i Løsøreregisteret"@nb ;
+                                    dct:source      [ rdfs:label  "Forskrift om tinglysing § 11 tredje ledd og § 16 annet ledd bokstav e). _Forskrift 3. november 1995 nr. 875 om tinglysing_ https://lovdata.no/forskrift/1995-11-03-875"@nb ] ;
+                                    skos:scopeNote  "Et dokumentnummer består av årstall og automatisk tildelt løpenummer. "@nb
+                                  ] ;
+    dct:identifier                "https://jira.brreg.no/rest/api/2/issue/53615" ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/974760673> ;
+    dct:subject                   "Tinglysing"@nb ;
+    skos:example                  "2018000068."@no ;
+    skosxl:altLabel               [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "dagboknummer"@nb
+                                  ] ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "dokumentnummer"@nb
+                                  ] ;
+    dcat:contactPoint             [ a                   vcard:Organization ;
+                                    vcard:hasEmail      <mailto:informasjonsforvaltning@brreg.no> ;
+                                    vcard:hasTelephone  <tel:+4775007500>
+                                  ] .
+<http://data.brreg.no/begrep/66396>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a               skosno:Definisjon ;
+                                    rdfs:label      "kategorisering av geografiske adresser"@nb ;
+                                    dct:source      [ rdfs:label  "Egendefinert"@nb ] ;
+                                    skos:scopeNote  "Adressekategoriene er vegadresse, stedsadresse, postboksadresse, matrikkeladresse og internasjonal adresse."@nb
+                                  ] ;
+    dct:identifier                "https://jira.brreg.no/rest/api/2/issue/66396" ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/974760673> ;
+    dct:subject                   "Adresse"@nb ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "adressekategori"@nb
+                                  ] ;
+    dcat:contactPoint             [ a                   vcard:Organization ;
+                                    vcard:hasEmail      <mailto:informasjonsforvaltning@brreg.no> ;
+                                    vcard:hasTelephone  <tel:+4775007500>
+                                  ] .
+<http://data.brreg.no/begrep/66396>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a               skosno:Definisjon ;
+                                    rdfs:label      "kategorisering av geografiske adresser"@nb ;
+                                    dct:source      [ rdfs:label  "Egendefinert"@nb ] ;
+                                    skos:scopeNote  "Adressekategoriene er vegadresse, stedsadresse, postboksadresse, matrikkeladresse og internasjonal adresse."@nb
+                                  ] ;
+    dct:identifier                "https://jira.brreg.no/rest/api/2/issue/66396" ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/974760673> ;
+    dct:subject                   "Adresse"@nb ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "adressekategori"@nb
+                                  ] ;
+    dcat:contactPoint             [ a                   vcard:Organization ;
+                                    vcard:hasEmail      <mailto:informasjonsforvaltning@brreg.no> ;
+                                    vcard:hasTelephone  <tel:+4775007500>
+                                  ] .
+<http://data.brreg.no/begrep/28265>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a               skosno:Definisjon ;
+                                    rdfs:label      "metadata til arkivdokument, som angir arkivdokumentets innhold"@nb ;
+                                    dct:source      [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
+                                    skos:scopeNote  "Dokumentbeskrivelsen er et nivå i arkivstrukturen, det vil si en arkivenhet. \r\n\r\nEt dokument er et informasjonsobjekt som kan behandles som en enhet. For å understreke at det dreier seg om en enhet, kan vi bruke begrepet enkeltdokument. En registrering som dokumenterer en transaksjon, kan bestå av ett eller flere enkeltdokument. Dokumentbeskrivelsen inneholder metadata for enkeltdokumenter og beskriver noen egenskaper ved enkeltdokumentet."@nb
+                                  ] ;
+    dct:identifier                "https://jira.brreg.no/rest/api/2/issue/28265" ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/974760673> ;
+    dct:subject                   "Arkiv"@nb ;
+    skos:example                  "Eksempel på dokumentbeskrivelser er tittel, opprettet dato, opprettet av, status, dokumentnummer."@no ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "dokumentbeskrivelse"@nb
+                                  ] ;
+    dcat:contactPoint             [ a                   vcard:Organization ;
+                                    vcard:hasEmail      <mailto:informasjonsforvaltning@brreg.no> ;
+                                    vcard:hasTelephone  <tel:+4775007500>
+                                  ] .
+<http://data.brreg.no/begrep/49218>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a               skosno:Definisjon ;
+                                    rdfs:label      "dokument som inneholder en skriftlig meddelelse og som leveres elektronisk eller på papir fra avsender til mottaker"@nb ;
+                                    dct:source      [ rdfs:label  "Egendefinert"@nb ] ;
+                                    skos:scopeNote  "Brev kan være både inngående og utgående. \n\nEt brev kan være delvis strukturert ved at man bruker en brevmal som for eksempel inneholder topp- eller bunntekst og faste felter til for eksempel dato, referanse og overskrift. Innholdet i et brev kan også være delvis strukturert ved at man bruker faste tekster som legges inn basert på gitte kriterier. Et brev kan også være helt ustrukturert. "@nb
+                                  ] ;
+    dct:identifier                "https://jira.brreg.no/rest/api/2/issue/49218" ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/974760673> ;
+    dct:subject                   "Arkiv"@nb ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "brev"@nb
+                                  ] ;
+    dcat:contactPoint             [ a                   vcard:Organization ;
+                                    vcard:hasEmail      <mailto:informasjonsforvaltning@brreg.no> ;
+                                    vcard:hasTelephone  <tel:+4775007500>
+                                  ] .
+<http://data.brreg.no/begrep/53604>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a               skosno:Definisjon ;
+                                    rdfs:label      "register over saksdokumenter som behandles i et organ"@nb ;
+                                    dct:source      [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 11. juni 2018]"@nb ] ;
+                                    skos:scopeNote  "I Brønnøysundregistrenes felles sakarkiv Public 360 (som er Noark-basert), er det en felles journal for alle arkivdelene. \n\nVår forståelse av dagens fagsystemer (som ikke er Noark-baserte), er at det finnes ulike varianter. For eksempel for Saksys, som er saksbehandlingssystem for flere registre, er det en felles journal for Foretaksregisteret, Enhetsregisteret og Frivillighetsregisteret, mens Konksys derimot, kun inneholder journal for Konkursregisteret.\n\nEn journal kan også forklares som en innholdsfortegnelse over saksdokumenter, mens en arkivdel omfatter både journalopplysninger og saksdokumenter med filer.\n"@nb
+                                  ] ;
+    dct:identifier                "https://jira.brreg.no/rest/api/2/issue/53604" ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/974760673> ;
+    dct:subject                   "Arkiv"@nb ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "journal"@nb
+                                  ] ;
+    dcat:contactPoint             [ a                   vcard:Organization ;
+                                    vcard:hasEmail      <mailto:informasjonsforvaltning@brreg.no> ;
+                                    vcard:hasTelephone  <tel:+4775007500>
+                                  ] .
+
+<http://data.brreg.no/begrep/28253>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a               skosno:Definisjon ;
+                                    rdfs:label      "enkelt registrering i en journal, det vil si opplysningene om et saksdokument med eventuelle vedlegg"@nb ;
+                                    dct:source      [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
+                                    skos:scopeNote  "En journalpost representer en \"innføring i journalen\". Journalen er en kronologisk fortegnelse over inn- og utgående dokumenter (det vil si korrespondansedokumenter), og eventuelt også interne dokumenter som inngår i saksbehandlingen. Journalposten inneholder blant annet metadata om korrespondanseparter (avsender og mottaker), og om saksbehandlere. Det finnes flere typer journalposter. De viktigste er inngående dokument, utgående dokument, organinternt dokument for oppfølging og organinternt dokument uten oppfølging."@nb
+                                  ] ;
+    dct:identifier                "https://jira.brreg.no/rest/api/2/issue/28253" ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/974760673> ;
+    dct:subject                   "Arkiv"@nb ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "journalpost"@nb
+                                  ] ;
+    dcat:contactPoint             [ a                   vcard:Organization ;
+                                    vcard:hasEmail      <mailto:informasjonsforvaltning@brreg.no> ;
+                                    vcard:hasTelephone  <tel:+4775007500>
+                                  ] .
+<http://data.brreg.no/begrep/28293>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a               skosno:Definisjon ;
+                                    rdfs:label      "skal i prinsippet være mottaksdatoen for et innkommet dokument, og for et egenprodusert dokument datoen for det tidspunktet arkivtjenesten har kvalitetssikret dokumentet, etter at det er sendt eller avsluttet"@nb ;
+                                    dct:source      [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
+                                    skos:scopeNote  "Med mottaksdato menes her den datoen da et innkommet dokument kom inn til eller ble lagt fram for organet.\n\nI følge arkivforskriften § 10 skal journaldato oppgis i journalen. \n\nJournaldato er også et utvalgskriterium for den samlede kronologisk ordnete rapporten over samtlige registreringer innenfor perioden."@nb
+                                  ] ;
+    dct:identifier                "https://jira.brreg.no/rest/api/2/issue/28293" ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/974760673> ;
+    dct:subject                   "Arkiv"@nb ;
+    skosxl:altLabel               [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "Journaldato"@nb
+                                  ] ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "journalføringsdato"@nb
+                                  ] ;
+    dcat:contactPoint             [ a                   vcard:Organization ;
+                                    vcard:hasEmail      <mailto:informasjonsforvaltning@brreg.no> ;
+                                    vcard:hasTelephone  <tel:+4775007500>
+                                  ] .
+<http://begrepskatalogen/begrep/8ef7c41b-0ef8-11e7-a910-005056821322>
+    a                              skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a           skosno:Definisjon ;
+                                    rdfs:label  "lagre informasjon, dvs. et dokument eller en beslutning i organets arkivsystem"@nb
+                                  ] ;
+    dct:identifier                 "8ef7c41b-0ef8-11e7-a910-005056821322" ;
+    dct:modified                   "2017-03-09"^^xsd:date ;
+    dct:publisher                  <https://data.brreg.no/enhetsregisteret/api/enheter/974761076> ;
+    dct:subject                    "Arkiv"@nb ;
+    dct:temporal                   [ a                 dct:PeriodOfTime ;
+                                     schema:endDate    "2022-03-01"^^xsd:date ;
+                                     schema:startDate  "2017-03-01"^^xsd:date
+                                   ] ;
+    skosxl:prefLabel               [ a                   skosxl:Label ;
+                                     skosxl:literalForm  "arkivering"@nb
+                                   ] ;
+    dcat:contactPoint              [ a                       vcard:Organization ;
+                                     vcard:hasEmail          <mailto:begrepskatalogen@skatteetaten.no> ;
+                                     vcard:organizationUnit  "Informasjonsforvaltning - innhenting"
+                                   ] .
+
+<http://begrepskatalogen/begrep/8ef7c456-0ef8-11e7-a910-005056821322>
+    a                              skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a           skosno:Definisjon ;
+                                    rdfs:label  "etablerer et rammeverk for policy, mål og retningslinjer for å kontrollere organisasjonens dokumentasjon i dokumentasjonssystemer og som sikrer at disse systemene oppfyller organisasjonens krav"@nb
+                                  ] ;
+    dct:identifier                 "8ef7c456-0ef8-11e7-a910-005056821322" ;
+    dct:modified                   "2017-03-09"^^xsd:date ;
+    dct:publisher                  <https://data.brreg.no/enhetsregisteret/api/enheter/974761076> ;
+    dct:subject                    "Arkiv"@nb ;
+    dct:temporal                   [ a                 dct:PeriodOfTime ;
+                                     schema:endDate    "2022-03-01"^^xsd:date ;
+                                     schema:startDate  "2017-03-01"^^xsd:date
+                                   ] ;
+    skosxl:prefLabel               [ a                   skosxl:Label ;
+                                     skosxl:literalForm  "ledelsessystem for dokumentasjon"@nb
+                                   ] ;
+    dcat:contactPoint              [ a                       vcard:Organization ;
+                                     vcard:hasEmail          <mailto:begrepskatalogen@skatteetaten.no> ;
+                                     vcard:organizationUnit  "Informasjonsforvaltning - innhenting"
+                                   ] .
+
+<http://begrepskatalogen/begrep/8ef7c448-0ef8-11e7-a910-005056821322>
+    a                              skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a           skosno:Definisjon ;
+                                    rdfs:label  "register over saksdokumenter og/eller beslutninger som blir behandlet/tatt i et organ; se også journalføring"@nb
+                                  ] ;
+    dct:identifier                 "8ef7c448-0ef8-11e7-a910-005056821322" ;
+    dct:modified                   "2017-03-09"^^xsd:date ;
+    dct:publisher                  <https://data.brreg.no/enhetsregisteret/api/enheter/974761076> ;
+    dct:subject                    "Arkiv"@nb ;
+    dct:temporal                   [ a                 dct:PeriodOfTime ;
+                                     schema:endDate    "2022-03-01"^^xsd:date ;
+                                     schema:startDate  "2017-03-01"^^xsd:date
+                                   ] ;
+    skosxl:prefLabel               [ a                   skosxl:Label ;
+                                     skosxl:literalForm  "journal"@nb
+                                   ] ;
+    dcat:contactPoint              [ a                       vcard:Organization ;
+                                     vcard:hasEmail          <mailto:begrepskatalogen@skatteetaten.no> ;
+                                     vcard:organizationUnit  "Informasjonsforvaltning - innhenting"
+                                   ] .
+<http://begrepskatalogen/begrep/20b52b14-9fe1-11e5-a9f8-e4115b280940>
+    a                              skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a           skosno:Definisjon ;
+                                    rdfs:label  "identifiserende nøkkel for dokumentrevisjonen"@nb
+                                  ] ;
+    dct:identifier                 "20b52b14-9fe1-11e5-a9f8-e4115b280940" ;
+    dct:modified                   "2019-01-24"^^xsd:date ;
+    dct:publisher                  <https://data.brreg.no/enhetsregisteret/api/enheter/974761076> ;
+    dct:subject                    "Skatteinfo"@nb ;
+    skosxl:prefLabel               [ a                   skosxl:Label ;
+                                     skosxl:literalForm  "dokumentidentifikator"@nb
+                                   ] ;
+    dcat:contactPoint              [ a                       vcard:Organization ;
+                                     vcard:hasEmail          <mailto:begrepskatalogen@skatteetaten.no> ;
+                                     vcard:organizationUnit  "Informasjonsforvaltning - innhenting"
+                                   ] .
