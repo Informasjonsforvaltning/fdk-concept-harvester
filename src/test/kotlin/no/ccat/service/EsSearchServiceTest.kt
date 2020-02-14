@@ -2,11 +2,15 @@ package no.ccat.service
 
 import net.minidev.json.JSONArray
 import no.ccat.utils.QueryParams
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import testUtils.jsonPathParser
 import testUtils.jsonValueParser
 import java.io.File
 import testUtils.assertions.Expect as expect
+
+
+@Tag("unit")
 class EsSearchServiceTest {
     private val service = EsSearchService()
 

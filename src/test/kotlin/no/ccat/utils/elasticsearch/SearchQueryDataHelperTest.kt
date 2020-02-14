@@ -41,7 +41,7 @@ class SearchQueryHelperTest {
          fun `default object should have secondaryLanguage keys nn,no and en`() {
              val result: List<String> = LanguageProperties().secondaryKeys()
              val expected = listOf<String>("nn","no","en")
-             expect(result).to_contain(result);
+             expect(result).to_contain(expected);
             }
 
             @Test

@@ -1,6 +1,8 @@
 package testUtils
 
 import com.google.common.collect.ImmutableMap
+import com.jayway.jsonpath.DocumentContext
+import net.minidev.json.JSONArray
 import testUtils.ApiTestContainer.Companion.TEST_API
 
 const val API_PORT = 8080
@@ -20,7 +22,7 @@ const val RABBIT_MQ_PORT_2 = 15672
 const val WIREMOCK_TEST_HOST = "http://host.testcontainers.internal:$LOCAL_SERVER_PORT"
 const val API_IMAGE = "eu.gcr.io/fdk-infra/fdk-concept-harvester:latest"
 
-fun API_ENV_VALUES (elasticsearch : KGenericContainer): Map<String,String> = mutableMapOf(
+val API_ENV_VALUES : Map<String,String> = mutableMapOf(
         "SPRING_PROFILES_ACTIVE" to  "test",
         "WIREMOCK_TEST_HOST" to WIREMOCK_TEST_HOST,
         "FDK_ES_CLUSTERNODES" to ELASTIC_CLUSTERNODES,
@@ -52,37 +54,3 @@ fun getApiAddress( endpoint: String ): String{
 }
 const val mockDataArkiv = "/Users/bbreg/Documents/concept-catalouge/fdk-concept-harvester/src/main/resources/dev.data/arkivverket_fdk.turtle"
 
-data class SortResponse(val sortWord: String, val primaryLanguagePath: String = "nb") {
-        var exactMatchesId = mutableListOf<String>()
-        var lastExactMatch = 0
-        var lastPath =  ""
-
-        fun isLessRelevant(currentPath: String, currentValue: String, positionInList: Int, conceptId: String): Boolean {
-            var correctlySorted = false
-
-            if(currentValue == sortWord) {
-                //if current hit is an exact match, last match should be an exact match
-                if (positionInList == lastExactMatch + 1) {
-                    lastExactMatch += 1
-                    //if the current hit is in primaryLanguage, last hit should also be in primaryLanguage
-                    if(currentPath == primaryLanguagePath){
-                        if(lastPath == primaryLanguagePath) {
-                            correctlySorted = true
-                        }
-
-                    } else {
-                        //If the concept has already been listed in primary language, it should not be listed on secondary languages
-                        if(!exactMatchesId.contains(conceptId)){
-                            correctlySorted = true
-                        }
-                    }
-                }
-            } else {
-                //TODO: better search specification
-                correctlySorted = true
-            }
-
-            return correctlySorted
-        }
-
-}

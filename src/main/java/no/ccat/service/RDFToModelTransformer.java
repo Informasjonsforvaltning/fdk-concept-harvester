@@ -262,13 +262,6 @@ public class RDFToModelTransformer {
     public ConceptDenormalized extractConceptFromModel(Resource conceptResource) {
         ConceptDenormalized concept = new ConceptDenormalized();
 
-   //     Publisher publisher = extractPublisher(conceptResource, DCTerms.publisher);
-
-    /*    if (publisher != null && publisher.getId().equals("974761076")) {
-            List<Object> deleted = conceptDenormalizedRepository.deleteByIdentifier(conceptResource.getURI());
-            logger.info("Deleted " + deleted.size() + " concepts");
-        }*/
-
         ConceptDenormalized existingConcept = null;
 
         // Checking whether the concept is already harvested:

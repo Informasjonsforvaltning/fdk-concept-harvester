@@ -4,6 +4,7 @@ import no.ccat.common.model.ConceptDenormalized;
 import no.ccat.common.model.TextAndURI;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.Tag;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
@@ -15,6 +16,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
+@Tag("unit")
 public class RDFToModelTransformerTest {
 
     private RDFToModelTransformer transformer;

@@ -2,9 +2,11 @@ package no.dcat.shared;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.jupiter.api.Tag;
 
 import java.util.Date;
 
+@Tag("unit")
 public class HarvestMetadataUtilTest {
 
     @Test

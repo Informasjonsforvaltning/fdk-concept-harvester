@@ -58,7 +58,7 @@ abstract class ApiTestContainer {
                             .forResponsePredicate { response -> response?.let { it.toLong() >  50 } ?: false }
                             .withStartupTimeout(Duration.ofMinutes(3)))
                     .withNetwork(apiNetwork)
-                    .withEnv(API_ENV_VALUES(elasticContainer))
+                    .withEnv(API_ENV_VALUES)
                     .withLogConsumer(apiLogger)
 
             TEST_API.start()

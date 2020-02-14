@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assumptions
 import org.skyscreamer.jsonassert.JSONAssert
 import java.lang.StringBuilder
+import kotlin.test.expect
 
 
 class Expect(_result: Any?) {
@@ -115,8 +116,9 @@ class Expect(_result: Any?) {
         return false
     }
 
-    fun to_be_less_exact_than(lastHit: String) {
-
+    fun to_contain(testString: String) {
+        result as String
+        Assertions.assertTrue(result.contains(testString), "expected to find $testString in result\n found $result")
     }
 
 }

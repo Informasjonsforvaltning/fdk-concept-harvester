@@ -16,6 +16,7 @@
 @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix dcatno: <http://difi.no/dcatno#> .
 @prefix dcat:  <http://www.w3.org/ns/dcat#> .
+@prefix dcat:  <http://www.w3.org/ns/dcat#> .
 @prefix foaf:  <http://xmlns.com/foaf/0.1/> .
 
 <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/f3a466c7-4cba-466b-987d-083f2610eac7>

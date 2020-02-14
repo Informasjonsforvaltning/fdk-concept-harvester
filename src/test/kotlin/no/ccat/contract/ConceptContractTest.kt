@@ -1,6 +1,6 @@
 package no.ccat.contract
 
-import com.google.gson.JsonArray
+import net.minidev.json.JSONArray
 import org.junit.jupiter.api.*
 import testUtils.ApiTestContainer
 import testUtils.SortResponse
@@ -13,6 +13,8 @@ import testUtils.jsonValueParser
 @Tag("contract")
 
 class ConceptContractTest : ApiTestContainer() {
+    val prefLabelPath = "$.._embedded.concepts.*.prefLabel"
+    val testString = "arkiv"
 
 
     @Nested
@@ -32,39 +34,51 @@ class ConceptContractTest : ApiTestContainer() {
         @TestInstance(TestInstance.Lifecycle.PER_CLASS)
         @Nested
         inner class FullTextSearch {
-            lateinit var result: String;
-            val prefLabelPath = "$._embedded.concepts.prefLabel"
-            val testString = "dokument"
-            @BeforeAll
-                fun setup(){
-                result = apiGet("/concepts?q=$testString")
-            }
 
 
             @Test
             fun `expect full text search to return list of concepts sorted on exact matches in preferredLanguage nb`(){
-                val prefLabelPaths = jsonPathParser.parse(result).read<List<String>>(prefLabelPath);
+
+                val result = apiGet("/concepts?q=$testString&size=100")
+                val pathParser = jsonPathParser.parse(result)
                 val valueParser = jsonValueParser.parse(result)
-                val sortResult = SortResponse(sortWord = "$testString");
+                val sortResult = SortResponse(sortWord = testString,
+                        pathParser = pathParser )
+
+                val responsePaths = sortResult.getPathsForField(jsonPath = prefLabelPath, field = "prefLabel")
 
 
-                for (i in prefLabelPaths.indices){
-                    val currentValue = valueParser.read<String>(prefLabelPaths[i])
-                    val currentId = valueParser.read<JsonArray>("$..concepts[$i].id").toString()
-                    expect(sortResult.isLessRelevant(prefLabelPaths[i], currentValue, i, currentId)).to_be_true()
+                for (i in responsePaths.indices){
+                    val currentValue = valueParser.read<JSONArray>(responsePaths[i])
+                    val currentId = valueParser.read<JSONArray>("$..concepts[$i].id").toString()
+                    expect(sortResult.isLessRelevant(responsePaths[i], currentValue.toString(), i, currentId)).to_be_true()
                 }
             }
         }
+    }
+    @Nested
+    inner class PrefLabelOnlySearch {
+        @Test
+        fun `expect prefLabel search to return list of concepts sorted on exact matches in preferredLanguage `(){
+            val result = apiGet("/concepts?prefLabel=$testString&size=100")
+            val pathParser = jsonPathParser.parse(result)
+            val valueParser = jsonValueParser.parse(result)
+            val sortResult = SortResponse(sortWord = testString,
+                    pathParser = pathParser )
 
-        inner class PrefLabelOnlySearch {
-            @Test
-            fun `expect prefLabel search to return list of concepts sorted on exact matches in preferredLanguage `(){
+            val responsePaths = sortResult.getPathsForField(jsonPath = prefLabelPath, field = "prefLabel")
 
+
+            for (i in responsePaths.indices){
+                val currentValue = valueParser.read<JSONArray>(responsePaths[i]).toString()
+                val currentId = valueParser.read<JSONArray>("$..concepts[$i].id").toString()
+                expect(sortResult.isLessRelevant(responsePaths[i], currentValue, i, currentId)).to_be_true()
+                expect(currentValue).to_contain(testString)
             }
 
-            //TODO specifications for behaviour of prefLabel search
-
         }
+
+        //TODO specifications for behaviour of prefLabel search
 
     }
 
