@@ -4,11 +4,12 @@ import com.google.common.collect.ImmutableMap
 import com.jayway.jsonpath.DocumentContext
 import net.minidev.json.JSONArray
 import testUtils.ApiTestContainer.Companion.TEST_API
+import testUtils.ApiTestContainer.Companion.elasticContainer
 
 const val API_PORT = 8080
 const val LOCAL_SERVER_PORT = 5000
 
-const val COMPLEX_SEARCH_STRING = "søke noe søke noe"
+const val COMPLEX_SEARCH_STRING = "søke noe"
 
 const val ELASTIC_PORT = 9200
 const val ELASTIC_TCP_PORT = 9300
@@ -51,6 +52,10 @@ val RABBIT_MQ_ENV_VALUES : Map <String, String> = ImmutableMap.of(
 
 fun getApiAddress( endpoint: String ): String{
     return "http://${TEST_API.getContainerIpAddress()}:${TEST_API.getMappedPort(API_PORT)}$endpoint"
+}
+
+fun getElasticAddress( query: String ): String{
+    return "http://${elasticContainer.getContainerIpAddress()}:${elasticContainer.getMappedPort(API_PORT)}/$query"
 }
 const val mockDataArkiv = "/Users/bbreg/Documents/concept-catalouge/fdk-concept-harvester/src/main/resources/dev.data/arkivverket_fdk.turtle"
 

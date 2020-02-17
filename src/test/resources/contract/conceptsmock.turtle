@@ -1000,3 +1000,23 @@
                                      vcard:hasEmail          <mailto:begrepskatalogen@skatteetaten.no> ;
                                      vcard:organizationUnit  "Informasjonsforvaltning - innhenting"
                                    ] .
+<http://begrepskatalogen/begrep/5138d9e9-be20-11e6-8004-005056825ca0>
+    a                              skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a           skosno:Definisjon ;
+                                    rdfs:label  "en logisk avgrenset informasjonsmengde som er lagret på et medium for senere lesing, lytting, framføring, overføring eller lignende"@nb ;
+                                    dct:source  [ rdfs:label  "Forvaltningsloven §2 f"@nb ]
+                                  ] ;
+    dct:identifier                 "5138d9e9-be20-11e6-8004-005056825ca0" ;
+    dct:modified                   "2016-10-05"^^xsd:date ;
+    dct:publisher                  <https://data.brreg.no/enhetsregisteret/api/enheter/974761076> ;
+    dct:subject                    "Folkeregister"@nb ;
+    dct:temporal                   [ a                 dct:PeriodOfTime ;
+                                     schema:startDate  "2016-10-05"^^xsd:date
+                                   ] ;
+    skosxl:prefLabel               [ a                   skosxl:Label ;
+                                     skosxl:literalForm  "dokument"@nb
+                                   ] ;
+    dcat:contactPoint              [ a                       vcard:Organization ;
+                                     vcard:hasEmail          <mailto:begrepskatalogen@skatteetaten.no> ;
+                                     vcard:organizationUnit  "Informasjonsforvaltning - innhenting"
+                                   ] .

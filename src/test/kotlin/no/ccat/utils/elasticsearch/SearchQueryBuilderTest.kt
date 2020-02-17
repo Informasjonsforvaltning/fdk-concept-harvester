@@ -1,7 +1,7 @@
 package no.ccat.utils.elasticsearch
 import no.ccat.utils.LanguageProperties
 import no.ccat.utils.buildSearchStringInPrefLabelBoost
-import no.ccat.utils.getExactMatchString
+import no.ccat.utils.buildExactMatchString
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
@@ -22,7 +22,7 @@ class SearchQueryBuilderTest {
         fun`should return correct searchstring for prefered language nb`(){
             val searchString = "ark"
             val expected = "(doc['prefLabel.nb'][0].contains('$searchString') && doc['prefLabel.nb'].size() == 1 && doc['prefLabel.nb'][0].length() < 7)"
-            val result = getExactMatchString("nb",searchString,7);
+            val result = buildExactMatchString("nb",searchString,7);
             expect(result).to_equal(expected)
         }
 
@@ -30,7 +30,7 @@ class SearchQueryBuilderTest {
         fun`should return correct searchstring for prefered language en`(){
             val searchString = "another thing"
             val expected = "(doc['prefLabel.en'][0].contains('$searchString') && doc['prefLabel.en'].size() == 1 && doc['prefLabel.en'][0].length() < 7)"
-            val result = getExactMatchString("en",searchString, 7);
+            val result = buildExactMatchString("en",searchString, 7);
             expect(result).to_equal(expected)
         }
     }

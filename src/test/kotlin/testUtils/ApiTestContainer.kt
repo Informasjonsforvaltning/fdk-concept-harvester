@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory
 import org.testcontainers.Testcontainers
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.Network
-import org.testcontainers.containers.output.Slf4jLogConsumer
 import org.testcontainers.containers.wait.strategy.HttpWaitStrategy
 import java.io.IOException
 import java.time.Duration
@@ -18,7 +17,6 @@ abstract class ApiTestContainer {
         var elasticContainer: KGenericContainer
         var TEST_API: KGenericContainer
         var rabbitContainer: KGenericContainer
-        val apiLogger = Slf4jLogConsumer(logger).withPrefix("API")
 
         init {
 
@@ -59,7 +57,6 @@ abstract class ApiTestContainer {
                             .withStartupTimeout(Duration.ofMinutes(3)))
                     .withNetwork(apiNetwork)
                     .withEnv(API_ENV_VALUES)
-                    .withLogConsumer(apiLogger)
 
             TEST_API.start()
 
@@ -69,6 +66,7 @@ abstract class ApiTestContainer {
                 if (!result.stderr.contains("200")) {
                     logger.debug("Ping to mock server failed")
                 }
+
             } catch (e: IOException) {
                 e.printStackTrace()
             } catch (e: InterruptedException) {

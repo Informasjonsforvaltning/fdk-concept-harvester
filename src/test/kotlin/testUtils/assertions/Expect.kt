@@ -19,15 +19,12 @@ class Expect(_result: Any?) {
     fun to_equal(expected: List<String>) {
         result as List<String>
         Assertions.assertEquals(expected.size, result.size)
-        for(i in expected.indices){
-            var testString = expected[i]
-            if(i == 0) {
-               testString = testString.substring(2)
+        expected.indices.forEach {
+            val testString : String = when {
+                it == 0 -> expected[it].substring(2)
+                it ==  expected.size - 1 -> expected[it].substring(0, expected[it].length-3)
+                else -> expected[it]
             }
-            if(i == expected.size - 1) {
-                testString = testString.substring(0, testString.length-3)
-            }
-
             Assertions.assertTrue(scriptListContains(testString), "expected to find\n $testString \n found ${resultToString(result)}")
         }
     }

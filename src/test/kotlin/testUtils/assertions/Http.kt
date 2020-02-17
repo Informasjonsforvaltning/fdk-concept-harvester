@@ -6,6 +6,7 @@ import java.net.URL
 import org.springframework.http.HttpStatus
 
 import testUtils.getApiAddress
+import testUtils.getElasticAddress
 
 fun apiGet(endpoint: String): String {
 
@@ -24,7 +25,6 @@ fun apiGet(endpoint: String): String {
         "error"
     }
 }
-
 
 fun isOK(response: Int?): Boolean =
         if(response == null) false

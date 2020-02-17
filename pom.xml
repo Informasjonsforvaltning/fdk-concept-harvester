@@ -246,32 +246,41 @@
                 <!-- Unit test runner -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.0</version>
+                <version>3.0.0-M3</version>
                 <configuration>
                     <useSystemClassLoader>false</useSystemClassLoader>
-                    <groups>no.fdk.test.testcategories.UnitTest</groups><!--java.lang.Exception is a hack to make a valid comma-separated list og category classes -->
-                    <argLine>${surefireArgLine} -Dfile.encoding=UTF-8</argLine>
+                    <groups>unit</groups>
+                    <excludedGroups>contract</excludedGroups>
+                    <includes>
+                        <include>**/*.java</include>
+                    </includes>
+                    <systemProperties>
+                        <property>
+                            <name>test.type</name>
+                            <value>unit</value>
+                        </property>
+                    </systemProperties>
                 </configuration>
             </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.19.1</version>
+                <version>3.0.0-M3</version>
                 <configuration>
-                    <groups>java.lang.Exception ${integrationtest.category}
-                    </groups> <!-- java.lang.Exception is a hack to make a valid comma-separated list og category classes -->
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                    <argLine>${failsafeArgLine}</argLine>
+                    <groups>contract</groups>
+                    <excludedGroups>unit</excludedGroups>
+                    <includes>
+                        <include>**/*.java</include>
+                    </includes>
+                    <!--System property used in TestPlanExecutionListener for tests to determine test type-->
+                    <systemProperties>
+                        <property>
+                            <name>test.type</name>
+                            <value>contract</value>
+                        </property>
+                    </systemProperties>
                 </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
 
             <plugin>

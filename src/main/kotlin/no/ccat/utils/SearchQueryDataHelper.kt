@@ -3,6 +3,43 @@
 package no.ccat.utils
 
 
+val nn = LanguageProperties("nn", "norwegian")
+val en = LanguageProperties("en", "english")
+val no = LanguageProperties("no", "norwegian")
+val nb = LanguageProperties()
+
+/**
+ * @param langParam: language code from request
+ * @return properties to be used for boosting with with elastichsearch,
+ *          defaults to bokmål if language code is unknowm
+ */
+fun language(langParam: String) : LanguageProperties {
+    return when (langParam) {
+        nb.key -> nb
+        nn.key -> nn
+        en.key -> en
+        no.key -> no
+        else -> nb;
+    }
+}
+
+/**
+ * @param langParam: language code from request
+ * @return properties to be used for boosting of exact matches with elastichsearch,
+ *          defaults to bokmål if language code is unknowm
+ */
+fun secondaryLanguages(langParam: String ): Array<LanguageProperties>{
+    return when (langParam) {
+        nb.key -> arrayOf(nn,en,no)
+        nn.key -> arrayOf(nb,en,no)
+        en.key ->  arrayOf(nn,nb,no)
+        no.key -> arrayOf(nn,en,nb)
+        else -> arrayOf(nn,en,no)
+    }
+}
+
+
+
 data class LanguageProperties(var key : String = "nb", val analyzer: String = "norwegian", val stemmer: String? = null){
 
     init {
@@ -11,7 +48,7 @@ data class LanguageProperties(var key : String = "nb", val analyzer: String = "n
     }
 
     fun secondaryKeys() : List<String> {
-        val secondary : Array<LanguageProperties> = LanguageUtils().getSecondaryLanguage(key)
+        val secondary : Array<LanguageProperties> = secondaryLanguages(key)
 
         val keyList = mutableListOf<String>();
         for (lang in secondary) {
@@ -21,42 +58,6 @@ data class LanguageProperties(var key : String = "nb", val analyzer: String = "n
         return keyList;
     }
 
-}
-
-data class LanguageUtils(val nb : LanguageProperties = LanguageProperties()){
-    private val nn = LanguageProperties("nn", "norwegian")
-    private val en = LanguageProperties("en", "english")
-    private val no = LanguageProperties("no", "norwegian")
-
-    /**
-     * @param langParam: language code from request
-     * @return properties to be used for boosting with with elastichsearch,
-     *          defaults to bokmål if language code is unknowm
-     */
-    fun getLanguage(langParam: String) : LanguageProperties {
-        return when (langParam) {
-            nb.key -> nb
-            nn.key -> nn
-            en.key -> en
-            no.key -> no
-            else -> nb;
-        }
-    }
-
-    /**
-     * @param langParam: language code from request
-     * @return properties to be used for boosting of exact matches with elastichsearch,
-     *          defaults to bokmål if language code is unknowm
-     */
-    fun getSecondaryLanguage(langParam: String ): Array<LanguageProperties>{
-        return when (langParam) {
-            nb.key -> arrayOf(nn,en,no)
-            nn.key -> arrayOf(nb,en,no)
-            en.key ->  arrayOf(nn,nb,no)
-            no.key -> arrayOf(nn,en,nb)
-            else -> arrayOf(nn,en,no)
-        }
-    }
 }
 
 data class QueryParams(val queryString: String = "",

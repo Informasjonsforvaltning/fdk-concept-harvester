@@ -37,7 +37,7 @@ public class CcatApiApplication {
     private String swagger2Endpoint;
 
     public static void main(String[] args) {
-        ApplicationContext context= SpringApplication.run(CcatApiApplication.class, args);
+       SpringApplication.run(CcatApiApplication.class, args);
     }
     @Bean
     public Docket swaggerDocket() {

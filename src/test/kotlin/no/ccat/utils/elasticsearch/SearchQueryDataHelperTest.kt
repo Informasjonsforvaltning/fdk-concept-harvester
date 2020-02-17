@@ -1,9 +1,7 @@
 package no.ccat.utils.elasticsearch
 
+import no.ccat.utils.*
 import org.junit.jupiter.api.*
-import no.ccat.utils.LanguageProperties
-import no.ccat.utils.LanguageUtils
-import no.ccat.utils.QueryParams
 import testUtils.assertions.Expect as expect
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -57,22 +55,20 @@ class SearchQueryHelperTest {
     inner class LanguageUtilsTest {
         @Nested
         inner class GetLanguage{
-            var languageUtils: LanguageUtils = LanguageUtils();
 
             @Test
             fun `should return a nn object when language is set to nn`(){
                 val expectedObject : LanguageProperties = LanguageProperties(key = "nn")
-                val result = languageUtils.getLanguage("nn")
+                val result = language("nn")
+
                 expect(result).to_equal(expectedObject);
             }
 
             @Test
             fun `should return an array containg en,nb and no when language is set to nn`(){
                 val expected = arrayOf(LanguageProperties("nb"),LanguageProperties("en", analyzer = "english"),LanguageProperties("no"))
-                val result = languageUtils.getSecondaryLanguage("nn");
-
+                val result = secondaryLanguages("nn");
                 expect(result).to_contain(expected)
-
             }
         }
     }
@@ -111,7 +107,7 @@ class SearchQueryHelperTest {
             @Test
             fun `should return false if searchString is not default `() {
                 val params = QueryParams(queryString = "nsakfa");
-                val result = expect(params.isEmpty()).to_be_false()
+                expect(params.isEmpty()).to_be_false()
 
             }
 

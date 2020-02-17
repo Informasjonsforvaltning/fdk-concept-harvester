@@ -2,6 +2,7 @@ package testUtils
 
 import com.jayway.jsonpath.*
 import net.minidev.json.JSONArray
+import org.junit.jupiter.api.fail
 
 val jsonPathParser = JsonPath
         .using(Configuration.builder()
@@ -17,59 +18,76 @@ val jsonValueParser = JsonPath
 
 class SortResponse(val sortWord: String,
                         val primaryLanguagePath: String = "nb",
-                        val pathParser: DocumentContext)
-{
-    var exactMatchesId = mutableListOf<String>()
+                        val pathParser: DocumentContext) {
+    var conceptIds = mutableListOf<String>()
     var lastExactMatch = -1
-    var lastPath = ""
+    var lastLangPath = ""
 
-    fun isLessRelevant(currentPath: String, currentObject: String, positionInList: Int, conceptId: String): Boolean {
-        var correctlySorted = false
+    fun expectIsLessRelevant(currentObject: String, positionInList: Int, conceptId: String){
         val lang =
                 getLanguage(jsonPathParser.parse(currentObject).read<List<String>>("$.*.*").toString());
-        val value = jsonValueParser.parse(currentObject).read<JSONArray>("$[0]$lang")[0]
 
-                if(value == sortWord) {
-            //if current hit is an exact match, last match should be an exact match
-            if (positionInList == lastExactMatch + 1) {
+        val resultWord : String = jsonValueParser.parse(currentObject).read<JSONArray>("$[0]$lang")[0] as String;
+
+        when(resultWord.getSortCondition(positionInList,lang,conceptId)){
+            SortConditions.sortWordAndLastWordIsNotSortWord -> fail("Error on $resultWord in position $positionInList on exact match: \n entry sorted after non-exact match")
+            SortConditions.sortWordAndPrimaryLanguageAndLastLanguageIsPrimaryAndIsDuplicate -> fail("Error on $resultWord in position $positionInList primary language exact match:\n entry is duplicate")
+            SortConditions.sortWordAndPrimaryLanguageAndLastLanguageIsNotPrimary -> fail("Error on $resultWord in position $positionInList primary language exact match: \n entry sorted after secondary language")
+            SortConditions.sortWordAndSecondaryLanguageAndIsDuplicate -> fail("Error on $resultWord in position $positionInList secondary language exact match: \n entry is duplicate")
+            SortConditions.notSortWordAndIsDuplicate -> fail("Error on $resultWord in position $positionInList secondary match: entry is duplicate")
+            SortConditions.sortWordAndcorrectlySorted -> {
+                lastLangPath = notNullLang(lang)
                 lastExactMatch += 1
-                //if the current hit is in primaryLanguage, last hit should also be in primaryLanguage
-                if(lang == primaryLanguagePath){
-                    if(lastPath == "" || lastPath == primaryLanguagePath) {
-                        correctlySorted = true
-                    }
-
-                } else {
-                    //If the concept has already been listed in primary language, it should not be listed on secondary languages
-                    if(!exactMatchesId.contains(conceptId)){
-                        correctlySorted = true
-                    }
-                }
+                conceptIds.add(conceptId)
             }
-        } else {
-            //TODO: better search specification:
-            correctlySorted = true
+            SortConditions.notSortWordAndCorrectlySorted -> {
+                conceptIds.add(conceptId)
+            }
         }
-
-        return correctlySorted
     }
 
-    private fun  getLanguage(currentPath: String): String? {
-        var langPath : String? = null
-        val langKeys = listOf<String>("en","nn","nb","no")
-
-            for (key in langKeys){
-                if(currentPath.contains(key)) {
-                    langPath = key
-                }
-            }
-
-        return langPath
+    private fun String.getSortCondition(listPosition: Int, lang: String?, conceptId: String): SortConditions {
+        return when {
+            this == sortWord && lastExactMatch +1 != listPosition ->
+                SortConditions.sortWordAndLastWordIsNotSortWord
+            this == sortWord && lang == primaryLanguagePath && !(lastLangPath == "" || lastLangPath == primaryLanguagePath) ->
+                SortConditions.sortWordAndPrimaryLanguageAndLastLanguageIsNotPrimary
+            this == sortWord && lang == primaryLanguagePath && (lastLangPath == "" || lastLangPath == primaryLanguagePath) && conceptIds.contains(conceptId) ->
+                SortConditions.sortWordAndPrimaryLanguageAndLastLanguageIsPrimaryAndIsDuplicate
+            this == sortWord && lang == primaryLanguagePath && (lastLangPath == "" || lastLangPath == primaryLanguagePath) && !conceptIds.contains(conceptId) ->
+                SortConditions.sortWordAndcorrectlySorted
+            this == sortWord && lang != primaryLanguagePath && conceptIds.contains(conceptId) ->
+                SortConditions.sortWordAndSecondaryLanguageAndIsDuplicate
+            this != sortWord && conceptIds.contains(this) ->
+                SortConditions.notSortWordAndIsDuplicate
+            else -> SortConditions.notSortWordAndCorrectlySorted
+        }
     }
 
-    fun getPathsForField(jsonPath : String, field : String): MutableList<String> {
+    fun getPathsForField(jsonPath : String): MutableList<String> {
         val paths = mutableListOf<String>();
         paths.addAll(pathParser.read<List<String>>(jsonPath))
         return paths;
     }
+}
+
+private fun notNullLang(lang: String?) : String = lang ?: ""
+
+private enum class SortConditions{
+    sortWordAndcorrectlySorted,
+    notSortWordAndCorrectlySorted,
+    sortWordAndLastWordIsNotSortWord,
+    sortWordAndPrimaryLanguageAndLastLanguageIsNotPrimary,
+    sortWordAndPrimaryLanguageAndLastLanguageIsPrimaryAndIsDuplicate,
+    sortWordAndSecondaryLanguageAndIsDuplicate,
+    notSortWordAndIsDuplicate,
+}
+
+private fun  getLanguage(currentPath: String): String? {
+    var langPath : String? = null
+    val langKeys = listOf<String>("en","nn","nb","no")
+    langKeys.forEach {
+        if(currentPath.contains(it)) langPath = it
+    }
+    return langPath
 }

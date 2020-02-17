@@ -14,7 +14,7 @@ import testUtils.jsonValueParser
 
 class ConceptContractTest : ApiTestContainer() {
     val prefLabelPath = "$.._embedded.concepts.*.prefLabel"
-    val testString = "arkiv"
+    val testString = "dokument"
 
 
     @Nested
@@ -45,13 +45,13 @@ class ConceptContractTest : ApiTestContainer() {
                 val sortResult = SortResponse(sortWord = testString,
                         pathParser = pathParser )
 
-                val responsePaths = sortResult.getPathsForField(jsonPath = prefLabelPath, field = "prefLabel")
+                val responsePaths = sortResult.getPathsForField(jsonPath = prefLabelPath)
 
 
                 for (i in responsePaths.indices){
                     val currentValue = valueParser.read<JSONArray>(responsePaths[i])
                     val currentId = valueParser.read<JSONArray>("$..concepts[$i].id").toString()
-                    expect(sortResult.isLessRelevant(responsePaths[i], currentValue.toString(), i, currentId)).to_be_true()
+                    sortResult.expectIsLessRelevant(currentValue.toString(), i, currentId)
                 }
             }
         }
@@ -66,13 +66,13 @@ class ConceptContractTest : ApiTestContainer() {
             val sortResult = SortResponse(sortWord = testString,
                     pathParser = pathParser )
 
-            val responsePaths = sortResult.getPathsForField(jsonPath = prefLabelPath, field = "prefLabel")
+            val responsePaths = sortResult.getPathsForField(jsonPath = prefLabelPath)
 
 
             for (i in responsePaths.indices){
                 val currentValue = valueParser.read<JSONArray>(responsePaths[i]).toString()
                 val currentId = valueParser.read<JSONArray>("$..concepts[$i].id").toString()
-                expect(sortResult.isLessRelevant(responsePaths[i], currentValue, i, currentId)).to_be_true()
+                sortResult.expectIsLessRelevant(currentValue, i, currentId)
                 expect(currentValue).to_contain(testString)
             }
 

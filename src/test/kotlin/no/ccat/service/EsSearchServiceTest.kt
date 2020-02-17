@@ -30,8 +30,10 @@ class EsSearchServiceTest {
         val expectedString: String = File("./src/test/resources/elasticsearch/full_text_query.json").readText(Charsets.UTF_8)
         val result = service.buildSearch(QueryParams(queryString = "dokument")).toString()
 
-        val expectedScoreScript = jsonValueParser.parse(expectedString).read<JSONArray>("$..source").toString().split("||")
-        val resultScoreScript = jsonValueParser.parse(result).read<JSONArray>("$..source").toString().split("||")
+        val expectedScoreScript = jsonValueParser.parse(expectedString).read<JSONArray>("$..filter.script.script.source")
+                .toString()
+                .split("||")
+        val resultScoreScript = jsonValueParser.parse(result).read<JSONArray>("$..filter.script.script.source").toString().split("||")
 
         expect(resultScoreScript).to_equal(expectedScoreScript)
         expect(jsonPathParser.parse(result)).json_to_have_entries_like(jsonPathParser.parse(expectedString))
@@ -42,8 +44,8 @@ class EsSearchServiceTest {
         val expectedString: String = File("./src/test/resources/elasticsearch/prefLabel_only_query.json").readText(Charsets.UTF_8)
         val result = service.buildSearch(QueryParams(prefLabel = "dok")).toString()
 
-        val expectedScoreScript = jsonValueParser.parse(expectedString).read<JSONArray>("$..source").toString().split("||")
-        val resultScoreScript = jsonValueParser.parse(result).read<JSONArray>("$..source").toString().split("||")
+        val expectedScoreScript = jsonValueParser.parse(expectedString).read<JSONArray>("$..filter.script.script.source").toString().split("||")
+        val resultScoreScript = jsonValueParser.parse(result).read<JSONArray>("$..filter.script.script.source").toString().split("||")
 
         expect(resultScoreScript).to_equal(expectedScoreScript)
         expect(jsonPathParser.parse(result)).json_to_have_entries_like(jsonPathParser.parse(expectedString))
