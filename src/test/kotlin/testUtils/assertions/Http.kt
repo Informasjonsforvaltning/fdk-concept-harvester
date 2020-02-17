@@ -4,9 +4,7 @@ import java.io.BufferedReader
 import java.net.HttpURLConnection
 import java.net.URL
 import org.springframework.http.HttpStatus
-
 import testUtils.getApiAddress
-import testUtils.getElasticAddress
 
 fun apiGet(endpoint: String): String {
 

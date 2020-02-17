@@ -38,7 +38,7 @@ fun secondaryLanguages(langParam: String ): Array<LanguageProperties>{
     }
 }
 
-
+val allLanguages = listOf<String>("nb","nn","en","no")
 
 data class LanguageProperties(var key : String = "nb", val analyzer: String = "norwegian", val stemmer: String? = null){
 
@@ -57,7 +57,6 @@ data class LanguageProperties(var key : String = "nb", val analyzer: String = "n
 
         return keyList;
     }
-
 }
 
 data class QueryParams(val queryString: String = "",

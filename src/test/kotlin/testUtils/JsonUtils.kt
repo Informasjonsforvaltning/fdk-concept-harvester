@@ -2,6 +2,7 @@ package testUtils
 
 import com.jayway.jsonpath.*
 import net.minidev.json.JSONArray
+import no.ccat.utils.allLanguages
 import org.junit.jupiter.api.fail
 
 val jsonPathParser = JsonPath
@@ -16,31 +17,31 @@ val jsonValueParser = JsonPath
                 .build())
 
 
+
 class SortResponse(val sortWord: String,
-                        val primaryLanguagePath: String = "nb",
-                        val pathParser: DocumentContext) {
+                   val primaryLanguagePath: String = "nb",
+                   val pathParser: DocumentContext) {
+
     var conceptIds = mutableListOf<String>()
     var lastExactMatch = -1
     var lastLangPath = ""
 
     fun expectIsLessRelevant(currentObject: String, positionInList: Int, conceptId: String){
-        val lang =
-                getLanguage(jsonPathParser.parse(currentObject).read<List<String>>("$.*.*").toString());
-
+        val lang = getLanguage(jsonPathParser.parse(currentObject).read<List<String>>("$.*.*").toString());
         val resultWord : String = jsonValueParser.parse(currentObject).read<JSONArray>("$[0]$lang")[0] as String;
 
         when(resultWord.getSortCondition(positionInList,lang,conceptId)){
-            SortConditions.sortWordAndLastWordIsNotSortWord -> fail("Error on $resultWord in position $positionInList on exact match: \n entry sorted after non-exact match")
-            SortConditions.sortWordAndPrimaryLanguageAndLastLanguageIsPrimaryAndIsDuplicate -> fail("Error on $resultWord in position $positionInList primary language exact match:\n entry is duplicate")
-            SortConditions.sortWordAndPrimaryLanguageAndLastLanguageIsNotPrimary -> fail("Error on $resultWord in position $positionInList primary language exact match: \n entry sorted after secondary language")
-            SortConditions.sortWordAndSecondaryLanguageAndIsDuplicate -> fail("Error on $resultWord in position $positionInList secondary language exact match: \n entry is duplicate")
-            SortConditions.notSortWordAndIsDuplicate -> fail("Error on $resultWord in position $positionInList secondary match: entry is duplicate")
-            SortConditions.sortWordAndcorrectlySorted -> {
+            SortConditions.SortWordAndLastWordIsNotSortWord -> fail("Error on $resultWord in position $positionInList on exact match: \n entry sorted after non-exact match")
+            SortConditions.SortWordAndPrimaryLanguageAndLastLanguageIsPrimaryAndIsDuplicate -> fail("Error on $resultWord in position $positionInList primary language exact match:\n entry is duplicate")
+            SortConditions.SortWordAndPrimaryLanguageAndLastLanguageIsNotPrimary -> fail("Error on $resultWord in position $positionInList primary language exact match: \n entry sorted after secondary language")
+            SortConditions.SortWordAndSecondaryLanguageAndIsDuplicate -> fail("Error on $resultWord in position $positionInList secondary language exact match: \n entry is duplicate")
+            SortConditions.NotSortWordAndIsDuplicate -> fail("Error on $resultWord in position $positionInList secondary match: entry is duplicate")
+            SortConditions.SortWordAndCorrectlySorted -> {
                 lastLangPath = notNullLang(lang)
                 lastExactMatch += 1
                 conceptIds.add(conceptId)
             }
-            SortConditions.notSortWordAndCorrectlySorted -> {
+            SortConditions.NotSortWordAndNotDuplicate -> {
                 conceptIds.add(conceptId)
             }
         }
@@ -49,18 +50,18 @@ class SortResponse(val sortWord: String,
     private fun String.getSortCondition(listPosition: Int, lang: String?, conceptId: String): SortConditions {
         return when {
             this == sortWord && lastExactMatch +1 != listPosition ->
-                SortConditions.sortWordAndLastWordIsNotSortWord
+                SortConditions.SortWordAndLastWordIsNotSortWord
             this == sortWord && lang == primaryLanguagePath && !(lastLangPath == "" || lastLangPath == primaryLanguagePath) ->
-                SortConditions.sortWordAndPrimaryLanguageAndLastLanguageIsNotPrimary
+                SortConditions.SortWordAndPrimaryLanguageAndLastLanguageIsNotPrimary
             this == sortWord && lang == primaryLanguagePath && (lastLangPath == "" || lastLangPath == primaryLanguagePath) && conceptIds.contains(conceptId) ->
-                SortConditions.sortWordAndPrimaryLanguageAndLastLanguageIsPrimaryAndIsDuplicate
+                SortConditions.SortWordAndPrimaryLanguageAndLastLanguageIsPrimaryAndIsDuplicate
             this == sortWord && lang == primaryLanguagePath && (lastLangPath == "" || lastLangPath == primaryLanguagePath) && !conceptIds.contains(conceptId) ->
-                SortConditions.sortWordAndcorrectlySorted
+                SortConditions.SortWordAndCorrectlySorted
             this == sortWord && lang != primaryLanguagePath && conceptIds.contains(conceptId) ->
-                SortConditions.sortWordAndSecondaryLanguageAndIsDuplicate
+                SortConditions.SortWordAndSecondaryLanguageAndIsDuplicate
             this != sortWord && conceptIds.contains(this) ->
-                SortConditions.notSortWordAndIsDuplicate
-            else -> SortConditions.notSortWordAndCorrectlySorted
+                SortConditions.NotSortWordAndIsDuplicate
+            else -> SortConditions.NotSortWordAndNotDuplicate
         }
     }
 
@@ -74,20 +75,16 @@ class SortResponse(val sortWord: String,
 private fun notNullLang(lang: String?) : String = lang ?: ""
 
 private enum class SortConditions{
-    sortWordAndcorrectlySorted,
-    notSortWordAndCorrectlySorted,
-    sortWordAndLastWordIsNotSortWord,
-    sortWordAndPrimaryLanguageAndLastLanguageIsNotPrimary,
-    sortWordAndPrimaryLanguageAndLastLanguageIsPrimaryAndIsDuplicate,
-    sortWordAndSecondaryLanguageAndIsDuplicate,
-    notSortWordAndIsDuplicate,
+    SortWordAndCorrectlySorted,
+    NotSortWordAndNotDuplicate,
+    SortWordAndLastWordIsNotSortWord,
+    SortWordAndPrimaryLanguageAndLastLanguageIsNotPrimary,
+    SortWordAndPrimaryLanguageAndLastLanguageIsPrimaryAndIsDuplicate,
+    SortWordAndSecondaryLanguageAndIsDuplicate,
+    NotSortWordAndIsDuplicate,
 }
 
 private fun  getLanguage(currentPath: String): String? {
-    var langPath : String? = null
-    val langKeys = listOf<String>("en","nn","nb","no")
-    langKeys.forEach {
-        if(currentPath.contains(it)) langPath = it
-    }
-    return langPath
+    allLanguages.forEach { if(currentPath.contains(it)) return it }
+    return null
 }

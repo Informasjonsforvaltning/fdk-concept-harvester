@@ -53,9 +53,3 @@ val RABBIT_MQ_ENV_VALUES : Map <String, String> = ImmutableMap.of(
 fun getApiAddress( endpoint: String ): String{
     return "http://${TEST_API.getContainerIpAddress()}:${TEST_API.getMappedPort(API_PORT)}$endpoint"
 }
-
-fun getElasticAddress( query: String ): String{
-    return "http://${elasticContainer.getContainerIpAddress()}:${elasticContainer.getMappedPort(API_PORT)}/$query"
-}
-const val mockDataArkiv = "/Users/bbreg/Documents/concept-catalouge/fdk-concept-harvester/src/main/resources/dev.data/arkivverket_fdk.turtle"
-

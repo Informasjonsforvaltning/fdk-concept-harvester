@@ -20,12 +20,15 @@ import java.util.List;
 public class LocalHarvester {
 
     private static final Logger logger = LoggerFactory.getLogger(LocalHarvester.class);
+    private RDFToModelTransformer rdfToModelTransformer;
+    private ConceptDenormalizedRepository conceptDenormalizedRepository;
 
     @Autowired
-    RDFToModelTransformer rdfToModelTransformer;
+    LocalHarvester(RDFToModelTransformer rdfToModelTransformer, ConceptDenormalizedRepository conceptDenormalizedRepository) {
+        this.rdfToModelTransformer = rdfToModelTransformer;
+        this.conceptDenormalizedRepository = conceptDenormalizedRepository;
+    }
 
-    @Autowired
-    ConceptDenormalizedRepository conceptDenormalizedRepository;
 
     public void harvestFromSingleURLSource(String source) {
         Reader reader;
@@ -38,9 +41,8 @@ public class LocalHarvester {
         theEntireDocument = readFileFully(source);
 
 
+        assert theEntireDocument != null;
         reader = new StringReader(theEntireDocument);
-
-        if (reader == null) return;
 
         List<ConceptDenormalized> concepts = rdfToModelTransformer.getConceptsFromStream(reader);
 

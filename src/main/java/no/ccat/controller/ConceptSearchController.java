@@ -39,13 +39,13 @@ public class ConceptSearchController {
 
     private static final Logger logger = LoggerFactory.getLogger(ConceptSearchController.class);
     private ElasticsearchTemplate elasticsearchTemplate;
+    private EsSearchService esSearchService;
 
     @Autowired
-    EsSearchService esSearchService;
-    @Autowired
-    public ConceptSearchController(ElasticsearchTemplate elasticsearchTemplate
-    ) {
+    public ConceptSearchController(ElasticsearchTemplate elasticsearchTemplate,
+                                   EsSearchService esSearchService) {
         this.elasticsearchTemplate = elasticsearchTemplate;
+        this.esSearchService = esSearchService;
     }
 
     /**
