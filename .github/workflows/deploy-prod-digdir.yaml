@@ -24,10 +24,13 @@ jobs:
       - run: gcloud auth configure-docker
 
       - name: Package with maven
-        run: mvn clean package --no-transfer-progress
+        run: mvn clean package --no-transfer-progress -DskipTests
 
       - name: Build Docker image
         run: docker build -f Dockerfile.prod . -t eu.gcr.io/digdir-fdk-infra/fdk-concept-harvester:$GITHUB_SHA -t eu.gcr.io/digdir-fdk-infra/fdk-concept-harvester:latest
+
+      - name: Set max map count for elasticsearch
+        run: sudo sysctl -w vm.max_map_count=262144
 
       - name: Run tests
         run: mvn verify --no-transfer-progress
