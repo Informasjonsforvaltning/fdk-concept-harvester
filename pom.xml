@@ -41,10 +41,19 @@
     </properties>
     <repositories>
         <repository>
+            <id>central</id>
+            <name>Central Repository</name>
+            <url>https://repo.maven.apache.org/maven2</url>
+            <layout>default</layout>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
-            <id>central</id>
+        </repository>
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>bintray-central</id>
             <name>bintray</name>
             <url>https://jcenter.bintray.com</url>
         </repository>
