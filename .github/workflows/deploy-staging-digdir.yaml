@@ -30,6 +30,9 @@ jobs:
       - name: Build Docker image with GitHub commit sha tag
         run: docker build -f Dockerfile.prod . -t eu.gcr.io/digdir-fdk-infra/fdk-concept-harvester:$GITHUB_SHA -t eu.gcr.io/digdir-fdk-infra/fdk-concept-harvester:staging_latest
 
+      - name: Set max map count for elasticsearch
+        run: sudo sysctl -w vm.max_map_count=262144
+
       - name: Run tests
         run: mvn verify --no-transfer-progress
 
