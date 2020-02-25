@@ -30,7 +30,7 @@ jobs:
         run: docker build -f Dockerfile.prod . -t eu.gcr.io/digdir-fdk-infra/fdk-concept-harvester:$GITHUB_SHA -t eu.gcr.io/digdir-fdk-infra/fdk-concept-harvester:latest
 
       - name: Run tests
-        run: mvn verify --no-transfer-progress
+        run: mvn -DtestImageName="eu.gcr.io/digdir-fdk-infra/fdk-api-harvester:latest" verify --no-transfer-progress
 
       - name: Publish docker image to Google Cloud
         run: docker -- push eu.gcr.io/digdir-fdk-infra/fdk-concept-harvester

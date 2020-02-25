@@ -21,7 +21,7 @@ const val RABBIT_MQ_PORT = 5672
 const val RABBIT_MQ_PORT_2 = 15672
 
 const val WIREMOCK_TEST_HOST = "http://host.testcontainers.internal:$LOCAL_SERVER_PORT"
-const val API_IMAGE = "eu.gcr.io/fdk-infra/fdk-concept-harvester:latest"
+val API_IMAGE = System.getProperty("testImageName") ?: "eu.gcr.io/fdk-infra/fdk-concept-harvester:latest"
 
 val API_ENV_VALUES : Map<String,String> = mutableMapOf(
         "SPRING_PROFILES_ACTIVE" to  "test",
