@@ -15,7 +15,7 @@ class EsSearchServiceTest {
     private val service = EsSearchService()
 
     @Test
-    fun `should return empty match all request`() {
+    fun `should return empty match all query`() {
         val expected = "{\n" +
                               "  \"match_all\" : {\n" +
                               "    \"boost\" : 1.0\n" +
@@ -26,7 +26,7 @@ class EsSearchServiceTest {
     }
 
     @Test
-    fun `should return search with boosting on exact matches for full text searches`(){
+    fun `should return query with boosting on exact matches for full text searches`(){
         val expectedString: String = File("./src/test/resources/elasticsearch/full_text_query.json").readText(Charsets.UTF_8)
         val result = service.buildSearch(QueryParams(queryString = "dokument")).toString()
 
@@ -40,7 +40,7 @@ class EsSearchServiceTest {
     }
 
     @Test
-    fun `should return search with boosting on exact match, and closer matches for prefLabel searches only`(){
+    fun `should return query with boosting on exact match, and closer matches for prefLabel searches only`(){
         val expectedString: String = File("./src/test/resources/elasticsearch/prefLabel_only_query.json").readText(Charsets.UTF_8)
         val result = service.buildSearch(QueryParams(prefLabel = "dok")).toString()
 
@@ -49,6 +49,24 @@ class EsSearchServiceTest {
 
         expect(resultScoreScript).to_equal(expectedScoreScript)
         expect(jsonPathParser.parse(result)).json_to_have_entries_like(jsonPathParser.parse(expectedString))
+    }
+
+    @Test
+    fun `should return full text query with orgPath match`() {
+        val expectedString: String = File("./src/test/resources/elasticsearch/full_text_org_path_query.json").readText(Charsets.UTF_8)
+        val result = service.buildSearch(QueryParams(queryString = "arkiv", orgPath = "STAT/87654321/12345678")).toString()
+
+        expect(jsonPathParser.parse(result)).json_to_have_entries_like(jsonPathParser.parse(expectedString))
+
+    }
+
+    @Test
+    fun `should return prefLabel query with orgPath match`() {
+        val expectedString: String = File("./src/test/resources/elasticsearch/prefLabel_org_path_query.json").readText(Charsets.UTF_8)
+        val result = service.buildSearch(QueryParams(prefLabel = "arkiv", orgPath = "STAT/87654321/12345678")).toString()
+
+        expect(jsonPathParser.parse(result)).json_to_have_entries_like(jsonPathParser.parse(expectedString))
+
     }
 
 }

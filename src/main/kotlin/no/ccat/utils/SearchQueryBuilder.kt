@@ -2,6 +2,7 @@ package no.ccat.utils
 
 import mbuhot.eskotlin.query.compound.bool
 import mbuhot.eskotlin.query.compound.constant_score
+import mbuhot.eskotlin.query.fulltext.match
 import mbuhot.eskotlin.query.fulltext.match_phrase_prefix
 import org.elasticsearch.index.query.QueryBuilder
 import org.elasticsearch.index.query.QueryBuilders.scriptQuery
@@ -83,6 +84,14 @@ fun getSearchSpan(isPrefLabelSearch: Boolean, searchString:String): Int =
     } else {
         searchString.length + 1
     }
+fun buildOrgPathQuery(queryParams: QueryParams) = match {
+    "publisher.orgPath" {
+        query = queryParams.orgPath
+        analyzer = "keyword"
+        operator= "AND"
+        minimum_should_match = "100%"
+    }
+}
 
 private fun getPrefLabelSpan(searchString: String) : Int =
     if(searchString.length < 6 ) {

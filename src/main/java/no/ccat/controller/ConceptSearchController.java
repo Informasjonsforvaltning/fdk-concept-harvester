@@ -74,6 +74,9 @@ public class ConceptSearchController {
         @RequestParam(value = "prefLabel", defaultValue = "", required = false)
         String prefLabel,
 
+        @RequestParam(value = "lang", defaultValue = "", required = false)
+        String lang,
+
         @RequestParam (value = "page", defaultValue = "", required = false)
         String startPage,
 
@@ -99,7 +102,7 @@ public class ConceptSearchController {
 
          QueryParams params = new QueryParams(queryString,
                 orgPath,
-                "",
+                lang,
                 prefLabel,
                 startPage,
                 size,
@@ -115,12 +118,11 @@ public class ConceptSearchController {
             .withIndices("ccat").withTypes("concept")
             .withPageable(pageable)
             .withSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-            .build(); 
+            .build();
 
         if (isNotEmpty(aggregations)) {
             finalQuery = addAggregations(finalQuery, aggregations);
         }
-
         if (isNotEmpty(returnFields)) {
             SourceFilter sourceFilter = new FetchSourceFilter(returnFields.concat(",prefLabel").split(","), null);
             finalQuery.addSourceFilter(sourceFilter);

@@ -1,10 +1,12 @@
 package no.ccat.service;
 
 import no.ccat.dto.HarvestDataSource;
+import no.ccat.utils.DevHarvestMockKt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.env.Environment;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -26,16 +28,21 @@ public class HarvestAdminClient {
 
     private final RestTemplate restTemplate;
     private HttpHeaders defaultHeaders;
+    private final Environment env;
 
     @Value("${application.harvestAdminRootUrl}")
     private String apiHost;
 
-    public HarvestAdminClient() {
+    public HarvestAdminClient(Environment env) {
+        this.env = env;
         this.restTemplate = new RestTemplate();
 
         this.defaultHeaders = new HttpHeaders();
         defaultHeaders.setAccept(singletonList(MediaType.APPLICATION_JSON));
         defaultHeaders.setContentType(MediaType.APPLICATION_JSON);
+        if (localHarvest() &!DevHarvestMockKt.ready()) {
+            DevHarvestMockKt.startMockServer();
+        }
     }
 
     List<HarvestDataSource> getDataSources() {
@@ -63,5 +70,17 @@ public class HarvestAdminClient {
         }
 
         return emptyList();
+    }
+
+    private boolean localHarvest(){
+        boolean local = false;
+
+        for (String profile :  env.getActiveProfiles()){
+            if(profile.equals("dev-with-harvester") ){
+                logger.info("Starting concept harvest from local file");
+                local = true;
+            }
+        }
+        return local;
     }
 }

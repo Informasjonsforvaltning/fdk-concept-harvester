@@ -1,5 +1,6 @@
 package no.ccat.contract
 
+import com.jayway.jsonpath.PathNotFoundException
 import net.minidev.json.JSONArray
 import org.junit.jupiter.api.*
 import testUtils.ApiTestContainer
@@ -13,7 +14,9 @@ import testUtils.jsonValueParser
 @Tag("contract")
 
 class ConceptContractTest : ApiTestContainer() {
-    val prefLabelPath = "$.._embedded.concepts.*.prefLabel"
+    val conceptsPath = "$.._embedded.concepts"
+    val prefLabelPath = "$conceptsPath.*.prefLabel"
+    val orgPath = "publisher.orgPath"
     val testString = "dokument"
 
 
@@ -54,6 +57,16 @@ class ConceptContractTest : ApiTestContainer() {
                     sortResult.expectIsLessRelevant(currentValue.toString(), i, currentId)
                 }
             }
+
+            @Test
+            fun `expect full text search with orgPath to return list of concepts from corresponding publisher only`() {
+                val result = apiGet("/concepts?q=$testString&size=100&orgPath=STAT/87654321/12345678")
+
+                val expOrgPath = "STAT/87654321/12345678".split("/")
+                val resultOrgPath = jsonValueParser.parse(result).read<List<String>>("\$.._embedded.concepts.*.publisher.orgPath")
+
+                resultOrgPath.forEach { expect(it).to_be_organisation(expOrgPath) }
+            }
         }
     }
     @Nested
@@ -78,8 +91,15 @@ class ConceptContractTest : ApiTestContainer() {
 
         }
 
-        //TODO specifications for behaviour of prefLabel search
+        @Test
+        fun `expect prefLabel search with orgPath to return list of concepts from corresponding publisher only`() {
+            val expOrgPath = "STAT/87654321/12345678".split("/")
+            val result = apiGet("/concepts?prefLabel=$testString&size=100&orgPath=STAT/87654321/12345678")
+            val resultOrgPath = jsonValueParser.parse(result).read<List<String>>("\$.._embedded.concepts.*.publisher.orgPath")
 
+            resultOrgPath.forEach { expect(it).to_be_organisation(expOrgPath) }
+
+        }
     }
 
     @Nested

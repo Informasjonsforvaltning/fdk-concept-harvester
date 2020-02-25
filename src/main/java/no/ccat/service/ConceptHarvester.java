@@ -48,8 +48,9 @@ public class ConceptHarvester {
 
         String theEntireDocument = null;
 
-        if (readFromLocalFile()) {
-            theEntireDocument = readFileFully("/src/test/resources/contract/conceptsmock.turtle");
+        if (localHarvest()) {
+            theEntireDocument = readURLFully(dataSource.getUrl(),"*/*");
+
         } else {
             theEntireDocument = readURLFully(dataSource.getUrl(), dataSource.getAcceptHeaderValue());
         }
@@ -94,11 +95,11 @@ public class ConceptHarvester {
         return "";
     }
 
-    private boolean readFromLocalFile(){
+    private boolean localHarvest(){
         boolean local = false;
 
         for (String profile :  env.getActiveProfiles()){
-            if(profile.equals("dev-with-harvest") ){
+            if(profile.equals("dev-with-harvester") ){
                 logger.info("Starting concept harvest from local file");
                 local = true;
             }

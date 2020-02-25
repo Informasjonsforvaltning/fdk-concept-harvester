@@ -78,7 +78,6 @@ data class QueryParams(val queryString: String = "",
     fun isEmptySearch() : Boolean{
         return queryString == "" && orgPath == "" && prefLabel == ""
     }
-
     fun isDefaultSize() : Boolean{
         return startPage == "" && size == ""
     }

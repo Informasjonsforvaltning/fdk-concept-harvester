@@ -1,12 +1,11 @@
-package testUtils
+package no.ccat.utils
 
+import java.io.File
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.*
-import java.io.File
 
 
-private val mockserver = WireMockServer(LOCAL_SERVER_PORT)
-
+private val mockserver = WireMockServer(5000)
 fun startMockServer() {
     if(!mockserver.isRunning) {
         mockserver.stubFor(get(urlEqualTo("/ping"))
@@ -31,7 +30,7 @@ fun startMockServer() {
         mockserver.stubFor(get(urlEqualTo("/api/publishers/974760673"))
                 .willReturn(okJson(File("src/test/resources/contract/org-0.json").readText())))
         mockserver.stubFor(get(urlEqualTo("/api/datasources"))
-                .willReturn(okJson(File("src/test/resources/contract/datasource.json").readText())))
+                .willReturn(okJson(File("src/main/resources/dev_data/datasource.json").readText())))
         mockserver.stubFor(get(urlEqualTo("/mockconcepts"))
                 .willReturn(aResponse().withBody(File("src/test/resources/contract/conceptsmock.turtle").readText()))
         )
@@ -39,6 +38,7 @@ fun startMockServer() {
         mockserver.start()
     }
 }
+fun ready(): Boolean = mockserver.isRunning
 
 fun stopMockServer() {
 

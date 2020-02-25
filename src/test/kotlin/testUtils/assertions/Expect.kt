@@ -1,12 +1,12 @@
 package testUtils.assertions
 
 import com.jayway.jsonpath.DocumentContext
+import com.jayway.jsonpath.PathNotFoundException
 import no.ccat.utils.LanguageProperties
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assumptions
 import org.skyscreamer.jsonassert.JSONAssert
-import java.lang.StringBuilder
-import kotlin.test.expect
+import testUtils.jsonPathParser
 
 
 class Expect(_result: Any?) {
@@ -116,6 +116,24 @@ class Expect(_result: Any?) {
     fun to_contain(testString: String) {
         result as String
         Assertions.assertTrue(result.contains(testString), "expected to find $testString in result\n found $result")
+    }
+
+    fun to_equal(expected: Int) {
+        Assertions.assertEquals(result,expected)
+    }
+
+    fun to_not_have_path(path: String) {
+        jsonPathParser.parse(result).read<List<String>>(path)
+
+    }
+
+    fun to_be_organisation(expOrgPathParts: List<String>) {
+        result as String
+        val orgPathParts = result.split("/")
+
+        orgPathParts.indices.forEach {
+            Assertions.assertEquals(orgPathParts[it],expOrgPathParts[it])
+        }
     }
 
 }
