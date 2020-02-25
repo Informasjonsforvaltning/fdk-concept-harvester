@@ -34,7 +34,7 @@ jobs:
         run: sudo sysctl -w vm.max_map_count=262144
 
       - name: Run tests
-        run: mvn -DtestImageName="eu.gcr.io/digdir-fdk-infra/fdk-api-harvester:staging_latest" verify --no-transfer-progress
+        run: mvn -DtestImageName="eu.gcr.io/digdir-fdk-infra/fdk-concept-harvester:staging_latest" verify --no-transfer-progress
 
       - name: Publish docker image to Google Cloud
         run: docker -- push eu.gcr.io/digdir-fdk-infra/fdk-concept-harvester
