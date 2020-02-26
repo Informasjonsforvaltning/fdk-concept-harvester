@@ -32,6 +32,9 @@ jobs:
       - name: Run tests
         run: mvn verify --no-transfer-progress
 
+      - name: Set max map count for elasticsearch
+        run: sudo sysctl -w vm.max_map_count=262144
+
       - name: Publish docker image to Google Cloud
         run: docker -- push eu.gcr.io/fdk-infra/fdk-concept-harvester
 
