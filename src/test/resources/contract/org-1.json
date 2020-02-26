@@ -1,0 +1,16 @@
+{
+  "organizationId": "87654321",
+  "norwegianRegistry": "https://data.brreg.no/enhetsregisteret/api/enheter/87654321",
+  "internationalRegistry": null,
+  "name": "TESTDEPARTEMENTET",
+  "orgType": "STAT",
+  "orgPath": "STAT/87654321",
+  "subOrganizationOf": null,
+  "issued": "2013-10-31",
+  "municipalityNumber": "0301",
+  "industryCode": "84.110",
+  "sectorCode": "6100",
+  "prefLabel": null,
+  "domains": [],
+  "allowDelegatedRegistration": null
+}

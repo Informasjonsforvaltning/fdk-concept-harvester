@@ -1,13 +1,12 @@
 package no.dcat.shared;
 
-import no.fdk.test.testcategories.UnitTest;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Tag;
 
 import java.util.Date;
 
-@Category(UnitTest.class)
+@Tag("unit")
 public class HarvestMetadataUtilTest {
 
     @Test

@@ -86,7 +86,7 @@
         a                             skos:Concept ;
         skosno:betydningsbeskrivelse  [ a               skosno:Definisjon ;
                                         rdfs:label      "bestanddelene i et klassifikasjonssystem"@nb ;
-                                        dct:source      [ rdfs:label  "Arkivverket (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 13. november 2017]\n"@nb ] ;
+                                        dct:source      [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 13. november 2017]\n"@nb ] ;
                                         skos:scopeNote  "Et klassifikasjonssystem er bygd opp av klasser. Ved funksjonsbasert (emnebasert) klassifikasjon vil klassene vanligvis inngå i et hierarki, hvor tre eller fire nivåer er det vanlige.\n\nKlassene skal ha en egen identifikasjon som er unik innenfor klassifikasjonssystemet. Dette tilsvarer det som er kalt ordningsverdi eller arkivkode i Noark-4. Identifikasjoner fra overordnede klasser skal arves nedover i hierarkiet, slik at det er lett å si hvilket nivå en befinner seg på.\n\nEn arkivkode er et eksempel på identifikasjonen av en klasse."@nb
                                       ] ;
         dct:identifier                "https://jira.brreg.no/rest/api/2/issue/47124" ;
@@ -104,7 +104,7 @@
         a                             skos:Concept ;
         skosno:betydningsbeskrivelse  [ a           skosno:Definisjon ;
                                         rdfs:label  "registrering av opplysninger i journalen om når og hvordan behandlingen av et inngående dokument eller et organinternt dokument for oppfølging har blitt avsluttet"@nb ;
-                                        dct:source  [ rdfs:label  "Arkivverket (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ]
+                                        dct:source  [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ]
                                       ] ;
         dct:identifier                "https://jira.brreg.no/rest/api/2/issue/30969" ;
         dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/974760673> ;
@@ -152,7 +152,7 @@
         a                             skos:Concept ;
         skosno:betydningsbeskrivelse  [ a               skosno:Definisjon ;
                                         rdfs:label      "enkelt registrering i en journal, det vil si opplysningene om et saksdokument med eventuelle vedlegg"@nb ;
-                                        dct:source      [ rdfs:label  "Arkivverket (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
+                                        dct:source      [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
                                         skos:scopeNote  "En journalpost representer en \"innføring i journalen\". Journalen er en kronologisk fortegnelse over inn- og utgående dokumenter (det vil si korrespondansedokumenter), og eventuelt også interne dokumenter som inngår i saksbehandlingen. Journalposten inneholder blant annet metadata om korrespondanseparter (avsender og mottaker), og om saksbehandlere. Det finnes flere typer journalposter. De viktigste er inngående dokument, utgående dokument, organinternt dokument for oppfølging og organinternt dokument uten oppfølging."@nb
                                       ] ;
         dct:identifier                "https://jira.brreg.no/rest/api/2/issue/28253" ;
@@ -189,7 +189,7 @@
         a                             skos:Concept ;
         skosno:betydningsbeskrivelse  [ a           skosno:Definisjon ;
                                         rdfs:label  "vurdering av informasjon knyttet til en intern eller ekstern problemstilling med sikte på at det skal fattes en beslutning eller et vedtak "@nb ;
-                                        dct:source  [ rdfs:label  "Arkivverket (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ]
+                                        dct:source  [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ]
                                       ] ;
         dct:identifier                "https://jira.brreg.no/rest/api/2/issue/41243" ;
         dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/974760673> ;
@@ -206,7 +206,7 @@
         a                             skos:Concept ;
         skosno:betydningsbeskrivelse  [ a           skosno:Definisjon ;
                                         rdfs:label  "saksdokumenter, registreringer, påskrifter og så videre som oppstår og/eller inngår i et behandlingsforløp"@nb ;
-                                        dct:source  [ rdfs:label  "Arkivverket (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ]
+                                        dct:source  [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ]
                                       ] ;
         dct:identifier                "https://jira.brreg.no/rest/api/2/issue/42646" ;
         dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/974760673> ;
@@ -277,7 +277,7 @@
         a                             skos:Concept ;
         skosno:betydningsbeskrivelse  [ a               skosno:Definisjon ;
                                         rdfs:label      "beskrivelse av hvordan behandlingen av et inngående eller et organinternt dokument underlagt behandlingskontroll har blitt avsluttet"@nb ;
-                                        dct:source      [ rdfs:label  "Arkivverket (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
+                                        dct:source      [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
                                         skos:scopeNote  "Avskrivningsmåter som er i bruk i Brønnøysundregistrenes felles arkiv (Public 360): besvart med brev, besvart med e-post, besvart per telefon, tatt til etterretning og tatt til orientering. \n\nOrganinternt dokument underlagt behandlingskontroll tilsvarer «internt notat med oppfølging» i Public 360. \n\nAvskrivningsmåte sier ikke noe om selve vedtaket eller utfallet av saken. \n"@nb
                                       ] ;
         dct:identifier                "https://jira.brreg.no/rest/api/2/issue/28298" ;
@@ -497,7 +497,7 @@
         a                             skos:Concept ;
         skosno:betydningsbeskrivelse  [ a               skosno:Definisjon ;
                                         rdfs:label      "skal i prinsippet være mottaksdatoen for et innkommet dokument, og for et egenprodusert dokument datoen for det tidspunktet arkivtjenesten har kvalitetssikret dokumentet, etter at det er sendt eller avsluttet"@nb ;
-                                        dct:source      [ rdfs:label  "Arkivverket (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
+                                        dct:source      [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
                                         skos:scopeNote  "Med mottaksdato menes her den datoen da et innkommet dokument kom inn til eller ble lagt fram for organet.\n\nI følge arkivforskriften § 10 skal journaldato oppgis i journalen. \n\nJournaldato er også et utvalgskriterium for den samlede kronologisk ordnete rapporten over samtlige registreringer innenfor perioden."@nb
                                       ] ;
         dct:identifier                "https://jira.brreg.no/rest/api/2/issue/28293" ;
@@ -518,7 +518,7 @@
         a                             skos:Concept ;
         skosno:betydningsbeskrivelse  [ a               skosno:Definisjon ;
                                         rdfs:label      "dokumenter som blir til som ledd i en virksomhet, det vil si dokumenter som mottas eller produseres av en enkelt arkivskaper og samles som resultat av dennes virksomhet \n"@nb ;
-                                        dct:source      [ rdfs:label  "Arkivverket (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
+                                        dct:source      [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
                                         skos:scopeNote  "I følge Noark er \"arkiv\" i denne sammenhengen også kalt enkeltarkiv."@nb
                                       ] ;
         dct:identifier                "https://jira.brreg.no/rest/api/2/issue/28261" ;
@@ -573,7 +573,7 @@
         a                             skos:Concept ;
         skosno:betydningsbeskrivelse  [ a               skosno:Definisjon ;
                                         rdfs:label      "plikt til å arkivere alle dokumenter som blir til som ledd i den virksomheten et forvaltningsorgan driver"@nb ;
-                                        dct:source      [ rdfs:label  "Arkivverket (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
+                                        dct:source      [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
                                         skos:scopeNote  "Arkiveringsplikten gjelder både dokument som kommer inn til organet og dokument som sendes ut fra organet, i tillegg til organinterne dokument (både med og uten oppfølging).\n\nUnntatt fra arkiveringsplikten er de dokumentene som kommer inn under bestemmelsene om arkivbegrensning etter § 14 i arkivforskriften."@nb
                                       ] ;
         dct:identifier                "https://jira.brreg.no/rest/api/2/issue/41237" ;
@@ -702,7 +702,7 @@
         a                             skos:Concept ;
         skosno:betydningsbeskrivelse  [ a               skosno:Definisjon ;
                                         rdfs:label      "nivå i arkivstrukturen, en arkivenhet, som består av en eller flere registreringer med tilhørende arkivdokumenter som er knyttet sammen under en felles identitet "@nb ;
-                                        dct:source      [ rdfs:label  "Arkivverket (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 13. november 2017]"@nb ] ;
+                                        dct:source      [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 13. november 2017]"@nb ] ;
                                         skos:scopeNote  "En mappe kan være en sammenstilling av dokumentasjon som naturlig hører sammen. Kan også utgjøre en sammenstilling knyttet til et objekt, for eksempel all dokumentasjon som tilhører en personalmappe."@nb
                                       ] ;
         dct:identifier                "https://jira.brreg.no/rest/api/2/issue/47523" ;
@@ -795,7 +795,7 @@
         a                             skos:Concept ;
         skosno:betydningsbeskrivelse  [ a               skosno:Definisjon ;
                                         rdfs:label      "spesialisering av arkivenheten mappe i arkivstrukturen"@nb ;
-                                        dct:source      [ rdfs:label  "Arkivverket (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 13. november 2017]"@nb ] ;
+                                        dct:source      [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 13. november 2017]"@nb ] ;
                                         skos:scopeNote  "Nivåene for mappe og registrering er bygd ut ved hjelp av spesialisering av klassene. Et eksempel på slike spesialiseringer er saksmappe.\n\nI sakarkiver skal en mappe forekomme som spesialiseringen Saksmappe, og disse skal alltid være knyttet til en klasse. Mappene skal også ha referanse til hvilken arkivdel de tilhører, selv om dette også kan avledes av tilhørigheten til klasse og klassifikasjonssystem. \n\nFor sakarkiver er saksmappen obligatorisk. I enkelte fagsystemer kan mappenivået utelates. En registrering vil da knyttes direkte til en arkivdel eller eventuelt til en klasse.\n"@nb
                                       ] ;
         dct:identifier                "https://jira.brreg.no/rest/api/2/issue/47126" ;
@@ -903,7 +903,7 @@
         a                             skos:Concept ;
         skosno:betydningsbeskrivelse  [ a               skosno:Definisjon ;
                                         rdfs:label      "vilkårlig definert del av et arkiv (enkeltarkiv), hvor alt materiale er ordnet etter ett og samme klassifikasjonssystem som primær klasse"@nb ;
-                                        dct:source      [ rdfs:label  "Arkivverket (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
+                                        dct:source      [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
                                         skos:scopeNote  "Arkivdel vil ofte være definert identisk med det som kalles en arkivserie, men behøver ikke være det. \r\n\r\nMed «vilkårlig» menes her «etter eget godtykke», slik at «vilkårlig definert del av…» i denne sammenhengen kan leses som «hvilken som helst del av…». \r\n\r\n"@nb
                                       ] ;
         dct:identifier                "https://jira.brreg.no/rest/api/2/issue/28167" ;
@@ -940,7 +940,7 @@
         a                             skos:Concept ;
         skosno:betydningsbeskrivelse  [ a               skosno:Definisjon ;
                                         rdfs:label      "spørsmål som er til behandling, på grunnlag av en henvendelse utenfra eller på initiativ fra organet selv, jamfør forvaltnings­loven og offentleglova,  eller selve behandlingsforløpet\n\n"@nb ;
-                                        dct:source      [ rdfs:label  "Arkivverket (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
+                                        dct:source      [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
                                         skos:scopeNote  "Termen «spørsmål» forstås her i betydningen “spørrende setning eller ytring, forespørsel, sak som er gjenstand for drøfting, problem eller noe som er usikkert»."@nb
                                       ] ;
         dct:identifier                "https://jira.brreg.no/rest/api/2/issue/41240" ;
@@ -958,7 +958,7 @@
         a                             skos:Concept ;
         skosno:betydningsbeskrivelse  [ a               skosno:Definisjon ;
                                         rdfs:label      "oppbevaringssted for arkiv (enkeltarkiv)"@nb ;
-                                        dct:source      [ rdfs:label  "Arkivverket (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
+                                        dct:source      [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
                                         skos:scopeNote  "Arkiv i betydningen oppbevaringssted kan være et fysisk oppbevaringssted eller et elektronisk oppbevaringssted."@nb
                                       ] ;
         dct:identifier                "https://jira.brreg.no/rest/api/2/issue/42643" ;
@@ -1158,7 +1158,7 @@
         a                             skos:Concept ;
         skosno:betydningsbeskrivelse  [ a               skosno:Definisjon ;
                                         rdfs:label      "register over saksdokumenter som behandles i et organ"@nb ;
-                                        dct:source      [ rdfs:label  "Arkivverket (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 11. juni 2018]"@nb ] ;
+                                        dct:source      [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 11. juni 2018]"@nb ] ;
                                         skos:scopeNote  "I Brønnøysundregistrenes felles sakarkiv Public 360 (som er Noark-basert), er det en felles journal for alle arkivdelene. \n\nVår forståelse av dagens fagsystemer (som ikke er Noark-baserte), er at det finnes ulike varianter. For eksempel for Saksys, som er saksbehandlingssystem for flere registre, er det en felles journal for Foretaksregisteret, Enhetsregisteret og Frivillighetsregisteret, mens Konksys derimot, kun inneholder journal for Konkursregisteret.\n\nEn journal kan også forklares som en innholdsfortegnelse over saksdokumenter, mens en arkivdel omfatter både journalopplysninger og saksdokumenter med filer.\n"@nb
                                       ] ;
         dct:identifier                "https://jira.brreg.no/rest/api/2/issue/53604" ;
@@ -1229,7 +1229,7 @@
         a                             skos:Concept ;
         skosno:betydningsbeskrivelse  [ a               skosno:Definisjon ;
                                         rdfs:label      "person som er ansvarlig for behandling av saken som helhet"@nb ;
-                                        dct:source      [ rdfs:label  "Arkivverket (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
+                                        dct:source      [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
                                         skos:scopeNote  "En sak skal knyttes til en saksansvarlig, selv om det kan være forskjellige saksbehandlere til de ulike dokumentene i saken."@nb
                                       ] ;
         dct:identifier                "https://jira.brreg.no/rest/api/2/issue/28156" ;
@@ -1321,7 +1321,7 @@
         a                             skos:Concept ;
         skosno:betydningsbeskrivelse  [ a               skosno:Definisjon ;
                                         rdfs:label      "data som tjener til å definere eller beskrive andre data"@nb ;
-                                        dct:source      [ rdfs:label  "Arkivverket (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 13. november 2017]"@nb ] ;
+                                        dct:source      [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 13. november 2017]"@nb ] ;
                                         skos:scopeNote  "I arkivsammenheng vil metadata for eksempel være informasjon om et dokuments struktur, innhold og kontekst."@nb
                                       ] ;
         dct:identifier                "https://jira.brreg.no/rest/api/2/issue/47520" ;
@@ -1497,7 +1497,7 @@
         a                             skos:Concept ;
         skosno:betydningsbeskrivelse  [ a               skosno:Definisjon ;
                                         rdfs:label      "institusjon hvor bevaringsverdig arkivmateriale oppbevares permanent"@nb ;
-                                        dct:source      [ rdfs:label  "Arkivverket (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
+                                        dct:source      [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
                                         skos:scopeNote  "Arkivdepotet avlaster arkivskaperen for lagring av eldre arkivmateriale og legger forholdene til rette for betjening av brukere som er interessert i materialet.\n\nBrønnøysundregistrene deponerer og avleverer bevaringsverdig arkivmateriale til Statsarkivet i Trondheim."@nb
                                       ] ;
         dct:identifier                "https://jira.brreg.no/rest/api/2/issue/42645" ;
@@ -1518,7 +1518,7 @@
         a                             skos:Concept ;
         skosno:betydningsbeskrivelse  [ a               skosno:Definisjon ;
                                         rdfs:label      "person i organet som er ansvarlig for oppfølging og behandling av ett eller flere dokumenter i en sak"@nb ;
-                                        dct:source      [ rdfs:label  "Arkivverket (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
+                                        dct:source      [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
                                         skos:scopeNote  "Personen skal vurdere informasjon knyttet til en intern eller ekstern problemstilling og utarbeide det nødvendige grunnlaget for en beslutning eller et vedtak."@nb
                                       ] ;
         dct:identifier                "https://jira.brreg.no/rest/api/2/issue/28164" ;
@@ -1557,7 +1557,7 @@
         a                             skos:Concept ;
         skosno:betydningsbeskrivelse  [ a               skosno:Definisjon ;
                                         rdfs:label      "arkivmateriale som har vært gjenstand for saksbehandling eller hatt verdi som dokumentasjon, blir tatt ut av arkivet og tilintetgjort"@nb ;
-                                        dct:source      [ rdfs:label  "Arkivverket (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 13. november 2017].\n"@nb ] ;
+                                        dct:source      [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 13. november 2017].\n"@nb ] ;
                                         skos:scopeNote  "Riksarkivaren utarbeider generelle kassasjonsregler for saker som gjelder egenforvaltning i statlige organ. For fagsakene skal statlige organ utarbeide egne spesifiserte kassasjonsregler. \n\nKassasjonsreglene skal gi oversikt over hva som skal bevares og hva som kan eller skal kasseres, eventuelt hvor lenge materialet skal oppbevares før kassasjon.\n"@nb
                                       ] ;
         dct:identifier                "https://jira.brreg.no/rest/api/2/issue/46982" ;
@@ -1612,7 +1612,7 @@
         a                             skos:Concept ;
         skosno:betydningsbeskrivelse  [ a               skosno:Definisjon ;
                                         rdfs:label      "metadata til arkivdokument, som angir arkivdokumentets innhold"@nb ;
-                                        dct:source      [ rdfs:label  "Arkivverket (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
+                                        dct:source      [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
                                         skos:scopeNote  "Dokumentbeskrivelsen er et nivå i arkivstrukturen, det vil si en arkivenhet. \r\n\r\nEt dokument er et informasjonsobjekt som kan behandles som en enhet. For å understreke at det dreier seg om en enhet, kan vi bruke begrepet enkeltdokument. En registrering som dokumenterer en transaksjon, kan bestå av ett eller flere enkeltdokument. Dokumentbeskrivelsen inneholder metadata for enkeltdokumenter og beskriver noen egenskaper ved enkeltdokumentet."@nb
                                       ] ;
         dct:identifier                "https://jira.brreg.no/rest/api/2/issue/28265" ;
@@ -1872,7 +1872,7 @@
         a                             skos:Concept ;
         skosno:betydningsbeskrivelse  [ a               skosno:Definisjon ;
                                         rdfs:label      "den som sender et brev, en pakke, en e-post, en elektronisk melding, en SMS eller lignende"@nb ;
-                                        dct:source      [ rdfs:label  "Arkivverket (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
+                                        dct:source      [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
                                         skos:scopeNote  "I Brønnøysundregistrenes felles arkiv (Public 360) er det som regel foretaket eller personen som har «signert» meldingen vi mottar, vi legger til grunn for å fastsette avsender. Dersom slike opplysninger mangler, kan e-postadressen føres opp som avsender."@nb
                                       ] ;
         dct:identifier                "https://jira.brreg.no/rest/api/2/issue/41236" ;
@@ -2166,7 +2166,7 @@
         a                             skos:Concept ;
         skosno:betydningsbeskrivelse  [ a               skosno:Definisjon ;
                                         rdfs:label      "en eller flere journalposter med tilhørende dokumenter, som er knyttet sammen under den felles identiteten saksnummer"@nb ;
-                                        dct:source      [ rdfs:label  "Arkivverket (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
+                                        dct:source      [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
                                         skos:scopeNote  "Noark er en standard for elektroniske journal- og arkivløsninger."@nb
                                       ] ;
         dct:identifier                "https://jira.brreg.no/rest/api/2/issue/42647" ;
@@ -2219,7 +2219,7 @@
         a                             skos:Concept ;
         skosno:betydningsbeskrivelse  [ a           skosno:Definisjon ;
                                         rdfs:label  "klasser som beskriver arkivskapers funksjoner, aktiviteter, emner eller objekter "@nb ;
-                                        dct:source  [ rdfs:label  "Arkivverket (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 13. november 2017]\n"@nb ]
+                                        dct:source  [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 13. november 2017]\n"@nb ]
                                       ] ;
         dct:identifier                "https://jira.brreg.no/rest/api/2/issue/46984" ;
         dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/974760673> ;
@@ -2255,7 +2255,7 @@
         a                             skos:Concept ;
         skosno:betydningsbeskrivelse  [ a               skosno:Definisjon ;
                                         rdfs:label      "tidsperiode for inndeling av arkiv (enkeltarkiv) "@nb ;
-                                        dct:source      [ rdfs:label  "Arkivverket (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
+                                        dct:source      [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
                                         skos:scopeNote  "Inndelingen i tidsperioder, også omtalt som periodisering, legges blant annet til grunn i forbindelse med bortsetting og kassasjon.\n\nBrønnøysundregistrene har arkivperioder på 4-5 år. Det vil si at det settes et kontrollert tidsskille i de ulike arkivene med 4-5 års mellomrom. "@nb
                                       ] ;
         dct:identifier                "https://jira.brreg.no/rest/api/2/issue/28299" ;
@@ -2325,7 +2325,7 @@
         a                             skos:Concept ;
         skosno:betydningsbeskrivelse  [ a               skosno:Definisjon ;
                                         rdfs:label      "det enkelte nivået i arkivstrukturen"@nb ;
-                                        dct:source      [ rdfs:label  "Arkivverket (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
+                                        dct:source      [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
                                         skos:scopeNote  "Arkivstrukturen kan vi gjerne kalle den indre ordningen av arkivet. Denne strukturen er hierarkisk med flere nivåer fra topp til bunn. Som en fellesbetegnelse på disse nivåene brukes begrepet arkivenhet."@nb
                                       ] ;
         dct:identifier                "https://jira.brreg.no/rest/api/2/issue/42407" ;
@@ -2475,7 +2475,7 @@
         a                             skos:Concept ;
         skosno:betydningsbeskrivelse  [ a               skosno:Definisjon ;
                                         rdfs:label      "standardisert format for elektronisk arkivering og langtidslagring av dokumenter "@nb ;
-                                        dct:source      [ rdfs:label  "Arkivverket (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
+                                        dct:source      [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
                                         skos:scopeNote  "Spesifisert i riksarkivarens forskrift kapittel 5 (Elektronisk arkivmateriale. Lagringsmedier, format og avlevering)."@nb
                                       ] ;
         dct:identifier                "https://jira.brreg.no/rest/api/2/issue/41238" ;
@@ -2564,7 +2564,7 @@
         a                             skos:Concept ;
         skosno:betydningsbeskrivelse  [ a               skosno:Definisjon ;
                                         rdfs:label      "metadata til dokumentfiler  "@nb ;
-                                        dct:source      [ rdfs:label  "Arkivverket (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
+                                        dct:source      [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
                                         skos:scopeNote  "Dokumentobjekt er et nivå i arkivstrukturen, det vil si en arkivenhet. Dokumentobjekt er det laveste nivået i arkivstrukturen. \r\n\r\nEt dokumentobjekt skal referere til én og kun en dokumentfil. Dokumentfila inneholder selve dokumentet.  Dersom dokumentet er arkivert i flere versjoner, må vi ha et dokumentobjekt og en dokumentfil for hver versjon. Hver versjon av dokumentet kan dessuten arkiveres i flere forskjellige formater, og da må det i tillegg opprettes egne dokumentobjekter og dokumentfiler for hvert format. I noen tilfeller kan det også være aktuelt å lage varianter av enkelte dokumenter."@nb
                                       ] ;
         dct:identifier                "https://jira.brreg.no/rest/api/2/issue/28229" ;
@@ -2583,7 +2583,7 @@
         a                             skos:Concept ;
         skosno:betydningsbeskrivelse  [ a               skosno:Definisjon ;
                                         rdfs:label      "spesialisering av registrering som inneholder de metadataene som skal være obligatoriske i alle typer fagsystemer"@nb ;
-                                        dct:source      [ rdfs:label  "Arkivverket (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 13. november 2017]\n"@nb ] ;
+                                        dct:source      [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 13. november 2017]\n"@nb ] ;
                                         skos:scopeNote  "En basisregistrering inneholder alle metadata fra registrering, samt andre metadata som er obligatoriske i alle typer arkivsystemer. En basisregistrering kan danne utgangspunkt for andre registreringstyper for spesialiserte fagsystemer. Et eksempel på en slik spesialisering er møteregistrering, som skal knyttes til en møtemappe. En møteregistrering vil inneholde dokumenter produsert i forbindelse med at det har blitt avholdt et (utvalgs)møte. \n\nEn basisregistrering representerer en generell \"innføring\" i alle typer arkivsystemer, også de som ikke inneholder korrespondansebaserte dokumenter."@nb
                                       ] ;
         dct:identifier                "https://jira.brreg.no/rest/api/2/issue/47114" ;
@@ -2704,7 +2704,7 @@
         a                             skos:Concept ;
         skosno:betydningsbeskrivelse  [ a           skosno:Definisjon ;
                                         rdfs:label  "virksomhet eller person som arkivskaper mottar eller sender arkivdokumenter til"@nb ;
-                                        dct:source  [ rdfs:label  "Arkivverket (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 21. mars 2018].\n"@nb ]
+                                        dct:source  [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 21. mars 2018].\n"@nb ]
                                       ] ;
         dct:identifier                "https://jira.brreg.no/rest/api/2/issue/53989" ;
         dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/974760673> ;
@@ -2966,7 +2966,7 @@
         a                             skos:Concept ;
         skosno:betydningsbeskrivelse  [ a           skosno:Definisjon ;
                                         rdfs:label  "organisatorisk enhet som utfører oppgaver knyttet til arkiv (enkeltarkiv)"@nb ;
-                                        dct:source  [ rdfs:label  "Arkivverket (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ]
+                                        dct:source  [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ]
                                       ] ;
         dct:identifier                "https://jira.brreg.no/rest/api/2/issue/42644" ;
         dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/974760673> ;
@@ -3067,7 +3067,7 @@
         a                             skos:Concept ;
         skosno:betydningsbeskrivelse  [ a               skosno:Definisjon ;
                                         rdfs:label      "system for ordning av sakarkiv"@nb ;
-                                        dct:source      [ rdfs:label  "Arkivverket (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra [https://www.arkivverket.no/] [Lest 13. november 2017]"@nb ] ;
+                                        dct:source      [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra [https://www.arkivverket.no/] [Lest 13. november 2017]"@nb ] ;
                                         skos:scopeNote  "En arkivnøkkel er et eksempel på et klassifikasjonssystem.\n\nOrganet skal ha en ordning for klassifikasjon som omfatter alle de saksområdene organet har ansvaret for.\n\nBrønnøysundregistrene har en egen arkivnøkkel."@nb
                                       ] ;
         dct:identifier                "https://jira.brreg.no/rest/api/2/issue/46981" ;
@@ -3085,7 +3085,7 @@
         a                             skos:Concept ;
         skosno:betydningsbeskrivelse  [ a               skosno:Definisjon ;
                                         rdfs:label      "organisatorisk enhet eller person som danner arkiv som ledd i sin virksomhet"@nb ;
-                                        dct:source      [ rdfs:label  "Arkivverket (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
+                                        dct:source      [ rdfs:label  "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"@nb ] ;
                                         skos:scopeNote  "En arkivskaper som er en organisatorisk enhet, kan være et offentlig organ, en bedrift, en institusjon, en stiftelse og så videre eller en del av en slik enhet. En organisatorisk enhet kan være én arkivskaper og dermed ha ett arkiv (sentralarkiv), eller den kan ha flere arkivskapere (avdelinger, etater og så videre) som skaper hver sitt arkiv (underarkiver). "@nb
                                       ] ;
         dct:identifier                "https://jira.brreg.no/rest/api/2/issue/28296" ;

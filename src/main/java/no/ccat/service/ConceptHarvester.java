@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -26,13 +27,13 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ConceptHarvester {
+
     private static final Logger logger = LoggerFactory.getLogger(ConceptHarvester.class);
 
+    private final Environment env;
     private final ConceptDenormalizedRepository conceptDenormalizedRepository;
     private final RDFToModelTransformer rdfToModelTransformer;
     private final HarvestAdminClient harvestAdminClient;
-
-    private boolean isRunningForDeveloperLocally = false;
 
     @Async
     @EventListener(ApplicationReadyEvent.class)
@@ -47,9 +48,9 @@ public class ConceptHarvester {
 
         String theEntireDocument = null;
 
-        if (isRunningForDeveloperLocally) {
-            logger.info("Harvester isRunningForDeveloperLocally==true");
-            theEntireDocument = readFileFully("c:\\tmp\\localConceptsFile.txt");
+        if (localHarvest()) {
+            theEntireDocument = readURLFully(dataSource.getUrl(),"*/*");
+
         } else {
             theEntireDocument = readURLFully(dataSource.getUrl(), dataSource.getAcceptHeaderValue());
         }
@@ -70,8 +71,8 @@ public class ConceptHarvester {
             return new String(Files.readAllBytes(Paths.get(fileURI)));
         } catch (IOException ie) {
             logger.warn("File load failed for File URI " + fileURI);
+            return null;
         }
-        return null;
     }
 
     private String readURLFully(String harvestSourceUri, String acceptHeader) {
@@ -92,5 +93,17 @@ public class ConceptHarvester {
             logger.trace("Got exception when trying to harvest from url {} {}", harvestSourceUri, e.getStackTrace());
         }
         return "";
+    }
+
+    private boolean localHarvest(){
+        boolean local = false;
+
+        for (String profile :  env.getActiveProfiles()){
+            if(profile.equals("dev-with-harvester") ){
+                logger.info("Starting concept harvest from local file");
+                local = true;
+            }
+        }
+        return local;
     }
 }

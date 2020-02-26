@@ -1,0 +1,367 @@
+{
+  "_embedded" : {
+    "concepts" : [ {
+      "id" : "39ed9106-a4cb-49a0-8199-8365189f5e69",
+      "uri" : "http://host.testcontainers.internal:5000/api/concepts/39ed9106-a4cb-49a0-8199-8365189f5e69",
+      "identifier" : "http://data.brreg.no/begrep/49220",
+      "application" : [ ],
+      "definition" : {
+        "text" : {
+          "nn" : "\"[...] ei logisk avgrensa informasjonsmengd som er lagra på eit medium for seinare lesing, lytting, framsyning, overføring eller liknande\"",
+          "nb" : "logisk avgrenset informasjonsmengde som er lagret på et medium for senere lesing, lytting, framvisning, overføring eller lignende"
+        },
+        "remark" : {
+          "nb" : "Et dokument kan foreligge på papir, elektronisk medium, mikrofiche, mikrofilm eller et hvilket som helst annet medium som kan inneholde informasjon. Dokumenter kan inneholde tekst, tegninger, grafikk, fotografier, video, tale og så videre."
+        },
+        "source" : {
+          "prefLabel" : {
+            "nb" : "Offentleglova. _Lov 19. mai 2006 nr. 16 om rett til innsyn i dokument i offentleg verksemd §4._ Tilgjengelig fra: https://lovdata.no/NL/lov/2006-05-19-16/"
+          }
+        },
+        "sources" : [ {
+          "text" : {
+            "nb" : "Offentleglova. _Lov 19. mai 2006 nr. 16 om rett til innsyn i dokument i offentleg verksemd §4._ Tilgjengelig fra: https://lovdata.no/NL/lov/2006-05-19-16/"
+          }
+        } ]
+      },
+      "subject" : {
+        "nb" : "Arkiv"
+      },
+      "prefLabel" : {
+        "nb" : "dokument"
+      },
+      "altLabel" : [ ],
+      "hiddenLabel" : [ ],
+      "contactPoint" : {
+        "email" : "informasjonsforvaltning@brreg.no",
+        "telephone" : "+4775007500"
+      },
+      "seeAlso" : [ ],
+      "publisher" : {
+        "name" : "TESTDEPARTEMENTET",
+        "orgPath" : "STAT/87654321"
+      },
+      "harvest" : {
+        "firstHarvested" : "2020-02-11T14:36:42.448+0000",
+        "lastHarvested" : "2020-02-11T14:36:42.448+0000"
+      }
+    },
+      {
+      "id" : "62b203ff-25d7-4e3e-b53d-07a6e241f8bd",
+      "uri" : "http://host.testcontainers.internal:5000/api/concepts/62b203ff-25d7-4e3e-b53d-07a6e241f8bd",
+      "identifier" : "https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/c12f144e-e9d4-4581-9351-5af37abd8a68",
+      "application" : [ ],
+      "definition" : {
+        "text" : {
+          "nn" : "ei logisk avgrensa informasjonsmengd som er lagra på eit medium for seinare lesing, lyding, framsyning eller overføring"
+        },
+        "source" : {
+          "prefLabel" : {
+            "nb" : "lov 4. desember 1992 nr. 126 om arkiv"
+          }
+        },
+        "sourceRelationship" : "sitatFraKilde",
+        "sources" : [ {
+          "text" : {
+            "nb" : "lov 4. desember 1992 nr. 126 om arkiv"
+          },
+          "uri" : "https://lovdata.no/lov/1992-12-04-126/§2"
+        } ]
+      },
+      "prefLabel" : {
+        "nn" : "dokument"
+      },
+      "altLabel" : [ ],
+      "hiddenLabel" : [ ],
+      "contactPoint" : {
+        "email" : "begrep@arkivverket.no"
+      },
+      "seeAlso" : [ ],
+      "publisher" : {
+        "name" : "TESTDEPARTEMENTET",
+        "orgPath" : "STAT/87654321"
+      },
+      "harvest" : {
+        "firstHarvested" : "2020-02-11T14:36:42.521+0000",
+        "lastHarvested" : "2020-02-11T14:36:42.521+0000"
+      }
+    },
+      {
+      "id" : "1f3b7402-06e4-40ac-8c80-73cf6cc5ad17",
+      "uri" : "http://host.testcontainers.internal:5000/api/concepts/1f3b7402-06e4-40ac-8c80-73cf6cc5ad17",
+      "identifier" : "http://data.brreg.no/begrep/28265",
+      "application" : [ ],
+      "definition" : {
+        "text" : {
+          "nb" : "metadata til arkivdokument, som angir arkivdokumentets innhold"
+        },
+        "remark" : {
+          "nb" : "Dokumentbeskrivelsen er et nivå i arkivstrukturen, det vil si en arkivenhet. \r\n\r\nEt dokument er et informasjonsobjekt som kan behandles som en enhet. For å understreke at det dreier seg om en enhet, kan vi bruke begrepet enkeltdokument. En registrering som dokumenterer en transaksjon, kan bestå av ett eller flere enkeltdokument. Dokumentbeskrivelsen inneholder metadata for enkeltdokumenter og beskriver noen egenskaper ved enkeltdokumentet."
+        },
+        "source" : {
+          "prefLabel" : {
+            "nb" : "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"
+          }
+        },
+        "sources" : [ {
+          "text" : {
+            "nb" : "arkivverket_fdk.turtle (2016) Noark5-standarden [Internett]. Versjon 4.0 Standard for elektronisk arkiv. Tilgjengelig fra https://www.arkivverket.no/ [Lest 10. januar 2018]"
+          }
+        } ]
+      },
+      "subject" : {
+        "nb" : "Arkiv"
+      },
+      "prefLabel" : {
+        "nb" : "dokumentbeskrivelse"
+      },
+      "altLabel" : [ ],
+      "hiddenLabel" : [ ],
+      "contactPoint" : {
+        "email" : "informasjonsforvaltning@brreg.no",
+        "telephone" : "+4775007500"
+      },
+      "example" : {
+        "no" : "Eksempel på dokumentbeskrivelser er tittel, opprettet dato, opprettet av, status, dokumentnummer."
+      },
+      "seeAlso" : [ ],
+      "publisher" : {
+        "name" : "TESTDEPARTEMENTET",
+        "orgPath" : "STAT/87654321"
+      },
+      "harvest" : {
+        "firstHarvested" : "2020-02-11T14:36:42.647+0000",
+        "lastHarvested" : "2020-02-11T14:36:42.647+0000"
+      }
+    }, {
+      "id" : "ab4340fc-badd-442c-959c-83d9a5455afb",
+      "uri" : "http://host.testcontainers.internal:5000/api/concepts/ab4340fc-badd-442c-959c-83d9a5455afb",
+      "identifier" : "https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/b1af69aa-0c56-40ca-ba2d-37f1e920efbf",
+      "application" : [ ],
+      "definition" : {
+        "text" : {
+          "nb" : "dato som er påført selve dokumentet"
+        },
+        "source" : {
+          "prefLabel" : {
+            "nb" : "Noark 5-standarden"
+          }
+        },
+        "sourceRelationship" : "sitatFraKilde",
+        "sources" : [ {
+          "text" : {
+            "nb" : "Noark 5-standarden"
+          },
+          "uri" : ""
+        } ]
+      },
+      "prefLabel" : {
+        "nb" : "dokumentdato"
+      },
+      "altLabel" : [ ],
+      "hiddenLabel" : [ ],
+      "contactPoint" : {
+        "email" : "begrep@arkivverket.no"
+      },
+      "seeAlso" : [ ],
+      "publisher" : {
+        "name" : "TESTDEPARTEMENTET",
+        "orgPath" : "STAT/87654321"
+      },
+      "harvest" : {
+        "firstHarvested" : "2020-02-11T14:36:42.850+0000",
+        "lastHarvested" : "2020-02-11T14:36:42.850+0000"
+      }
+    }, {
+      "id" : "4b8b02e5-ac6b-4003-a0be-fa39ac71d3ce",
+      "uri" : "http://host.testcontainers.internal:5000/api/concepts/4b8b02e5-ac6b-4003-a0be-fa39ac71d3ce",
+      "identifier" : "https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/2e57e1ba-b3cb-44cb-b5de-0f53ddb91bda",
+      "application" : [ ],
+      "definition" : {
+        "text" : {
+          "nb" : "identifikasjonsnummer for registrerte saker og dokumenter i et arkivsystem"
+        },
+        "sourceRelationship" : "egendefinert",
+        "sources" : [ ]
+      },
+      "prefLabel" : {
+        "nb" : "saks- og dokumentnummer"
+      },
+      "altLabel" : [ ],
+      "hiddenLabel" : [ ],
+      "contactPoint" : {
+        "email" : "begrep@arkivverket.no"
+      },
+      "seeAlso" : [ ],
+      "publisher" : {
+        "name" : "TESTDEPARTEMENTET",
+        "orgPath" : "STAT/87654321"
+      },
+      "harvest" : {
+        "firstHarvested" : "2020-02-11T14:36:42.019+0000",
+        "lastHarvested" : "2020-02-11T14:36:42.019+0000"
+      }
+    }, {
+      "id" : "ac911d81-ed59-435c-9378-9d37a8619ae6",
+      "uri" : "http://host.testcontainers.internal:5000/api/concepts/ac911d81-ed59-435c-9378-9d37a8619ae6",
+      "identifier" : "http://begrepskatalogen/begrep/8ef7c41b-0ef8-11e7-a910-005056821322",
+      "application" : [ ],
+      "definition" : {
+        "text" : {
+          "nb" : "lagre informasjon, dvs. et dokument eller en beslutning i organets arkivsystem"
+        },
+        "sources" : [ ]
+      },
+      "subject" : {
+        "nb" : "Arkiv"
+      },
+      "prefLabel" : {
+        "nb" : "arkivering"
+      },
+      "altLabel" : [ ],
+      "hiddenLabel" : [ ],
+      "contactPoint" : {
+        "email" : "begrepskatalogen@skatteetaten.no"
+      },
+      "validFromIncluding" : "2017-03-01",
+      "validToIncluding" : "2022-03-01",
+      "seeAlso" : [ ],
+      "publisher" : {
+        "name" : "TESTDEPARTEMENTET",
+        "orgPath" : "STAT/87654321"
+      },
+      "harvest" : {
+        "firstHarvested" : "2020-02-11T14:36:41.871+0000",
+        "lastHarvested" : "2020-02-11T14:36:41.871+0000"
+      }
+    }, {
+      "id" : "d6b96015-d964-4852-a275-9f1db71e75cb",
+      "uri" : "http://host.testcontainers.internal:5000/api/concepts/d6b96015-d964-4852-a275-9f1db71e75cb",
+      "identifier" : "https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/6461722f-7c99-4d8d-ab99-c67eaaab584d",
+      "application" : [ ],
+      "definition" : {
+        "text" : {
+          "nb" : "dato for når et dokument er ført inn i journalen"
+        },
+        "source" : {
+          "prefLabel" : {
+            "nb" : "Noark 5"
+          }
+        },
+        "sourceRelationship" : "sitatFraKilde",
+        "sources" : [ {
+          "text" : {
+            "nb" : "Noark 5"
+          },
+          "uri" : ""
+        } ]
+      },
+      "prefLabel" : {
+        "nb" : "journalføringsdato"
+      },
+      "altLabel" : [ ],
+      "hiddenLabel" : [ ],
+      "contactPoint" : {
+        "email" : "begrep@arkivverket.no"
+      },
+      "seeAlso" : [ ],
+      "publisher" : {
+        "name" : "TESTDEPARTEMENTET",
+        "orgPath" : "STAT/87654321"
+      },
+      "harvest" : {
+        "firstHarvested" : "2020-02-11T14:36:42.573+0000",
+        "lastHarvested" : "2020-02-11T14:36:42.573+0000"
+      }
+    }, {
+      "id" : "599a60bd-31be-47e0-9a88-36ed73e99eef",
+      "uri" : "http://host.testcontainers.internal:5000/api/concepts/599a60bd-31be-47e0-9a88-36ed73e99eef",
+      "identifier" : "https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/e7e1a7b2-7463-4f7d-b1d9-b81d4bb6688b",
+      "application" : [ ],
+      "definition" : {
+        "text" : {
+          "nb" : "dokument som skal inngå i et arkiv"
+        },
+        "source" : {
+          "prefLabel" : {
+            "nb" : "forskrift 19. desember 2017 nr. 2286 om utfyllende tekniske og arkivfaglige bestemmelser om behandling av offentlige arkiver"
+          }
+        },
+        "sourceRelationship" : "sitatFraKilde",
+        "sources" : [ {
+          "text" : {
+            "nb" : "forskrift 19. desember 2017 nr. 2286 om utfyllende tekniske og arkivfaglige bestemmelser om behandling av offentlige arkiver"
+          },
+          "uri" : "https://lovdata.no/forskrift/2017-12-19-2286/§3-1"
+        } ]
+      },
+      "prefLabel" : {
+        "nb" : "arkivdokument"
+      },
+      "altLabel" : [ ],
+      "hiddenLabel" : [ ],
+      "contactPoint" : {
+        "email" : "begrep@arkivverket.no"
+      },
+      "seeAlso" : [ ],
+      "publisher" : {
+        "name" : "TESTDEPARTEMENTET",
+        "orgPath" : "STAT/87654321"
+      },
+      "harvest" : {
+        "firstHarvested" : "2020-02-11T14:36:42.345+0000",
+        "lastHarvested" : "2020-02-11T14:36:42.345+0000"
+      }
+    }, {
+      "id" : "5e77cd83-827e-46e4-8b5e-a48a6931b393",
+      "uri" : "http://host.testcontainers.internal:5000/api/concepts/5e77cd83-827e-46e4-8b5e-a48a6931b393",
+      "identifier" : "http://data.brreg.no/begrep/49218",
+      "application" : [ ],
+      "definition" : {
+        "text" : {
+          "nb" : "dokument som inneholder en skriftlig meddelelse og som leveres elektronisk eller på papir fra avsender til mottaker"
+        },
+        "remark" : {
+          "nb" : "Brev kan være både inngående og utgående. \n\nEt brev kan være delvis strukturert ved at man bruker en brevmal som for eksempel inneholder topp- eller bunntekst og faste felter til for eksempel dato, referanse og overskrift. Innholdet i et brev kan også være delvis strukturert ved at man bruker faste tekster som legges inn basert på gitte kriterier. Et brev kan også være helt ustrukturert. "
+        },
+        "source" : {
+          "prefLabel" : {
+            "nb" : "Egendefinert"
+          }
+        },
+        "sources" : [ {
+          "text" : {
+            "nb" : "Egendefinert"
+          }
+        } ]
+      },
+      "subject" : {
+        "nb" : "Arkiv"
+      },
+      "prefLabel" : {
+        "nb" : "brev"
+      },
+      "altLabel" : [ ],
+      "hiddenLabel" : [ ],
+      "contactPoint" : {
+        "email" : "informasjonsforvaltning@brreg.no",
+        "telephone" : "+4775007500"
+      },
+      "seeAlso" : [ ],
+      "publisher" : {
+        "name" : "TESTDEPARTEMENTET",
+        "orgPath" : "STAT/87654321"
+      },
+      "harvest" : {
+        "firstHarvested" : "2020-02-11T14:36:43.187+0000",
+        "lastHarvested" : "2020-02-11T14:36:43.187+0000"
+      }
+    } ]
+  },
+  "page" : {
+    "size" : 10,
+    "totalElements" : 9,
+    "totalPages" : 1,
+    "number" : 0
+  }
+}

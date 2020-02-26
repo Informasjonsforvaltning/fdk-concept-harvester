@@ -62,6 +62,21 @@
             "fielddata": true,
             "type": "text",
             "analyzer": "norwegian"
+          },
+          "nn": {
+            "fielddata": true,
+            "type": "text",
+            "analyzer": "norwegian"
+          },
+          "en": {
+            "fielddata": true,
+            "type": "text",
+            "analyzer": "english"
+          },
+          "no": {
+            "fielddata": true,
+            "type": "text",
+            "analyzer": "norwegian"
           }
         }
       },

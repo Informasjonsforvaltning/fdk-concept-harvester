@@ -25,7 +25,7 @@ application:
 ---
 #Utv-miljø lokalt på egen PC
 spring:
-  profiles: develop, unit-integration
+  profiles: develop, unit-integration, dev-with-harvester, unit
   data:
     elasticsearch:
       clusterNodes: localhost:9300
@@ -36,9 +36,31 @@ spring:
     username: admin
     password: admin
 application:
-  harvestAdminRootUrl: ${HARVEST_ADMIN_ROOT_URL:http://localhost:8135/api}
-  apiRootUrl: http://localhost:8112/api
-  apiRootExternalURL: http://localhost:8112/api
+  harvestAdminRootUrl: http://localhost:5000/api
+  apiRootUrl: http://localhost:5000/api
+  apiRootExternalURL: http://localhost:5000/api
   conceptsPath: /concepts
 server:
   port: 8105
+
+---
+
+spring:
+  profiles: test
+  data:
+    elasticsearch:
+      clusterNodes: ${FDK_ES_CLUSTERNODES:elasticsearch5:9300}
+      clusterName: ${FDK_ES_CLUSTERNAME:elasticsearch}
+  rabbitmq:
+    host: ${RABBIT_HOST}
+    port: ${RABBIT_PORT}
+    username: admin
+    password: admin
+application:
+  harvestAdminRootUrl: ${WIREMOCK_TEST_HOST}/api
+  apiRootUrl: ${WIREMOCK_TEST_HOST}/api
+  apiRootExternalURL: ${WIREMOCK_TEST_HOST}/api
+  conceptsPath: /concepts
+server:
+  port: 8080
+

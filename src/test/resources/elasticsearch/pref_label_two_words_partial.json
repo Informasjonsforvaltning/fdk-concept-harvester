@@ -1,0 +1,49 @@
+{
+  "dis_max": {
+    "queries": [
+      {
+        "bool": {
+          "must": [
+            {
+              "constant_score": {
+                "filter": {
+                  "script": {
+                    "script": "(doc['prefLabel.nn'][0].contains('åpne da') && (doc['prefLabel.nn'][0].length() < 10) && doc['prefLabel.nn'].size() == 2) || (doc['prefLabel.nb'][0].contains('åpne da') && (doc['prefLabel.nb'][0].length() < 10) && doc['prefLabel.nb'].size() == 2) || (doc['prefLabel.no'][0].contains('åpne da') && (doc['prefLabel.no'][0].length() < 10) && doc['prefLabel.no'].size() == 2) || (doc['prefLabel.nn'][0].contains('åpne da') && (doc['prefLabel.en'][0].length() < 10) && doc['prefLabel.en'].size() == 2)"
+                  }
+                },
+                "boost": 20
+              }
+            }
+          ],
+          "should": [
+            {
+              "match_phrase_prefix": {
+                "prefLabel.nb": "åpne da"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "match_phrase_prefix": {
+          "prefLabel.nb": "åpne da"
+        }
+      },
+      {
+        "match_phrase_prefix": {
+          "prefLabel.nn": "åpne da"
+        }
+      },
+      {
+        "match_phrase_prefix": {
+          "prefLabel.no": "åpne da"
+        }
+      },
+      {
+        "match_phrase_prefix": {
+          "prefLabel.en": "åpne da"
+        }
+      }
+    ]
+  }
+}

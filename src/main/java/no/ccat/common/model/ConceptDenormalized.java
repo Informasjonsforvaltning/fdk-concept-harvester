@@ -3,12 +3,9 @@ package no.ccat.common.model;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import no.ccat.common.model.Concept;
 import no.dcat.shared.HarvestMetadata;
 import no.dcat.shared.Publisher;
 import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.annotations.Mapping;
-import org.springframework.data.elasticsearch.annotations.Setting;
 import org.springframework.hateoas.core.Relation;
 
 @Data

@@ -1,0 +1,49 @@
+{
+    "dis_max": {
+        "queries": [
+            {
+                "bool": {
+                    "must": [
+                        {
+                            "constant_score": {
+                                "filter": {
+                                    "script": {
+                                        "script": "(doc['prefLabel.nn'][0].contains('dokument') && (doc['prefLabel.nn'][0].length() < 10) && doc['prefLabel.nn'].size() == 1) || (doc['prefLabel.nb'][0].contains('dokument') && (doc['prefLabel.nb'][0].length() < 10) && doc['prefLabel.nb'].size() == 1) || (doc['prefLabel.no'][0].contains('dokument') && (doc['prefLabel.no'][0].length() < 10) && doc['prefLabel.no'].size() == 1) || (doc['prefLabel.nn'][0].contains('dokument') && (doc['prefLabel.en'][0].length() < 12) && doc['prefLabel.en'].size() == 1)"
+                                    }
+                                },
+                                "boost": 20
+                            }
+                        }
+                    ],
+                    "should": [
+                        {
+                            "match_phrase_prefix": {
+                                "prefLabel.nb": "dokument"
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "match_phrase_prefix": {
+                    "prefLabel.nb": "dokument"
+                }
+            },
+            {
+                "match_phrase_prefix": {
+                    "prefLabel.nn": "dokument"
+                }
+            },
+            {
+                "match_phrase_prefix": {
+                    "prefLabel.no": "dokument"
+                }
+            },
+            {
+                "match_phrase_prefix": {
+                    "prefLabel.en": "dokument"
+                }
+            }
+        ]
+    }
+}

@@ -1,4 +1,4 @@
-package no.utils;
+package no.ccat.dev.utils;
 
 import no.ccat.common.model.ConceptDenormalized;
 import no.ccat.service.ConceptDenormalizedRepository;
@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
@@ -15,43 +16,43 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+@Service
+public class LocalHarvester {
 
-public class HarvestMock {
-
-    @Autowired
-    private  ConceptDenormalizedRepository conceptDenormalizedRepository;
-    @Autowired
+    private static final Logger logger = LoggerFactory.getLogger(LocalHarvester.class);
     private RDFToModelTransformer rdfToModelTransformer;
+    private ConceptDenormalizedRepository conceptDenormalizedRepository;
 
-    private static final Logger logger = LoggerFactory.getLogger(HarvestMock.class);
-
-
-    public void startHarvest() {
-        logger.info("Starting mock data harvesting");
-        harvestFromSingleURLSource();
+    @Autowired
+    LocalHarvester(RDFToModelTransformer rdfToModelTransformer, ConceptDenormalizedRepository conceptDenormalizedRepository) {
+        this.rdfToModelTransformer = rdfToModelTransformer;
+        this.conceptDenormalizedRepository = conceptDenormalizedRepository;
     }
 
-    void harvestFromSingleURLSource() {
+
+    public void harvestFromSingleURLSource(String source) {
         Reader reader;
 
+        if(source == null){
+            source = "/Users/bbreg/Documents/concept-catalouge/fdk-concept-harvester/src/main/resources/dev.data/arkivverket_fdk.turtle";
+        }
         String theEntireDocument = null;
 
-        theEntireDocument = readFileFully("/Users/bbreg/Documents/concept-catalouge/fdk-concept-harvester/src/test/resources/data.brreg.no_begrep.turtle");
+        theEntireDocument = readFileFully(source);
 
 
+        assert theEntireDocument != null;
         reader = new StringReader(theEntireDocument);
-
-        if (reader == null) return;
 
         List<ConceptDenormalized> concepts = rdfToModelTransformer.getConceptsFromStream(reader);
 
-        logger.info("Mock data read complected, concepts collected:" + concepts.size());
+        logger.info("Local data read complected, concepts collected:" + concepts.size());
 
         concepts.stream().forEach(concept -> {
             conceptDenormalizedRepository.save(concept);
         });
 
-        logger.info("Mock data harvest completed");
+        logger.info("Local data harvest completed");
     }
 
     private String readFileFully(String fileURI) {
