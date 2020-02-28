@@ -68,7 +68,8 @@ data class QueryParams(val queryString: String = "",
                        val returnFields: String = "",
                        val aggregation: String = "",
                        val sortField: String = "",
-                       val sortDirection: String = ""
+                       val sortDirection: String = "",
+                       val uris: Set<String>? = emptySet()
                        ){
 
     fun isEmpty() : Boolean{
@@ -76,7 +77,7 @@ data class QueryParams(val queryString: String = "",
     }
 
     fun isEmptySearch() : Boolean{
-        return queryString == "" && orgPath == "" && prefLabel == ""
+        return queryString == "" && orgPath == "" && prefLabel == "" && uris.isNullOrEmpty()
     }
     fun isDefaultSize() : Boolean{
         return startPage == "" && size == ""
@@ -87,7 +88,11 @@ data class QueryParams(val queryString: String = "",
     }
 
     fun isPrefLabelSearch() : Boolean {
-        return queryString == "" && prefLabel != ""
+        return queryString == "" && prefLabel != "" && uris.isNullOrEmpty()
+    }
+
+    fun isUriSearch(): Boolean {
+        return !uris.isNullOrEmpty()
     }
 
 }

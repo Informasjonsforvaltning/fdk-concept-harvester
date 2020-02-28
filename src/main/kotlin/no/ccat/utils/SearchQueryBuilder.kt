@@ -93,6 +93,17 @@ fun buildOrgPathQuery(queryParams: QueryParams) = match {
     }
 }
 
+fun buildUrisQuery(uris: Set<String>) = uris.map {
+    match {
+        "uri" {
+            query = it
+            analyzer = "keyword"
+            operator= "AND"
+            minimum_should_match = "100%"
+        }
+    }
+}
+
 private fun getPrefLabelSpan(searchString: String) : Int =
     if(searchString.length < 6 ) {
         10
