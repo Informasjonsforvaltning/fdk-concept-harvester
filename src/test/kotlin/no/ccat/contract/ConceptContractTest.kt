@@ -122,6 +122,20 @@ class ConceptContractTest : ApiTestContainer() {
     }
 
     @Nested
+    inner class IdentifiersOnlySearch {
+        @Test
+        fun `expect identifiers search to return list of concepts that exactly match provided identifers`() {
+            val conceptIdentifiers = jsonValueParser.parse(apiGet("/concepts?size=2")).read<List<String>>("$.._embedded.concepts.*.identifier")
+
+            val result = apiGet("/concepts?identifiers=${conceptIdentifiers.joinToString(",")}")
+            val resultIdentifiers = jsonValueParser.parse(result).read<List<String>>("$.._embedded.concepts.*.identifier")
+
+            assertEquals(2, resultIdentifiers.size)
+            assertTrue(resultIdentifiers.containsAll(conceptIdentifiers))
+        }
+    }
+
+    @Nested
     inner class GetWithId {}
 
 }

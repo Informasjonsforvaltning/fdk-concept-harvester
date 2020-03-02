@@ -15,14 +15,23 @@ import org.springframework.stereotype.Service
 class EsSearchService {
 
     fun buildSearch(queryParams: QueryParams): QueryBuilder? =
-            when {
-                queryParams.isPrefLabelSearch() && (queryParams.orgPath == "") && !queryParams.isUriSearch() -> buildPrefLabelSearch(queryParams)
-                queryParams.isPrefLabelSearch() && (queryParams.orgPath != "") && !queryParams.isUriSearch() -> buildPrefLabelSearchWithOrgPath(queryParams)
-                !queryParams.isPrefLabelSearch() && (queryParams.orgPath == "") && !queryParams.isUriSearch() -> buildDocumentSearch(queryParams)
-                !queryParams.isPrefLabelSearch() && (queryParams.orgPath != "") && !queryParams.isUriSearch() -> buildDocumentSearchWithOrgPath(queryParams)
-                queryParams.isUriSearch() && queryParams.uris != null -> buildUrisSearchQuery(queryParams.uris)
+            when(queryParams.queryType) {
+                QueryType.prefLabelSearch -> buildPrefLabelSearch(queryParams)
+                QueryType.prefLabelSearcgWithOrgPath -> buildPrefLabelSearchWithOrgPath(queryParams)
+                QueryType.queryStringSearch -> buildDocumentSearch(queryParams)
+                QueryType.queryStringSearchWithOrgPath -> buildDocumentSearchWithOrgPath(queryParams)
+                QueryType.urisSearch -> buildUrisSearchQuery(queryParams.uris!!)
+                QueryType.identifiersSearch -> buildIdentifiersSearchQuery(queryParams.identifiers!!)
                 else -> match_all {}
             }
+
+    private fun buildIdentifiersSearchQuery(identifiers: Set<String>): QueryBuilder? = bool {
+        must =  listOf (
+                bool {
+                    should = buildIdentifierMatchQueries(identifiers)
+                }
+        )
+    }
 
     private fun buildDocumentSearch(queryParams: QueryParams): QueryBuilder? =
             if (queryParams.isEmpty()) {
@@ -91,7 +100,7 @@ class EsSearchService {
 
 
     private fun buildQueryString(queryParams: QueryParams): QueryBuilder? =
-            if (!queryParams.isEmptySearch()) {
+            if (!queryParams.isEmptySearchQuery()) {
                 buildWithSearchString(
                         queryParams.queryString,
                         queryParams.lang

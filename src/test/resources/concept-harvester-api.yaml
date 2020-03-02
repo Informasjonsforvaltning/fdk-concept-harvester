@@ -54,6 +54,18 @@ paths:
           required: false
           schema:
             type: string
+        - name: uris
+            in: query
+            description: URIs to perform a search on the felles datakatalog uris
+            required: false
+            schema:
+              type: string
+        - name: identifier
+            in: query
+            description: URIs to perform a search on the original uris
+            required: false
+            schema:
+              type: string
         - name: returnfields
           in: query
           description: Comma separated list of which fields should be returned.
