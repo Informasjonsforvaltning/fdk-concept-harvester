@@ -85,5 +85,4 @@ class EsSearchServiceTest {
 
         expect(jsonPathParser.parse(result)).json_to_have_entries_like(jsonPathParser.parse(expectedString))
     }
-
 }

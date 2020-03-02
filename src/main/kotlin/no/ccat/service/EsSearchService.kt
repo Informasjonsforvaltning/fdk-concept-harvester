@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service
 class EsSearchService {
 
     fun buildSearch(queryParams: QueryParams): QueryBuilder? =
+
             when(queryParams.queryType) {
                 QueryType.prefLabelSearch -> buildPrefLabelSearch(queryParams)
                 QueryType.prefLabelSearcgWithOrgPath -> buildPrefLabelSearchWithOrgPath(queryParams)
@@ -121,10 +122,4 @@ class EsSearchService {
             queries = queryList
         }
     }
-}
-
-
-private fun BoolQueryBuilder.addOrgPathFilter(orgPath: String): BoolQueryBuilder {
-    this.filter(term { "orgPath" to orgPath })
-    return this
 }

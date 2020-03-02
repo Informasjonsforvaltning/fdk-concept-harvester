@@ -76,7 +76,7 @@ data class QueryParams(val queryString: String = "",
     val queryType: QueryType
 
     init {
-        queryType = when{
+        queryType = when {
             isQueryStringSearch() && !shouldfilterOnOrgPath() -> QueryType.queryStringSearch
             isQueryStringSearch() && shouldfilterOnOrgPath() -> QueryType.queryStringSearchWithOrgPath
             isPrefLabelSearch() && !shouldfilterOnOrgPath() -> QueryType.prefLabelSearch
@@ -109,7 +109,6 @@ data class QueryParams(val queryString: String = "",
     fun isQueryStringSearch() = queryString != ""
 
     fun shouldfilterOnOrgPath()= orgPath != ""
-
 
 }
 

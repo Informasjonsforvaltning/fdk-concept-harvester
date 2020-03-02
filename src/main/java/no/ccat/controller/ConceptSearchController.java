@@ -100,7 +100,6 @@ public class ConceptSearchController {
             Set<String> uris,
         @RequestParam(value = "identifiers",required = false)
             Set<String> identifiers,
-
         @PageableDefault()
             Pageable pageable
     ) {
