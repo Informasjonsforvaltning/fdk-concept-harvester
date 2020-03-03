@@ -26,13 +26,14 @@ class EsSearchService {
                 else -> match_all {}
             }
 
-    private fun buildIdentifiersSearchQuery(identifiers: Set<String>): QueryBuilder? = bool {
-        must =  listOf (
-                bool {
-                    should = buildIdentifierMatchQueries(identifiers)
-                }
-        )
-    }
+    private fun buildIdentifiersSearchQuery(identifiers: Set<String>): QueryBuilder? =
+            bool {
+                must =  listOf (
+                        bool {
+                            should = buildIdentifierMatchQueries(identifiers)
+                        }
+                )
+            }
 
     private fun buildDocumentSearch(queryParams: QueryParams): QueryBuilder? =
             if (queryParams.isEmpty()) {
@@ -57,13 +58,14 @@ class EsSearchService {
 
             }
 
-    private fun buildUrisSearchQuery(uris: Set<String>): QueryBuilder? = bool {
-        must = listOf(
-                bool {
-                    should = buildUrisQuery(uris)
-                }
-        )
-    }
+    private fun buildUrisSearchQuery(uris: Set<String>): QueryBuilder? =
+            bool {
+                must = listOf(
+                        bool {
+                            should = buildUrisQuery(uris)
+                        }
+                )
+            }
 
     private fun buildPrefLabelSearchWithOrgPath(params: QueryParams): QueryBuilder {
         val langProperties = LanguageProperties(params.lang)

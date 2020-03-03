@@ -84,36 +84,40 @@ fun getSearchSpan(isPrefLabelSearch: Boolean, searchString:String): Int =
     } else {
         searchString.length + 1
     }
-fun buildOrgPathQuery(queryParams: QueryParams) = match {
-    "publisher.orgPath" {
-        query = queryParams.orgPath
-        analyzer = "keyword"
-        operator= "AND"
-        minimum_should_match = "100%"
-    }
-}
 
-fun buildUrisQuery(uris: Set<String>) = uris.map {
+fun buildOrgPathQuery(queryParams: QueryParams) =
     match {
-        "uri" {
-            query = it
+        "publisher.orgPath" {
+            query = queryParams.orgPath
             analyzer = "keyword"
             operator= "AND"
             minimum_should_match = "100%"
         }
     }
-}
 
-fun buildIdentifierMatchQueries(uris: Set<String>) = uris.map {
-    match {
-        "identifier" {
-            query = it
-            analyzer = "keyword"
-            operator= "AND"
-            minimum_should_match = "100%"
+fun buildUrisQuery(uris: Set<String>) =
+    uris.map {
+        match {
+            "uri" {
+                query = it
+                analyzer = "keyword"
+                operator= "AND"
+                minimum_should_match = "100%"
+            }
         }
     }
-}
+
+fun buildIdentifierMatchQueries(uris: Set<String>) =
+    uris.map {
+        match {
+            "identifier" {
+                query = it
+                analyzer = "keyword"
+                operator= "AND"
+                minimum_should_match = "100%"
+            }
+        }
+    }
 
 private fun getPrefLabelSpan(searchString: String) : Int =
     if(searchString.length < 6 ) {

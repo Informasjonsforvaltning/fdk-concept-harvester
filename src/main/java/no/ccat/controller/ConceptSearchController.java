@@ -98,13 +98,16 @@ public class ConceptSearchController {
 
         @RequestParam(value = "uris", required = false)
             Set<String> uris,
+
         @RequestParam(value = "identifiers",required = false)
             Set<String> identifiers,
+
         @PageableDefault()
             Pageable pageable
     ) {
 
-         QueryParams params = new QueryParams(queryString,
+         QueryParams params = new QueryParams(
+                 queryString,
                  orgPath,
                  lang,
                  prefLabel,

@@ -81,7 +81,7 @@ class SearchQueryHelperTest {
         inner class queryType {
 
             @Test
-            fun `should return emptySearch if no query value is present`() {
+            fun `should return matchAllSearch if no query value is present`() {
                 val params = QueryParams();
                 val paramsWithSort = QueryParams(sortDirection = "asc");
                 val paramsWithReturnFields = QueryParams(returnFields = "prefLabel");
