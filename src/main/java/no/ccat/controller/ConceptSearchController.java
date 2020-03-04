@@ -121,6 +121,8 @@ public class ConceptSearchController {
                  identifiers
                  );
 
+         logger.debug("/GET search concepts ", params.toString());
+
         QueryBuilder searchQuery = esSearchService.buildSearch(params);
 
         NativeSearchQuery finalQuery = new NativeSearchQueryBuilder()

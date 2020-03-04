@@ -2,6 +2,7 @@ package no.ccat.service
 
 import mbuhot.eskotlin.query.compound.bool
 import mbuhot.eskotlin.query.compound.dis_max
+import mbuhot.eskotlin.query.fulltext.match
 import mbuhot.eskotlin.query.term.match_all
 import mbuhot.eskotlin.query.term.term
 import no.ccat.utils.*
@@ -23,8 +24,19 @@ class EsSearchService {
                 QueryType.queryStringSearchWithOrgPath -> buildDocumentSearchWithOrgPath(queryParams)
                 QueryType.urisSearch -> buildUrisSearchQuery(queryParams.uris!!)
                 QueryType.identifiersSearch -> buildIdentifiersSearchQuery(queryParams.identifiers!!)
+                QueryType.orgPathOnlySearch -> buildOrhPathOnlySearch(queryParams.orgPath)
                 else -> match_all {}
             }
+
+    private fun buildOrhPathOnlySearch(orgPath: String): QueryBuilder? =
+              match {
+                  "publisher.orgPath" {
+                      query = orgPath
+                      analyzer = "keyword"
+                      operator= "AND"
+                      minimum_should_match = "100%"
+                  }
+              }
 
     private fun buildIdentifiersSearchQuery(identifiers: Set<String>): QueryBuilder? =
             bool {

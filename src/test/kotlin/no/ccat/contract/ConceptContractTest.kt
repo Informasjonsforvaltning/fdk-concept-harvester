@@ -112,7 +112,17 @@ class ConceptContractTest : ApiTestContainer() {
         @Test
         fun `expect orgPath only search to return list of concepts from corresponding publisher only`() {
             val expOrgPath = "STAT/87654321/12345678".split("/")
-            val result = apiGet("/concepts?size=100&orgPath=STAT/87654321/12345678")
+            val result = apiGet("/concepts?size=100&orgPath=STAT/87654321/12345678&aggregations=orgPath")
+            val resultOrgPath = jsonValueParser.parse(result).read<List<String>>("\$.._embedded.concepts.*.publisher.orgPath")
+            resultOrgPath.forEach {
+                expect(it).to_be_organisation(expOrgPath)
+            }
+        }
+
+        @Test
+        fun `eh only search to return list of concepts from corresponding publisher only`() {
+            val expOrgPath = "STAT/87654321".split("/")
+            val result = apiGet("/concepts?size=100&orgPath=STAT/87654321")
             val resultOrgPath = jsonValueParser.parse(result).read<List<String>>("\$.._embedded.concepts.*.publisher.orgPath")
             resultOrgPath.forEach {
                 expect(it).to_be_organisation(expOrgPath)

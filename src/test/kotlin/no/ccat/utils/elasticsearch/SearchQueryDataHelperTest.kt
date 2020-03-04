@@ -144,6 +144,12 @@ class SearchQueryHelperTest {
                 assertEquals(QueryType.identifiersSearch, paramsWithIdentifiers().queryType)
                 assertEquals(QueryType.identifiersSearch, paramsWithIdentifiersAndPage().queryType)
             }
+            @Test
+            fun `should return orgPathOnly`() {
+                assertEquals(QueryType.orgPathOnlySearch, QueryParams(orgPath = "gadshfgasjf").queryType)
+                assertEquals(QueryType.orgPathOnlySearch, QueryParams(orgPath = "gadshfgasjf", aggregation = "hjaskhfjkasf").queryType)
+            }
+
 
         }
 
@@ -254,7 +260,7 @@ class SearchQueryHelperTest {
 
             @Test
             fun `should return false if orgPath is not default `() {
-                val params = QueryParams(orgPath = "//13638/basfkj");
+                val params = QueryParams(orgPath = "/13638/basfkj");
                 expect(params.isEmptySearchQuery()).to_be_false()
 
             }
@@ -360,6 +366,18 @@ class SearchQueryHelperTest {
                 assertFalse(paramsWithQueryString().shouldfilterOnOrgPath())
                 assertFalse(paramsWithQueryStringAndUris().shouldfilterOnOrgPath())
                 assertFalse(paramsWithQueryStringAndPrefLabel().shouldfilterOnOrgPath())
+            }
+        }
+
+        @Nested
+        inner class isFilerOnPathgOnly{
+            @Test
+            fun `should filter on orgPath`(){
+                assertFalse(paramsWithQueryStringAndOrgPath().isOrgPathOnly())
+                assertFalse(paramsWithQueryStringUriAndOrgPath().isOrgPathOnly())
+                assertFalse(paramsWithQueryStringUriAndOrgPath().isOrgPathOnly())
+                assertFalse(paramsWithQueryStringPrefLabelAndOrgPath().isOrgPathOnly())
+                assertTrue(QueryParams(orgPath = "ANNET/123567").isOrgPathOnly())
             }
         }
     }

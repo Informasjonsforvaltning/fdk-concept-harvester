@@ -1,0 +1,16 @@
+{
+  "organizationId": "12345678",
+  "norwegianRegistry": "https://data.brreg.no/enhetsregisteret/api/enheter/12345678",
+  "internationalRegistry": null,
+  "name": "FESTENHETEN I FESTØYSUND",
+  "orgType": "ORGL",
+  "orgPath": "STAT/87654321/95678936",
+  "subOrganizationOf": "87654321",
+  "issued": "1995-08-09",
+  "municipalityNumber": "1813",
+  "industryCode": "84.110",
+  "sectorCode": "6100",
+  "prefLabel": null,
+  "domains": [],
+  "allowDelegatedRegistration": null
+}

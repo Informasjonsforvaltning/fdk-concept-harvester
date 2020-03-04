@@ -77,12 +77,13 @@ data class QueryParams(val queryString: String = "",
 
     init {
         queryType = when {
-            isQueryStringSearch() && !shouldfilterOnOrgPath() -> QueryType.queryStringSearch
-            isQueryStringSearch() && shouldfilterOnOrgPath() -> QueryType.queryStringSearchWithOrgPath
-            isPrefLabelSearch() && !shouldfilterOnOrgPath() -> QueryType.prefLabelSearch
-            isPrefLabelSearch() && shouldfilterOnOrgPath() -> QueryType.prefLabelSearcgWithOrgPath
-            isUriSearch() && !isTextSearch() && !isIdentifiersSearch() -> QueryType.urisSearch
-            isIdentifiersSearch() && !isTextSearch() && !isUriSearch() -> QueryType.identifiersSearch
+            isQueryStringSearch() && !shouldfilterOnOrgPath() && !isOrgPathOnly() -> QueryType.queryStringSearch
+            isQueryStringSearch() && shouldfilterOnOrgPath() && !isOrgPathOnly() -> QueryType.queryStringSearchWithOrgPath
+            isPrefLabelSearch() && !shouldfilterOnOrgPath() && !isOrgPathOnly() -> QueryType.prefLabelSearch
+            isPrefLabelSearch() && shouldfilterOnOrgPath() && !isOrgPathOnly()-> QueryType.prefLabelSearcgWithOrgPath
+            isUriSearch() && !isTextSearch() && !isIdentifiersSearch() && !isOrgPathOnly() -> QueryType.urisSearch
+            isIdentifiersSearch() && !isTextSearch() && !isUriSearch() && !isOrgPathOnly() -> QueryType.identifiersSearch
+            isOrgPathOnly() -> QueryType.orgPathOnlySearch
             else -> QueryType.matchAllSearch
         }
     }
@@ -110,11 +111,14 @@ data class QueryParams(val queryString: String = "",
 
     fun shouldfilterOnOrgPath()= orgPath != ""
 
+    fun isOrgPathOnly() = orgPath != "" && !isTextSearch() && !isIdSearch()
+
 }
 
 enum class QueryType{
     queryStringSearch,
     queryStringSearchWithOrgPath,
+    orgPathOnlySearch,
     prefLabelSearch,
     prefLabelSearcgWithOrgPath,
     urisSearch,
