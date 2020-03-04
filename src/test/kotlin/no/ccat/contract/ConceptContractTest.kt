@@ -107,6 +107,19 @@ class ConceptContractTest : ApiTestContainer() {
         }
     }
 
+    @Nested class OrgPathSearch {
+
+        @Test
+        fun `expect orgPath only search to return list of concepts from corresponding publisher only`() {
+            val expOrgPath = "STAT/87654321/12345678".split("/")
+            val result = apiGet("/concepts?size=100&orgPath=STAT/87654321/12345678")
+            val resultOrgPath = jsonValueParser.parse(result).read<List<String>>("\$.._embedded.concepts.*.publisher.orgPath")
+            resultOrgPath.forEach {
+                expect(it).to_be_organisation(expOrgPath)
+            }
+        }
+    }
+
     @Nested
     inner class UrisOnlySearch {
         @Test
