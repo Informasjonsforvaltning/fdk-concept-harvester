@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import testUtils.jsonPathParser
 import testUtils.jsonValueParser
+import testUtils.paramsWithIdentifiers
 import java.io.File
 import testUtils.assertions.Expect as expect
 
@@ -69,4 +70,19 @@ class EsSearchServiceTest {
 
     }
 
+    @Test
+    fun `should return uris query`() {
+        val expectedString: String = File("./src/test/resources/elasticsearch/uris_search_query.json").readText(Charsets.UTF_8)
+        val result = service.buildSearch(QueryParams(uris = setOf("http://localhost/concept/1", "http://localhost/concept/2"))).toString()
+
+        expect(jsonPathParser.parse(result)).json_to_have_entries_like(jsonPathParser.parse(expectedString))
+    }
+
+    @Test
+    fun `should return identifiers query`() {
+        val expectedString: String = File("./src/test/resources/elasticsearch/identifiers_search_query.json").readText(Charsets.UTF_8)
+        val result = service.buildSearch(paramsWithIdentifiers()).toString()
+
+        expect(jsonPathParser.parse(result)).json_to_have_entries_like(jsonPathParser.parse(expectedString))
+    }
 }

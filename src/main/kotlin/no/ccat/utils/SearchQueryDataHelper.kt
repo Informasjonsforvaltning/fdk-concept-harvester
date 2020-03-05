@@ -68,28 +68,62 @@ data class QueryParams(val queryString: String = "",
                        val returnFields: String = "",
                        val aggregation: String = "",
                        val sortField: String = "",
-                       val sortDirection: String = ""
+                       val sortDirection: String = "",
+                       val uris: Set<String>? = emptySet(),
+                       val identifiers: Set<String>? = emptySet()
                        ){
 
-    fun isEmpty() : Boolean{
-        return this == QueryParams()
+    val queryType: QueryType
+
+    init {
+        queryType = when {
+            isQueryStringSearch() && !shouldfilterOnOrgPath() && !isOrgPathOnly() -> QueryType.queryStringSearch
+            isQueryStringSearch() && shouldfilterOnOrgPath() && !isOrgPathOnly() -> QueryType.queryStringSearchWithOrgPath
+            isPrefLabelSearch() && !shouldfilterOnOrgPath() && !isOrgPathOnly() -> QueryType.prefLabelSearch
+            isPrefLabelSearch() && shouldfilterOnOrgPath() && !isOrgPathOnly()-> QueryType.prefLabelSearcgWithOrgPath
+            isUriSearch() && !isTextSearch() && !isIdentifiersSearch() && !isOrgPathOnly() -> QueryType.urisSearch
+            isIdentifiersSearch() && !isTextSearch() && !isUriSearch() && !isOrgPathOnly() -> QueryType.identifiersSearch
+            isOrgPathOnly() -> QueryType.orgPathOnlySearch
+            else -> QueryType.matchAllSearch
+        }
     }
 
-    fun isEmptySearch() : Boolean{
-        return queryString == "" && orgPath == "" && prefLabel == ""
-    }
-    fun isDefaultSize() : Boolean{
-        return startPage == "" && size == ""
-    }
+    fun isEmpty() = this == QueryParams()
 
-    fun isDefaultPresentation() : Boolean{
-        return  aggregation == "" && returnFields == "" && sortField == "" && sortDirection == ""
-    }
+    fun isEmptySearchQuery() = queryString == "" && orgPath == "" && prefLabel == "" && uris.isNullOrEmpty() && identifiers.isNullOrEmpty()
 
-    fun isPrefLabelSearch() : Boolean {
-        return queryString == "" && prefLabel != ""
-    }
+    fun isDefaultSize() = startPage == "" && size == ""
 
+    fun isDefaultPresentation() = aggregation == "" && returnFields == "" && sortField == "" && sortDirection == ""
+
+    fun isPrefLabelSearch() = queryString == "" && prefLabel != ""
+
+    fun isUriSearch() = !uris.isNullOrEmpty() && !isTextSearch()
+
+    fun isIdentifiersSearch() = !identifiers.isNullOrEmpty() && !isTextSearch()
+
+    fun isTextSearch() = isPrefLabelSearch() || isQueryStringSearch()
+
+    fun isIdSearch() = isUriSearch() || isIdentifiersSearch()
+
+    //Defaults to textserach if more than one search query value is present
+    fun isQueryStringSearch() = queryString != ""
+
+    fun shouldfilterOnOrgPath()= orgPath != ""
+
+    fun isOrgPathOnly() = orgPath != "" && !isTextSearch() && !isIdSearch()
+
+}
+
+enum class QueryType{
+    queryStringSearch,
+    queryStringSearchWithOrgPath,
+    orgPathOnlySearch,
+    prefLabelSearch,
+    prefLabelSearcgWithOrgPath,
+    urisSearch,
+    identifiersSearch,
+    matchAllSearch
 }
 
 

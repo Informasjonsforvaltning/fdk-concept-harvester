@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static no.ccat.controller.Common.MISSING;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
@@ -95,21 +96,32 @@ public class ConceptSearchController {
         @RequestParam(value = "sortdirection", defaultValue = "", required = false)
             String sortdirection,
 
+        @RequestParam(value = "uris", required = false)
+            Set<String> uris,
+
+        @RequestParam(value = "identifiers",required = false)
+            Set<String> identifiers,
+
         @PageableDefault()
             Pageable pageable
     ) {
-        logger.debug("GET /concepts");
 
-         QueryParams params = new QueryParams(queryString,
-                orgPath,
-                lang,
-                prefLabel,
-                startPage,
-                size,
-                returnFields,
-                aggregations,
-                sortfield,
-                sortdirection);
+         QueryParams params = new QueryParams(
+                 queryString,
+                 orgPath,
+                 lang,
+                 prefLabel,
+                 startPage,
+                 size,
+                 returnFields,
+                 aggregations,
+                 sortfield,
+                 sortdirection,
+                 uris,
+                 identifiers
+                 );
+
+         logger.debug("/GET search concepts ", params.toString());
 
         QueryBuilder searchQuery = esSearchService.buildSearch(params);
 

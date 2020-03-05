@@ -36,7 +36,7 @@ spring:
     username: admin
     password: admin
 application:
-  harvestAdminRootUrl: http://localhost:5000/api
+  harvestAdminRootUrl: ${HARVEST_ADMIN_ROOT_URL:https://admin-api.it1.fellesdatakatalog.brreg.no/api}
   apiRootUrl: http://localhost:5000/api
   apiRootExternalURL: http://localhost:5000/api
   conceptsPath: /concepts

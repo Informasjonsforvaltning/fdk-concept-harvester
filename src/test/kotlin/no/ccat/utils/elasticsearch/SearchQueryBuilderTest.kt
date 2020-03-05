@@ -2,6 +2,7 @@ package no.ccat.utils.elasticsearch
 import no.ccat.utils.LanguageProperties
 import no.ccat.utils.buildSearchStringInPrefLabelBoost
 import no.ccat.utils.buildExactMatchString
+import no.ccat.utils.buildUrisQuery
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
@@ -55,6 +56,20 @@ class SearchQueryBuilderTest {
             val result = buildSearchStringInPrefLabelBoost(COMPLEX_SEARCH_STRING,lang)
             expect(result[0].toString()).json_to_equal(expectedPrimary)
             expect (result[1].toString()).json_to_equal(expectedSecondary)
+        }
+    }
+
+    @Nested
+    inner class buildSearchUrisQueryTest
+    {
+        val expectedQuery = File("./src/test/resources/elasticsearch/uris_match_search_query.json").readText(Charsets.UTF_8)
+
+        val uris = setOf("http://localhost/concept/1", "http://localhost/concept/2")
+
+        @Test
+        fun `should return a builder containing 2 concept URIs`(){
+            val result = buildUrisQuery(uris)
+            expect(result.toString()).json_to_equal(expectedQuery)
         }
     }
 }

@@ -1,7 +1,6 @@
 package testUtils.assertions
 
 import com.jayway.jsonpath.DocumentContext
-import com.jayway.jsonpath.PathNotFoundException
 import no.ccat.utils.LanguageProperties
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assumptions

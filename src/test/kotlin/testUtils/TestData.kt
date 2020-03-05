@@ -3,6 +3,7 @@ package testUtils
 import com.google.common.collect.ImmutableMap
 import com.jayway.jsonpath.DocumentContext
 import net.minidev.json.JSONArray
+import no.ccat.utils.QueryParams
 import testUtils.ApiTestContainer.Companion.TEST_API
 import testUtils.ApiTestContainer.Companion.elasticContainer
 
@@ -53,3 +54,72 @@ val RABBIT_MQ_ENV_VALUES : Map <String, String> = ImmutableMap.of(
 fun getApiAddress( endpoint: String ): String{
     return "http://${TEST_API.getContainerIpAddress()}:${TEST_API.getMappedPort(API_PORT)}$endpoint"
 }
+
+fun paramsWithQueryString() = QueryParams(queryString = "Some query")
+fun paramsWithQueryStringAndPrefLabel() = QueryParams(queryString = "Some query", prefLabel = "something else")
+fun paramsWithQueryStringAndOrgPath() = QueryParams(queryString = "Some query", orgPath="STAT/123456/65432")
+fun paramsWithQueryStringAndIdentifiers() = QueryParams(
+        queryString = "Some query",
+        identifiers = setOf("http://dfg4-hdjk-22-sdjk","http://dfgkk-hdjk-22-sdjk"))
+fun paramsWithQueryStringAndIdentifiersAndOrgPath() = QueryParams(
+        queryString = "Some query",
+        orgPath="STAT/123456/65432",
+        identifiers = setOf("http://dfg4-hdjk-22-sdjk","http://dfgkk-hdjk-22-sdjk"))
+fun paramsWithUriAndSort() = QueryParams(queryString = "some string",
+        uris = setOf("One","two"), sortDirection = "asc", size="400")
+fun paramsWithQueryStringIdentifiersAndSort() = QueryParams(
+        queryString = "Some query",
+        orgPath="STAT/123456/65432",
+        identifiers = setOf("http://dfg4-hdjk-22-sdjk","http://dfgkk-hdjk-22-sdjk"),
+        sortDirection = "asc",sortField = "prefLabel")
+fun paramsWithPrefLabelIdentifiersAndSort() = QueryParams(
+        prefLabel = "Some query",
+        identifiers = setOf("http://dfg4-hdjk-22-sdjk","http://dfgkk-hdjk-22-sdjk"),
+        sortDirection = "asc",sortField = "prefLabel")
+fun paramsWithPrefLabelUrisAndSort() = QueryParams(
+        prefLabel = "Some query",
+        uris = setOf("http://dfg4-hdjk-22-sdjk","http://dfgkk-hdjk-22-sdjk"),
+        sortDirection = "asc",sortField = "prefLabel")
+fun paramsWithAllQueryValues() = QueryParams(
+        queryString = "Some query",
+        prefLabel = "something else",
+        identifiers = setOf("http://dfg4-hdjk-22-sdjk","http://dfgkk-hdjk-22-sdjk"),
+        uris = setOf("http://dfg4-hdjk-22-sdjk","http://dfgkk-hdjk-22-sdjk"))
+fun paramsWithQueryStringAndUris() = QueryParams(
+        queryString = "Some query",
+        uris = setOf("http://dfg4-hdjk-22-sdjk","http://dfgkk-hdjk-22-sdjk"))
+fun paramsWithPrefLabel() = QueryParams(
+        prefLabel = "Some query")
+fun paramsWithPrefLabelAndOrgPath() = QueryParams(
+        prefLabel = "Some query",
+        orgPath="STAT/123456/65432")
+fun paramsWithPrefLabelAndOrgPathAndSort() = QueryParams(
+        prefLabel = "Some query",
+        orgPath="STAT/123456/65432",
+        sortDirection = "asc",
+        sortField = "prefLabel")
+fun paramsWithPrefLabelAndUris() = QueryParams(
+        prefLabel = "somequery",
+        uris = setOf("http://dfg4-hdjk-22-sdjk","http://dfgkk-hdjk-22-sdjk"))
+fun paramsWithPrefLabelUrisAndOrgPath() = QueryParams(
+        prefLabel = "somequery",
+        uris = setOf("http://dfg4-hdjk-22-sdjk","http://dfgkk-hdjk-22-sdjk"),
+        orgPath="STAT/123456/65432")
+
+fun paramsWithUri() = QueryParams(uris = setOf("some-uri","some-other-uri"))
+fun paramsWithUriAndSize() = QueryParams(uris = setOf("some-uri","some-other-uri"), size = "10")
+fun paramsWithIdentifiers() = QueryParams(identifiers = setOf("sine-idnetifier","some-other-identifier"))
+fun paramsWithIdentifiersAndPage() = QueryParams(
+        identifiers = setOf("sine-idnetifier","some-other-identifier"),
+        startPage= "1")
+fun paramsWithUriAndIdentifiers() = QueryParams(
+        identifiers = setOf("http://dfg4-hdjk-22-sdjk","http://dfgkk-hdjk-22-sdjk"),
+        uris = setOf("http://dfg4-hdjk-22-sdjk","http://dfgkk-hdjk-22-sdjk"))
+fun paramsWithQueryStringUriAndOrgPath() = QueryParams(
+        queryString = "Some query",
+        orgPath = "STAS/123456/67890",
+        uris = setOf("http://dfg4-hdjk-22-sdjk","http://dfgkk-hdjk-22-sdjk"))
+fun paramsWithQueryStringPrefLabelAndOrgPath() = QueryParams(
+        queryString = "Some query",
+        orgPath = "STAS/123456/67890",
+        uris = setOf("http://dfg4-hdjk-22-sdjk","http://dfgkk-hdjk-22-sdjk"))

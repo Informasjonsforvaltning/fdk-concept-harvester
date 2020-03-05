@@ -2,6 +2,8 @@ package no.ccat.utils.elasticsearch
 
 import no.ccat.utils.*
 import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Assertions.*
+import testUtils.*
 import testUtils.assertions.Expect as expect
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -76,6 +78,164 @@ class SearchQueryHelperTest {
     @Nested
     inner class QueryParamsTest{
         @Nested
+        inner class queryType {
+
+            @Test
+            fun `should return matchAllSearch if no query value is present`() {
+                val params = QueryParams();
+                val paramsWithSort = QueryParams(sortDirection = "asc");
+                val paramsWithReturnFields = QueryParams(returnFields = "prefLabel");
+                val paramsWithAggregations = QueryParams(aggregation = "orgPath");
+                val paramsWithSortField = QueryParams(sortField = "prefLabel");
+                val paramsWithSize = QueryParams(size = "10")
+                val paramsWithPage = QueryParams(startPage = "2")
+                val paramsWithPageAndSort = QueryParams(startPage = "2", sortDirection = "asc")
+
+                assertEquals(QueryType.matchAllSearch,params.queryType)
+                assertEquals(QueryType.matchAllSearch,paramsWithSort.queryType)
+                assertEquals(QueryType.matchAllSearch,paramsWithPage.queryType)
+                assertEquals(QueryType.matchAllSearch,paramsWithReturnFields.queryType)
+                assertEquals(QueryType.matchAllSearch,paramsWithAggregations.queryType)
+                assertEquals(QueryType.matchAllSearch,paramsWithSortField.queryType)
+                assertEquals(QueryType.matchAllSearch,paramsWithSize.queryType)
+                assertEquals(QueryType.matchAllSearch,paramsWithPageAndSort.queryType)
+            }
+
+            @Test
+            fun `should return queryStringSearch for ambigious search query params`() {
+                assertEquals(QueryType.queryStringSearch, paramsWithQueryStringAndIdentifiers().queryType)
+                assertEquals(QueryType.queryStringSearch, paramsWithQueryStringAndUris().queryType)
+                assertEquals(QueryType.queryStringSearch, paramsWithQueryStringAndPrefLabel().queryType)
+                assertEquals(QueryType.queryStringSearch, paramsWithQueryStringAndUris().queryType)
+                assertEquals(QueryType.queryStringSearch, paramsWithAllQueryValues().queryType)
+
+            }
+
+            @Test
+            fun `should return queryStringSearchWithOrgPath`() {
+                assertEquals(QueryType.queryStringSearchWithOrgPath, paramsWithQueryStringAndOrgPath().queryType)
+                assertEquals(QueryType.queryStringSearchWithOrgPath, paramsWithQueryStringUriAndOrgPath().queryType)
+                assertEquals(QueryType.queryStringSearchWithOrgPath, paramsWithQueryStringAndIdentifiersAndOrgPath().queryType)
+
+            }
+
+            @Test
+            fun `should return preflabelSearch`() {
+                assertEquals(QueryType.prefLabelSearch, paramsWithPrefLabel().queryType)
+                assertEquals(QueryType.prefLabelSearch, paramsWithPrefLabelAndUris().queryType)
+                assertEquals(QueryType.prefLabelSearch, paramsWithPrefLabelUrisAndSort().queryType)
+                assertEquals(QueryType.prefLabelSearch, paramsWithPrefLabelIdentifiersAndSort().queryType)
+            }
+            @Test
+            fun `should return preflabelSearchWithOrgPath`() {
+                assertEquals(QueryType.prefLabelSearcgWithOrgPath, paramsWithPrefLabelUrisAndOrgPath().queryType)
+                assertEquals(QueryType.prefLabelSearcgWithOrgPath, paramsWithPrefLabelAndOrgPath().queryType)
+                assertEquals(QueryType.prefLabelSearcgWithOrgPath, paramsWithPrefLabelAndOrgPathAndSort().queryType)
+            }
+
+            @Test
+            fun `should return urisSearch`() {
+                assertEquals(QueryType.urisSearch, paramsWithUri().queryType)
+                assertEquals(QueryType.urisSearch, paramsWithUriAndSize().queryType)
+            }
+
+            @Test
+            fun `should return identifiersSearch`() {
+                assertEquals(QueryType.identifiersSearch, paramsWithIdentifiers().queryType)
+                assertEquals(QueryType.identifiersSearch, paramsWithIdentifiersAndPage().queryType)
+            }
+            @Test
+            fun `should return orgPathOnly`() {
+                assertEquals(QueryType.orgPathOnlySearch, QueryParams(orgPath = "gadshfgasjf").queryType)
+                assertEquals(QueryType.orgPathOnlySearch, QueryParams(orgPath = "gadshfgasjf", aggregation = "hjaskhfjkasf").queryType)
+            }
+
+
+        }
+
+        @Nested
+        inner class isStringQuerySearch {
+            @Test
+            fun `should return true if queryString has a value`() {
+               assertTrue(paramsWithQueryString().isQueryStringSearch())
+            }
+            @Test
+            fun `should return true if queryString and prefLabel had value`() {
+                assertTrue(paramsWithQueryStringAndPrefLabel().isQueryStringSearch())
+            }
+
+            @Test
+            fun `should return true if queryString and identifiers has value`() {
+                assertTrue(paramsWithQueryStringAndIdentifiers().isQueryStringSearch())
+            }
+
+            @Test
+            fun `should return true if queryString and uris has value`() {
+                assertTrue(paramsWithQueryStringAndUris().isQueryStringSearch())
+
+            }
+
+            @Test
+            fun `should return true if all search query fields has value`() {
+                assertTrue(paramsWithAllQueryValues().isQueryStringSearch())
+            }
+
+        }
+
+        @Nested
+        inner class isPrefLabelSearch {
+            @Test
+            fun `should return true if prefLabel has value`() {
+                assertTrue(paramsWithPrefLabel().isPrefLabelSearch())
+            }
+
+            @Test
+            fun `should return true if prefLabel and uris has value`() {
+                assertTrue(paramsWithPrefLabelAndUris().isPrefLabelSearch())
+            }
+
+        }
+
+        @Nested
+        inner class isTextSearch {
+            @Test
+            fun `should return true when preflabel or queryString is present`() {
+                assertTrue(paramsWithPrefLabel().isTextSearch())
+                assertTrue(paramsWithPrefLabelAndUris().isTextSearch())
+                assertTrue(paramsWithQueryString().isTextSearch())
+                assertTrue(paramsWithQueryStringAndIdentifiers().isTextSearch())
+                assertTrue(paramsWithAllQueryValues().isTextSearch())
+                assertTrue(paramsWithQueryStringIdentifiersAndSort().isTextSearch())
+            }
+
+            @Test
+            fun `should return false when neither preflabel or queryString is present`() {
+                assertFalse(paramsWithIdentifiers().isTextSearch())
+                assertFalse(paramsWithUri().isTextSearch())
+                assertFalse(paramsWithUriAndIdentifiers().isTextSearch())
+            }
+        }
+
+        @Nested
+        inner class isIdSearch {
+            @Test
+            fun `should return true if uri or identifier and no querystring values are present`(){
+                assertTrue(paramsWithUri().isIdSearch())
+                assertTrue(paramsWithUriAndIdentifiers().isIdSearch())
+                assertTrue(paramsWithUri().isIdSearch())
+
+            }
+            @Test
+            fun `should return false if uri or identifier and  querystring values are present`(){
+                assertFalse(paramsWithPrefLabelAndUris().isIdSearch())
+                assertFalse(paramsWithQueryStringAndIdentifiers().isIdSearch())
+                assertFalse(paramsWithAllQueryValues().isIdSearch())
+            }
+
+
+        }
+
+        @Nested
         inner class isEmpty {
             @Test
             fun `should return true if all values are default`() {
@@ -84,24 +244,24 @@ class SearchQueryHelperTest {
             }
 
             @Test
-            fun `should return false if all values are default`() {
+            fun `should return false if all values are not default`() {
                 val params = QueryParams(queryString = "nsakfa", orgPath = "//13638/basfkj", size = "500");
                 expect(params.isEmpty()).to_be_false()
             }
         }
 
         @Nested
-        inner class isEmptySearch {
+        inner class isEmptyQuerySearch {
             @Test
             fun `should return true if search params are default`() {
                 val params = QueryParams(size = "78");
-                expect(params.isEmptySearch()).to_be_true()
+                expect(params.isEmptySearchQuery()).to_be_true()
             }
 
             @Test
             fun `should return false if orgPath is not default `() {
-                val params = QueryParams(orgPath = "//13638/basfkj");
-                expect(params.isEmptySearch()).to_be_false()
+                val params = QueryParams(orgPath = "/13638/basfkj");
+                expect(params.isEmptySearchQuery()).to_be_false()
 
             }
             @Test
@@ -112,6 +272,7 @@ class SearchQueryHelperTest {
             }
 
         }
+
         @Nested
         inner class isDefaultSize {
             @Test
@@ -189,6 +350,35 @@ class SearchQueryHelperTest {
 
             }
         }
-    }
 
+        @Nested
+        inner class shouldFilterOnOrgPath {
+
+            @Test
+            fun `should filter on orgPath`(){
+                assertTrue(paramsWithQueryStringAndOrgPath().shouldfilterOnOrgPath())
+                assertTrue(paramsWithQueryStringUriAndOrgPath().shouldfilterOnOrgPath())
+                assertTrue(paramsWithQueryStringUriAndOrgPath().shouldfilterOnOrgPath())
+                assertTrue(paramsWithQueryStringPrefLabelAndOrgPath().shouldfilterOnOrgPath())
+            }
+
+            fun `should not filter on orgPath`(){
+                assertFalse(paramsWithQueryString().shouldfilterOnOrgPath())
+                assertFalse(paramsWithQueryStringAndUris().shouldfilterOnOrgPath())
+                assertFalse(paramsWithQueryStringAndPrefLabel().shouldfilterOnOrgPath())
+            }
+        }
+
+        @Nested
+        inner class isFilerOnPathgOnly{
+            @Test
+            fun `should filter on orgPath`(){
+                assertFalse(paramsWithQueryStringAndOrgPath().isOrgPathOnly())
+                assertFalse(paramsWithQueryStringUriAndOrgPath().isOrgPathOnly())
+                assertFalse(paramsWithQueryStringUriAndOrgPath().isOrgPathOnly())
+                assertFalse(paramsWithQueryStringPrefLabelAndOrgPath().isOrgPathOnly())
+                assertTrue(QueryParams(orgPath = "ANNET/123567").isOrgPathOnly())
+            }
+        }
+    }
 }
