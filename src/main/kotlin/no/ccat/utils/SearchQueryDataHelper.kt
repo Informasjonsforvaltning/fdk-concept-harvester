@@ -86,6 +86,7 @@ data class QueryParams(val queryString: String = "",
             isOrgPathOnly() -> QueryType.orgPathOnlySearch
             else -> QueryType.matchAllSearch
         }
+
     }
 
     fun isEmpty() = this == QueryParams()
@@ -113,6 +114,25 @@ data class QueryParams(val queryString: String = "",
 
     fun isOrgPathOnly() = orgPath != "" && !isTextSearch() && !isIdSearch()
 
+}
+
+
+fun QueryParams.sanitizeQueryStrings() =
+       copy(
+                queryString = queryString.sanitizeForQuery(),
+                orgPath = orgPath.sanitizeForQuery(),
+                lang = lang.sanitizeForQuery(),
+                prefLabel = prefLabel.sanitizeForQuery()
+        )
+
+private fun String.sanitizeForQuery(): String {
+    return trim()
+            .dropWhile {
+                !it.isLetterOrDigit()
+            }
+            .dropLastWhile {
+                it == '+'
+            }
 }
 
 enum class QueryType{

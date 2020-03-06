@@ -16,15 +16,17 @@ import org.springframework.stereotype.Service
 class EsSearchService {
 
     fun buildSearch(queryParams: QueryParams): QueryBuilder? =
+        queryParams.sanitizeQueryStrings().buildSearchFromParams()
 
-            when(queryParams.queryType) {
-                QueryType.prefLabelSearch -> buildPrefLabelSearch(queryParams)
-                QueryType.prefLabelSearcgWithOrgPath -> buildPrefLabelSearchWithOrgPath(queryParams)
-                QueryType.queryStringSearch -> buildDocumentSearch(queryParams)
-                QueryType.queryStringSearchWithOrgPath -> buildDocumentSearchWithOrgPath(queryParams)
-                QueryType.urisSearch -> buildUrisSearchQuery(queryParams.uris!!)
-                QueryType.identifiersSearch -> buildIdentifiersSearchQuery(queryParams.identifiers!!)
-                QueryType.orgPathOnlySearch -> buildOrhPathOnlySearch(queryParams.orgPath)
+    private fun QueryParams.buildSearchFromParams(): QueryBuilder? =
+            when(queryType) {
+                QueryType.prefLabelSearch -> buildPrefLabelSearch(this)
+                QueryType.prefLabelSearcgWithOrgPath -> buildPrefLabelSearchWithOrgPath(this)
+                QueryType.queryStringSearch -> buildDocumentSearch(this)
+                QueryType.queryStringSearchWithOrgPath -> buildDocumentSearchWithOrgPath(this)
+                QueryType.urisSearch -> buildUrisSearchQuery(uris!!)
+                QueryType.identifiersSearch -> buildIdentifiersSearchQuery(identifiers!!)
+                QueryType.orgPathOnlySearch -> buildOrhPathOnlySearch(orgPath)
                 else -> match_all {}
             }
 

@@ -63,8 +63,37 @@ class ConceptContractTest : ApiTestContainer() {
             }
 
             @Test
+            fun `expect full text search with trailing pluss to return list of concepts sorted on exact matches in preferredLanguage nb`() {
+
+                val result = apiGet("/concepts?q=$testString++&size=100")
+                val pathParser = jsonPathParser.parse(result)
+                val valueParser = jsonValueParser.parse(result)
+                val sortResult = SortResponse(sortWord = testString,
+                        pathParser = pathParser)
+
+                val responsePaths = sortResult.getPathsForField(jsonPath = prefLabelPath)
+
+
+                for (i in responsePaths.indices) {
+                    val currentValue = valueParser.read<JSONArray>(responsePaths[i])
+                    val currentId = valueParser.read<JSONArray>("$..concepts[$i].id").toString()
+                    sortResult.expectIsLessRelevant(currentValue.toString(), i, currentId)
+                }
+            }
+
+            @Test
             fun `expect full text search with orgPath to return list of concepts from corresponding publisher only`() {
                 val result = apiGet("/concepts?q=$testString&size=100&orgPath=STAT/87654321/12345678")
+
+                val expOrgPath = "STAT/87654321/12345678".split("/")
+                val resultOrgPath = jsonValueParser.parse(result).read<List<String>>("\$.._embedded.concepts.*.publisher.orgPath")
+
+                resultOrgPath.forEach { expect(it).to_be_organisation(expOrgPath) }
+            }
+
+            @Test
+            fun `expect full text search with orgPath and trailing pluss chars to return list of concepts from corresponding publisher only`() {
+                val result = apiGet("/concepts?q=$testString++&size=100&orgPath=STAT/87654321/12345678")
 
                 val expOrgPath = "STAT/87654321/12345678".split("/")
                 val resultOrgPath = jsonValueParser.parse(result).read<List<String>>("\$.._embedded.concepts.*.publisher.orgPath")
@@ -97,12 +126,52 @@ class ConceptContractTest : ApiTestContainer() {
         }
 
         @Test
+        fun `expect prefLabel search with trailing pluss to return list of concepts sorted on exact matches in preferredLanguage `() {
+            val result = apiGet("/concepts?prefLabel=$testString&size=100")
+            val pathParser = jsonPathParser.parse(result)
+            val valueParser = jsonValueParser.parse(result)
+            val sortResult = SortResponse(sortWord = testString,
+                    pathParser = pathParser)
+
+            val responsePaths = sortResult.getPathsForField(jsonPath = prefLabelPath)
+
+
+            for (i in responsePaths.indices) {
+                val currentValue = valueParser.read<JSONArray>(responsePaths[i]).toString()
+                val currentId = valueParser.read<JSONArray>("$..concepts[$i].id").toString()
+                sortResult.expectIsLessRelevant(currentValue, i, currentId)
+                expect(currentValue).to_contain(testString)
+            }
+
+        }
+
+        @Test
         fun `expect prefLabel search with orgPath to return list of concepts from corresponding publisher only`() {
             val expOrgPath = "STAT/87654321/12345678".split("/")
             val result = apiGet("/concepts?prefLabel=$testString&size=100&orgPath=STAT/87654321/12345678")
             val resultOrgPath = jsonValueParser.parse(result).read<List<String>>("\$.._embedded.concepts.*.publisher.orgPath")
 
             resultOrgPath.forEach { expect(it).to_be_organisation(expOrgPath) }
+
+        }
+
+        @Test
+        fun `expect prefLabel search  with trailing pluss to return list of concepts sorted on exact matches in preferredLanguage `() {
+            val result = apiGet("/concepts?prefLabel=$testString++++&size=100")
+            val pathParser = jsonPathParser.parse(result)
+            val valueParser = jsonValueParser.parse(result)
+            val sortResult = SortResponse(sortWord = testString,
+                    pathParser = pathParser)
+
+            val responsePaths = sortResult.getPathsForField(jsonPath = prefLabelPath)
+
+
+            for (i in responsePaths.indices) {
+                val currentValue = valueParser.read<JSONArray>(responsePaths[i]).toString()
+                val currentId = valueParser.read<JSONArray>("$..concepts[$i].id").toString()
+                sortResult.expectIsLessRelevant(currentValue, i, currentId)
+                expect(currentValue).to_contain(testString)
+            }
 
         }
     }
@@ -120,7 +189,7 @@ class ConceptContractTest : ApiTestContainer() {
         }
 
         @Test
-        fun `eh only search to return list of concepts from corresponding publisher only`() {
+        fun `expect orgPath only search with short path to return list of concepts from corresponding publisher only`() {
             val expOrgPath = "STAT/87654321".split("/")
             val result = apiGet("/concepts?size=100&orgPath=STAT/87654321")
             val resultOrgPath = jsonValueParser.parse(result).read<List<String>>("\$.._embedded.concepts.*.publisher.orgPath")
