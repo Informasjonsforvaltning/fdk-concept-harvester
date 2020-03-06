@@ -192,16 +192,6 @@ class ConceptContractTest : ApiTestContainer() {
         }
 
         @Test
-        fun `expect orgPath only search with short path to return list of concepts from corresponding publisher only`() {
-            val expOrgPath = "STAT/87654321".split("/")
-            val result = apiGet("/concepts?size=100&orgPath=STAT/87654321")
-            val resultOrgPath = jsonValueParser.parse(result).read<List<String>>("\$.._embedded.concepts.*.publisher.orgPath")
-            resultOrgPath.forEach {
-                expect(it).to_be_organisation(expOrgPath)
-            }
-        }
-
-        @Test
         fun `expect orgPath only search with MISSING to return list of concepts from missing publisher only`() {
             val result = apiGet("/concepts?size=100&orgPath=MISSING")
             val resultOrgPath = jsonValueParser.parse(result).read<List<String>>("\$.._embedded.concepts.*.publisher.orgPath")

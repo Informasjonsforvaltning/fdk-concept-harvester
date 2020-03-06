@@ -2,7 +2,7 @@
   "match": {
     "publisher.orgPath": {
       "query" : "ANNET/1234598",
-      "analyzer" : "pathanalyzer",
+      "analyzer" : "keyword",
       "operator" : "AND",
       "minimum_should_match" : "100%"
     }

@@ -93,7 +93,7 @@ fun buildOrgPathQuery(queryParams: QueryParams) =
             match {
                 "publisher.orgPath" {
                     query = queryParams.orgPath
-                    analyzer = "pathanalyzer"
+                    analyzer = "keyword"
                     operator= "AND"
                     minimum_should_match = "100%"
                 }
