@@ -2,11 +2,8 @@ package no.ccat.service
 
 import mbuhot.eskotlin.query.compound.bool
 import mbuhot.eskotlin.query.compound.dis_max
-import mbuhot.eskotlin.query.fulltext.match
 import mbuhot.eskotlin.query.term.match_all
-import mbuhot.eskotlin.query.term.term
 import no.ccat.utils.*
-import org.elasticsearch.index.query.BoolQueryBuilder
 import org.elasticsearch.index.query.DisMaxQueryBuilder
 import org.elasticsearch.index.query.QueryBuilder
 import org.elasticsearch.index.query.QueryBuilders
@@ -16,7 +13,7 @@ import org.springframework.stereotype.Service
 class EsSearchService {
 
     fun buildSearch(queryParams: QueryParams): QueryBuilder? =
-        queryParams.sanitizeQueryStrings().buildSearchFromParams()
+        queryParams.sanitize().buildSearchFromParams()
 
     private fun QueryParams.buildSearchFromParams(): QueryBuilder? =
             when(queryType) {
@@ -26,19 +23,12 @@ class EsSearchService {
                 QueryType.queryStringSearchWithOrgPath -> buildDocumentSearchWithOrgPath(this)
                 QueryType.urisSearch -> buildUrisSearchQuery(uris!!)
                 QueryType.identifiersSearch -> buildIdentifiersSearchQuery(identifiers!!)
-                QueryType.orgPathOnlySearch -> buildOrhPathOnlySearch(orgPath)
+                QueryType.orgPathOnlySearch -> buildOrgPathOnlySearch(this)
                 else -> match_all {}
             }
 
-    private fun buildOrhPathOnlySearch(orgPath: String): QueryBuilder? =
-              match {
-                  "publisher.orgPath" {
-                      query = orgPath
-                      analyzer = "keyword"
-                      operator= "AND"
-                      minimum_should_match = "100%"
-                  }
-              }
+    private fun buildOrgPathOnlySearch(queryParams: QueryParams): QueryBuilder? =
+              buildOrgPathQuery(queryParams)
 
     private fun buildIdentifiersSearchQuery(identifiers: Set<String>): QueryBuilder? =
             bool {

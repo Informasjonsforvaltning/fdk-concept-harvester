@@ -69,6 +69,23 @@ class EsSearchServiceTest {
         expect(jsonPathParser.parse(result)).json_to_have_entries_like(jsonPathParser.parse(expectedString))
 
     }
+    @Test
+    fun `should return "MISSING" orgPath match`() {
+        val expectedString: String = File("./src/test/resources/elasticsearch/prefLabel_org_path_missing_query.json").readText(Charsets.UTF_8)
+        val result = service.buildSearch(QueryParams(queryString = "arkiv", orgPath = "MISSING")).toString()
+
+        expect(jsonPathParser.parse(result)).json_to_have_entries_like(jsonPathParser.parse(expectedString))
+
+    }
+
+    @Test
+    fun `should return orgPath match`() {
+        val expectedString: String = File("./src/test/resources/elasticsearch/prefLabel_org_path_query.json").readText(Charsets.UTF_8)
+        val result = service.buildSearch(QueryParams(prefLabel = "arkiv", orgPath = "STAT/87654321/12345678")).toString()
+        expect(jsonPathParser.parse(result)).json_to_have_entries_like(jsonPathParser.parse(expectedString))
+
+    }
+
 
     @Test
     fun `should return uris query`() {

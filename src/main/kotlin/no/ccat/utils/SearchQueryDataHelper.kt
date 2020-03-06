@@ -117,7 +117,7 @@ data class QueryParams(val queryString: String = "",
 }
 
 
-fun QueryParams.sanitizeQueryStrings() =
+fun QueryParams.sanitize() =
        copy(
                 queryString = queryString.sanitizeForQuery(),
                 lang = lang.sanitizeForQuery(),

@@ -1,8 +1,5 @@
 package no.ccat.utils.elasticsearch
-import no.ccat.utils.LanguageProperties
-import no.ccat.utils.buildSearchStringInPrefLabelBoost
-import no.ccat.utils.buildExactMatchString
-import no.ccat.utils.buildUrisQuery
+import no.ccat.utils.*
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
@@ -43,6 +40,27 @@ class SearchQueryBuilderTest {
 
 
         }
+    }
+
+    @Nested
+    inner class orgPathQuery
+    {
+        @Test
+        fun `should return a match orgPath query`(){
+            val expectedMatch = File("./src/test/resources/elasticsearch/org_path_macth_query.json").readText(Charsets.UTF_8)
+            val result = buildOrgPathQuery(QueryParams(orgPath = "ANNET/1234598")).toString()
+
+            expect(result).json_to_equal(expectedMatch)
+        }
+
+        @Test
+        fun `should return a bool exists orgPath query`(){
+            val expectedMatch = File("./src/test/resources/elasticsearch/org_path_macth_missing_query.json").readText(Charsets.UTF_8)
+            val result = buildOrgPathQuery(QueryParams(orgPath = "MISSING")).toString()
+
+            expect(result).json_to_equal(expectedMatch)
+        }
+
     }
     @Nested
     inner class buildMatchPhrasePrefixBoostTest

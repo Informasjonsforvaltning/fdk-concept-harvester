@@ -546,7 +546,6 @@
                                   ] ;
     dct:identifier                "f1213019-c6cc-4581-bcd9-dd931ca34138" ;
     dct:modified                  "2019-12-19"^^xsd:date ;
-    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
     skosxl:prefLabel              [ a                   skosxl:Label ;
                                     skosxl:literalForm  "journalpost"@nb
                                   ] ;

@@ -4,6 +4,7 @@ import mbuhot.eskotlin.query.compound.bool
 import mbuhot.eskotlin.query.compound.constant_score
 import mbuhot.eskotlin.query.fulltext.match
 import mbuhot.eskotlin.query.fulltext.match_phrase_prefix
+import mbuhot.eskotlin.query.term.exists
 import org.elasticsearch.index.query.QueryBuilder
 import org.elasticsearch.index.query.QueryBuilders.scriptQuery
 import org.elasticsearch.index.query.QueryBuilders.simpleQueryStringQuery
@@ -86,14 +87,22 @@ fun getSearchSpan(isPrefLabelSearch: Boolean, searchString:String): Int =
     }
 
 fun buildOrgPathQuery(queryParams: QueryParams) =
-    match {
-        "publisher.orgPath" {
-            query = queryParams.orgPath
-            analyzer = "keyword"
-            operator= "AND"
-            minimum_should_match = "100%"
+        if(queryParams.orgPath == "MISSING") {
+            buildMissingOrgPathQuery()}
+        else {
+            match {
+                "publisher.orgPath" {
+                    query = queryParams.orgPath
+                    analyzer = "pathanalyzer"
+                    operator= "AND"
+                    minimum_should_match = "100%"
+                }
+            }
         }
-    }
+
+
+private fun buildMissingOrgPathQuery() =
+        bool { must_not = listOf(exists { field = "publisher.orgPath" }) }
 
 fun buildUrisQuery(uris: Set<String>) =
     uris.map {

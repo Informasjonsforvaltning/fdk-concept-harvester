@@ -12,6 +12,8 @@ import testUtils.SortResponse
 import testUtils.assertions.apiGet
 import testUtils.jsonPathParser
 import testUtils.jsonValueParser
+import kotlin.test.assertNotEquals
+import kotlin.test.assertNull
 import testUtils.assertions.Expect as expect
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -63,7 +65,7 @@ class ConceptContractTest : ApiTestContainer() {
             }
 
             @Test
-            fun `expect full text search with trailing pluss to return list of concepts sorted on exact matches in preferredLanguage nb`() {
+            fun `expect full text search with trailing plus to return list of concepts sorted on exact matches in preferredLanguage nb`() {
 
                 val result = apiGet("/concepts?q=$testString++&size=100")
                 val pathParser = jsonPathParser.parse(result)
@@ -92,7 +94,7 @@ class ConceptContractTest : ApiTestContainer() {
             }
 
             @Test
-            fun `expect full text search with orgPath and trailing pluss chars to return list of concepts from corresponding publisher only`() {
+            fun `expect full text search with orgPath and trailing plus chars to return list of concepts from corresponding publisher only`() {
                 val result = apiGet("/concepts?q=$testString++&size=100&orgPath=STAT/87654321/12345678")
 
                 val expOrgPath = "STAT/87654321/12345678".split("/")
@@ -126,7 +128,7 @@ class ConceptContractTest : ApiTestContainer() {
         }
 
         @Test
-        fun `expect prefLabel search with trailing pluss to return list of concepts sorted on exact matches in preferredLanguage `() {
+        fun `expect prefLabel search with trailing plus to return list of concepts sorted on exact matches in preferredLanguage `() {
             val result = apiGet("/concepts?prefLabel=$testString&size=100")
             val pathParser = jsonPathParser.parse(result)
             val valueParser = jsonValueParser.parse(result)
@@ -156,7 +158,7 @@ class ConceptContractTest : ApiTestContainer() {
         }
 
         @Test
-        fun `expect prefLabel search  with trailing pluss to return list of concepts sorted on exact matches in preferredLanguage `() {
+        fun `expect prefLabel search  with trailing plus to return list of concepts sorted on exact matches in preferredLanguage `() {
             val result = apiGet("/concepts?prefLabel=$testString++++&size=100")
             val pathParser = jsonPathParser.parse(result)
             val valueParser = jsonValueParser.parse(result)
@@ -176,7 +178,8 @@ class ConceptContractTest : ApiTestContainer() {
         }
     }
 
-    @Nested class OrgPathSearch {
+    @Nested
+    inner class OrgPathSearch {
 
         @Test
         fun `expect orgPath only search to return list of concepts from corresponding publisher only`() {
@@ -195,6 +198,16 @@ class ConceptContractTest : ApiTestContainer() {
             val resultOrgPath = jsonValueParser.parse(result).read<List<String>>("\$.._embedded.concepts.*.publisher.orgPath")
             resultOrgPath.forEach {
                 expect(it).to_be_organisation(expOrgPath)
+            }
+        }
+
+        @Test
+        fun `expect orgPath only search with MISSING to return list of concepts from missing publisher only`() {
+            val result = apiGet("/concepts?size=100&orgPath=MISSING")
+            val resultOrgPath = jsonValueParser.parse(result).read<List<String>>("\$.._embedded.concepts.*.publisher.orgPath")
+            assertNotEquals(resultOrgPath.size,0)
+            resultOrgPath.forEach {
+                assertNull(it)
             }
         }
     }

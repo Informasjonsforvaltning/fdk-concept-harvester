@@ -1,0 +1,11 @@
+{
+  "bool" : {
+    "must_not" : [
+      {
+        "exists" : {
+          "field" : "publisher.orgPath"
+        }
+      }
+    ]
+  }
+}
