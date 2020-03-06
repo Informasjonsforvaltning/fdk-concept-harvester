@@ -120,7 +120,6 @@ data class QueryParams(val queryString: String = "",
 fun QueryParams.sanitizeQueryStrings() =
        copy(
                 queryString = queryString.sanitizeForQuery(),
-                orgPath = orgPath.sanitizeForQuery(),
                 lang = lang.sanitizeForQuery(),
                 prefLabel = prefLabel.sanitizeForQuery()
         )
@@ -131,7 +130,7 @@ private fun String.sanitizeForQuery(): String {
                 !it.isLetterOrDigit()
             }
             .dropLastWhile {
-                it == '+'
+                (it == '+' || it == ' ')
             }
 }
 

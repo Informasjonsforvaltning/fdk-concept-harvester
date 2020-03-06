@@ -380,5 +380,72 @@ class SearchQueryHelperTest {
                 assertTrue(QueryParams(orgPath = "ANNET/123567").isOrgPathOnly())
             }
         }
+
+        @Nested
+        inner class sanitizeString {
+            @Test
+            fun `should remove trailing plus and whitespace in prefLabel`(){
+                val expected = QueryParams(prefLabel = "something")
+                val result = QueryParams(prefLabel = "something+").sanitizeQueryStrings()
+                val resultWithWhiteSpace = QueryParams(prefLabel = "something       ").sanitizeQueryStrings()
+                val resultWithWhiteSpaceAndPlus = QueryParams(prefLabel = "something       + ").sanitizeQueryStrings()
+
+                assertEquals(expected, result);
+                assertEquals(expected, resultWithWhiteSpace);
+                assertEquals(expected, resultWithWhiteSpaceAndPlus);
+            }
+
+            @Test
+            fun `should remove preceding plus and whitespace in prefLabel`(){
+                val expected = QueryParams(prefLabel = "something")
+                val result = QueryParams(prefLabel = "++something").sanitizeQueryStrings()
+                val resultWithWhiteSpace = QueryParams(prefLabel = "    something").sanitizeQueryStrings()
+                val resultWithWhiteSpaceAndPlus = QueryParams(prefLabel = "    + something").sanitizeQueryStrings()
+
+                assertEquals(expected, result);
+                assertEquals(expected, resultWithWhiteSpace);
+                assertEquals(expected, resultWithWhiteSpaceAndPlus);
+            }
+ @Test
+            fun `should remove trailing plus and whitespace in queryString`(){
+                val expected = QueryParams(queryString = "something")
+                val result = QueryParams(queryString = "something+").sanitizeQueryStrings()
+                val resultWithWhiteSpace = QueryParams(queryString = "something       ").sanitizeQueryStrings()
+                val resultWithWhiteSpaceAndPlus = QueryParams(queryString = "something       + ").sanitizeQueryStrings()
+
+                assertEquals(expected, result);
+                assertEquals(expected, resultWithWhiteSpace);
+                assertEquals(expected, resultWithWhiteSpaceAndPlus);
+            }
+
+            @Test
+            fun `should remove preceding plus and whitespace in queryString`(){
+                val expected = QueryParams(queryString = "something")
+                val result = QueryParams(queryString = "++something").sanitizeQueryStrings()
+                val resultWithWhiteSpace = QueryParams(queryString = "    something").sanitizeQueryStrings()
+                val resultWithWhiteSpaceAndPlus = QueryParams(queryString = "    + something").sanitizeQueryStrings()
+
+                assertEquals(expected, result);
+                assertEquals(expected, resultWithWhiteSpace);
+                assertEquals(expected, resultWithWhiteSpaceAndPlus);
+            }
+
+
+            @Test
+            fun `should not remove preceding forward slash from orgPath prefLabel search`(){
+                val expected = QueryParams(prefLabel = "something", orgPath = "/STAT/16465799").sanitizeQueryStrings()
+                val result = QueryParams(prefLabel = "something +", orgPath = "/STAT/16465799").sanitizeQueryStrings()
+                assertEquals(expected, result);
+            }
+
+            @Test
+            fun `should not remove preceding forward slash from orgPath queryString search`(){
+                val expected = QueryParams(queryString = "something +", orgPath = "/STAT/16465799").sanitizeQueryStrings()
+                val result = QueryParams(queryString = "something +", orgPath = "/STAT/16465799").sanitizeQueryStrings()
+                assertEquals(expected, result);
+            }
+
+
+        }
     }
 }
