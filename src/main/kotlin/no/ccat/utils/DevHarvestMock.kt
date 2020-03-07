@@ -20,9 +20,6 @@ fun startMockServer() {
 
         mockserver.stubFor(get(urlEqualTo("/api/publishers/12345678"))
                 .willReturn(okJson(File("src/test/resources/contract/org-0.json").readText())))
-
-        mockserver.stubFor(get(urlEqualTo("/api/publishers/87654321"))
-                .willReturn(okJson(File("src/test/resources/contract/org-0.json").readText())))
         mockserver.stubFor(get(urlEqualTo("/api/publishers/961181399"))
                 .willReturn(okJson(File("src/test/resources/contract/org-1.json").readText())))
         mockserver.stubFor(get(urlEqualTo("/api/publishers/974761076"))
@@ -31,9 +28,11 @@ fun startMockServer() {
                 .willReturn(okJson(File("src/test/resources/contract/org-1.json").readText())))
         mockserver.stubFor(get(urlEqualTo("/api/datasources"))
                 .willReturn(okJson(File("src/main/resources/dev_data/datasource.json").readText())))
+        mockserver.stubFor(get(urlEqualTo("/skatteEtaten"))
+                .willReturn(aResponse().withBody(File("./src/main/resources/dev_data/skatteEtaten.turtle").readText())))
         mockserver.stubFor(get(urlEqualTo("/mockconcepts"))
-                .willReturn(aResponse().withBody(File("src/test/resources/contract/conceptsmock.turtle").readText()))
-        )
+                .willReturn(aResponse().withBody(File("./src/main/resources/dev_data/arkivverket_fdk.turtle").readText())))
+
 
         mockserver.start()
     }

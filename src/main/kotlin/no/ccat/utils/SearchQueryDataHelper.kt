@@ -57,6 +57,21 @@ data class LanguageProperties(var key : String = "nb", val analyzer: String = "n
 
         return keyList;
     }
+
+    fun toPrefixFieldList(): List<String>? {
+        var fields = mutableListOf<String>("prefLabel.$key^3")
+        fields.addAll(secondaryLanguages(key).map { "prefLabel.${it.key}^2" })
+        return fields
+    }
+    fun toQueryStringFieldList(): MutableMap<String, Float> {
+        var fields = mutableMapOf<String, Float>("prefLabel.$key" to 1.5F)
+        secondaryLanguages(key).forEach {
+            fields.put("prefLabel.${it.key}", 1F)
+        }
+        return fields
+    }
+
+
 }
 
 data class QueryParams(val queryString: String = "",

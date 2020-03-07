@@ -1,10 +1,13 @@
 package no.ccat.utils.elasticsearch
+import net.minidev.json.JSONArray
 import no.ccat.utils.*
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import testUtils.COMPLEX_SEARCH_STRING
+import testUtils.jsonPathParser
+import testUtils.jsonValueParser
 import java.io.File
 import testUtils.assertions.Expect as expect
 
@@ -12,36 +15,131 @@ import testUtils.assertions.Expect as expect
 @Tag("unit")
 
 class SearchQueryBuilderTest {
-
     @Nested
-    inner class getExactMatchStringTest
-    {
+    inner class ExactMatch {
         @Test
-        fun`should return correct searchstring for prefered language nb`(){
-            val searchString = "ark"
-            val expected = "(doc['prefLabel.nb'][0].contains('$searchString') && doc['prefLabel.nb'].size() == 1 && doc['prefLabel.nb'][0].length() < 7)"
-            val result = buildExactMatchString("nb",searchString,7);
-            expect(result).to_equal(expected)
-        }
+        fun `should return a bool query with terms query on raw prefLabelValues`() {
+            val expectedString = File("./src/test/resources/elasticsearch/parts/exact_match_score.json").readText(Charsets.UTF_8)
+            val result = buildExactMatchQuery("arkiv",LanguageProperties(key = "nb")).toString()
 
-        @Test
-        fun`should return correct searchstring for prefered language en`(){
-            val searchString = "another thing"
-            val expected = "(doc['prefLabel.en'][0].contains('$searchString') && doc['prefLabel.en'].size() == 1 && doc['prefLabel.en'][0].length() < 7)"
-            val result = buildExactMatchString("en",searchString, 7);
-            expect(result).to_equal(expected)
+            expect(jsonPathParser.parse(result)).json_to_have_entries_like(jsonPathParser.parse(expectedString))
         }
     }
     @Nested
-    inner class buildSearchStringInPrefLabelBoostTest
-    {
+    inner class PrefLabelPrefixBoost{
         @Test
-        fun `should return a builder containing 4 simple_query_string for preflabel buidlers`(){
+        fun `should return multi match query with differentiated boosting nb`(){
+            val expectedString = File("./src/test/resources/elasticsearch/parts/mutli_match_prefix_prefLabel.json").readText(Charsets.UTF_8)
+            val result = buildPrefixBoostQuery("arkiv",LanguageProperties(key = "nb")).toString()
+            val expectedFieldsValue = listOf<String>("prefLabel.nn^2","prefLabel.nb^3","prefLabel.no^2","prefLabel.en^2")
+            val resultFieldValue = jsonValueParser.parse(result).read<JSONArray>("$..multi_match.fields").toString()
 
+            expectedFieldsValue.forEach {
+                expect(resultFieldValue).to_contain(it)
+            }
+            expect(jsonPathParser.parse(result)).json_to_have_entries_like(jsonPathParser.parse(expectedString))
+        }
+        @Test
+        fun `should return multi match query with differentiated boosting nn`(){
+            val expectedString = File("./src/test/resources/elasticsearch/parts/mutli_match_prefix_prefLabel.json").readText(Charsets.UTF_8)
+            val expectedFieldsValue = listOf<String>("prefLabel.nn^3","prefLabel.nb^2","prefLabel.no^2","prefLabel.en^2")
+            val result = buildPrefixBoostQuery("arkiv",LanguageProperties(key = "nn")).toString()
+            val resultFieldValue = jsonValueParser.parse(result).read<JSONArray>("$..multi_match.fields").toString()
+            expectedFieldsValue.forEach {
+                expect(resultFieldValue).to_contain(it)
+            }
+            expect(jsonPathParser.parse(result)).json_to_have_entries_like(jsonPathParser.parse(expectedString))
+        }
+        @Test
+        fun `should return multi match query with differentiated boosting no`(){
+            val expectedString = File("./src/test/resources/elasticsearch/parts/mutli_match_prefix_prefLabel.json").readText(Charsets.UTF_8)
+            val result = buildPrefixBoostQuery("arkiv",LanguageProperties(key = "no")).toString()
+            val expectedFieldsValue = listOf<String>("prefLabel.nn^2","prefLabel.nb^2","prefLabel.no^3","prefLabel.en^2")
+            val resultFieldValue = jsonValueParser.parse(result).read<JSONArray>("$..multi_match.fields").toString()
 
+            expectedFieldsValue.forEach {
+                expect(resultFieldValue).to_contain(it)
+            }
+            expect(jsonPathParser.parse(result)).json_to_have_entries_like(jsonPathParser.parse(expectedString))
+        }
+        @Test
+        fun `should return multi match query with differentiated boosting en`(){
+            val expectedString = File("./src/test/resources/elasticsearch/parts/mutli_match_prefix_prefLabel.json").readText(Charsets.UTF_8)
+            val expectedFieldsValue = listOf<String>("prefLabel.nn^2","prefLabel.nb^2","prefLabel.no^2","prefLabel.en^3")
+            val result = buildPrefixBoostQuery("arkiv",LanguageProperties(key = "en")).toString()
+            val resultFieldValue = jsonValueParser.parse(result).read<JSONArray>("$..multi_match.fields").toString()
+
+            expectedFieldsValue.forEach {
+                expect(resultFieldValue).to_contain(it)
+            }
+            expect(jsonPathParser.parse(result)).json_to_have_entries_like(jsonPathParser.parse(expectedString))
+        }
+
+    }
+    @Nested
+    inner class PrefLabelStringQuery{
+        @Test
+        fun `should return preflabel string query with differentiated boosting nb`(){
+            val expectedString = File("./src/test/resources/elasticsearch/parts/query_string_prefLabel.json").readText(Charsets.UTF_8)
+            val result = buildStringInPrefLabelQuery("arkiv",LanguageProperties(key = "nb")).toString()
+            val expectedFieldsValue = listOf<String>("prefLabel.nn^1","prefLabel.nb^1.5","prefLabel.no^1","prefLabel.en^1")
+            val expectedQueryValue = """["*arkiv*"]"""
+            val resultFieldValue = jsonValueParser.parse(result).read<JSONArray>("$..query_string.fields").toString()
+            val resultQueryValue = jsonValueParser.parse(result).read<JSONArray>("$..query_string.query").toString()
+
+            expectedFieldsValue.forEach {
+                expect(resultFieldValue).to_contain(it)
+            }
+            expect(resultQueryValue).to_equal(expectedQueryValue)
+            expect(jsonPathParser.parse(result)).json_to_have_entries_like(jsonPathParser.parse(expectedString))
+        }
+        @Test
+        fun `should return preflabel string query with differentiated boosting nn`(){
+            val expectedString = File("./src/test/resources/elasticsearch/parts/query_string_prefLabel.json").readText(Charsets.UTF_8)
+            val result = buildStringInPrefLabelQuery("arkiv",LanguageProperties(key = "nn")).toString()
+            val expectedFieldsValue = listOf<String>("prefLabel.nn^1.5","prefLabel.nb^1","prefLabel.no^1","prefLabel.en^1")
+            val resultFieldValue = jsonValueParser.parse(result).read<JSONArray>("$..query_string.fields").toString()
+            expectedFieldsValue.forEach {
+                expect(resultFieldValue).to_contain(it)
+            }
+            expect(jsonPathParser.parse(result)).json_to_have_entries_like(jsonPathParser.parse(expectedString))
+        }
+        @Test
+        fun `should return  preflabel string query with differentiated boosting no`(){
+            val expectedString = File("./src/test/resources/elasticsearch/parts/query_string_prefLabel.json").readText(Charsets.UTF_8)
+            val result = buildStringInPrefLabelQuery("arkiv",LanguageProperties(key = "no")).toString()
+            val expectedFieldsValue = listOf<String>("prefLabel.nn^1","prefLabel.nb^1","prefLabel.no^1.5","prefLabel.en^1")
+            val resultFieldValue = jsonValueParser.parse(result).read<JSONArray>("$..query_string.fields").toString()
+            expectedFieldsValue.forEach {
+                expect(resultFieldValue).to_contain(it)
+            }
+            expect(jsonPathParser.parse(result)).json_to_have_entries_like(jsonPathParser.parse(expectedString))
+        }
+        @Test
+        fun `should return preflabel string query with differentiated boosting en`(){
+            val expectedString = File("./src/test/resources/elasticsearch/parts/query_string_prefLabel.json").readText(Charsets.UTF_8)
+            val result = buildStringInPrefLabelQuery("arkiv",LanguageProperties(key = "en")).toString()
+            val expectedFieldsValue = listOf<String>("prefLabel.nn^1","prefLabel.nb^1","prefLabel.no^1","prefLabel.en^1.5")
+            val resultFieldValue = jsonValueParser.parse(result).read<JSONArray>("$..query_string.fields").toString()
+            expectedFieldsValue.forEach {
+                expect(resultFieldValue).to_contain(it)
+            }
+            expect(jsonPathParser.parse(result)).json_to_have_entries_like(jsonPathParser.parse(expectedString))
         }
     }
+    @Nested
+    inner class SimpleStringQuery{
+        @Test
+        fun `should return a simple string query with correct query string`() {
+            val expectedString = File("./src/test/resources/elasticsearch/parts/simple_query_string_all.json").readText(Charsets.UTF_8)
+            val result = buildSimpleStringQuery("arkiv").toString()
+            val expectedQueryValue = """["arkiv arkiv*"]"""
+            val resultQueryValue = jsonValueParser.parse(result).read<JSONArray>("$..simple_query_string.query").toString()
 
+            expect(resultQueryValue).to_equal(expectedQueryValue)
+            expect(jsonPathParser.parse(result)).json_to_have_entries_like(jsonPathParser.parse(expectedString))
+        }
+    }
     @Nested
     inner class orgPathQuery
     {
@@ -61,20 +159,6 @@ class SearchQueryBuilderTest {
             expect(result).json_to_equal(expectedMatch)
         }
 
-    }
-    @Nested
-    inner class buildMatchPhrasePrefixBoostTest
-    {
-        val expectedPrimary = File("./src/test/resources/elasticsearch/phrase_prefix_complex_nb.json").readText(Charsets.UTF_8)
-        val expectedSecondary = File("./src/test/resources/elasticsearch/phrase_prefix_complex_nn_secondary.json").readText(Charsets.UTF_8)
-
-        @Test
-        fun `should return a builder containing 4 match_phrase_prefix buidlers`(){
-            val lang = LanguageProperties();
-            val result = buildSearchStringInPrefLabelBoost(COMPLEX_SEARCH_STRING,lang)
-            expect(result[0].toString()).json_to_equal(expectedPrimary)
-            expect (result[1].toString()).json_to_equal(expectedSecondary)
-        }
     }
 
     @Nested

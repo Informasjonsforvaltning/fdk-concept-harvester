@@ -65,6 +65,26 @@ class ConceptContractTest : ApiTestContainer() {
             }
 
             @Test
+            fun `expect full text search to return list of concepts sorted on exact matches for multiple words`() {
+                val multipleString = "arbeidsprosess i offentlig sektor"
+                val urlString = "arbeidsprosess%20i%20offentlig%20sektor"
+                val result = apiGet("/concepts?q=$urlString&size=100")
+                val pathParser = jsonPathParser.parse(result)
+                val valueParser = jsonValueParser.parse(result)
+                val sortResult = SortResponse(sortWord = multipleString,
+                        pathParser = pathParser)
+
+                val responsePaths = sortResult.getPathsForField(jsonPath = prefLabelPath)
+
+
+                for (i in responsePaths.indices) {
+                    val currentValue = valueParser.read<JSONArray>(responsePaths[i])
+                    val currentId = valueParser.read<JSONArray>("$..concepts[$i].id").toString()
+                    sortResult.expectIsLessRelevant(currentValue.toString(), i, currentId)
+                }
+            }
+
+            @Test
             fun `expect full text search with trailing plus to return list of concepts sorted on exact matches in preferredLanguage nb`() {
 
                 val result = apiGet("/concepts?q=$testString++&size=100")

@@ -6,7 +6,6 @@ import mbuhot.eskotlin.query.term.match_all
 import no.ccat.utils.*
 import org.elasticsearch.index.query.DisMaxQueryBuilder
 import org.elasticsearch.index.query.QueryBuilder
-import org.elasticsearch.index.query.QueryBuilders
 import org.springframework.stereotype.Service
 
 @Service
@@ -19,7 +18,7 @@ class EsSearchService {
             when(queryType) {
                 QueryType.prefLabelSearch -> buildPrefLabelSearch(this)
                 QueryType.prefLabelSearcgWithOrgPath -> buildPrefLabelSearchWithOrgPath(this)
-                QueryType.queryStringSearch -> buildDocumentSearch(this)
+                QueryType.queryStringSearch -> buildEntireDocumentSearch(this)
                 QueryType.queryStringSearchWithOrgPath -> buildDocumentSearchWithOrgPath(this)
                 QueryType.urisSearch -> buildUrisSearchQuery(uris!!)
                 QueryType.identifiersSearch -> buildIdentifiersSearchQuery(identifiers!!)
@@ -39,7 +38,7 @@ class EsSearchService {
                 )
             }
 
-    private fun buildDocumentSearch(queryParams: QueryParams): QueryBuilder? =
+    private fun buildEntireDocumentSearch(queryParams: QueryParams): QueryBuilder? =
             if (queryParams.isEmpty()) {
                 match_all { }
 
@@ -59,7 +58,6 @@ class EsSearchService {
                         )
                     }
                 }
-
             }
 
     private fun buildUrisSearchQuery(uris: Set<String>): QueryBuilder? =
@@ -73,35 +71,28 @@ class EsSearchService {
 
     private fun buildPrefLabelSearchWithOrgPath(params: QueryParams): QueryBuilder {
         val langProperties = LanguageProperties(params.lang)
-        val normalizedExactScore = buildExactMatchScoreBoost(params.prefLabel, langProperties, true)
-        val matchPrefixPhrase = buildMatchPhrasePrefixBoost(params.prefLabel, langProperties)
-        val disMaxQueries = mutableListOf<QueryBuilder>(
-                normalizedExactScore
-        )
-        disMaxQueries.addAll(matchPrefixPhrase)
-
         return bool {
             must = listOf(
                     dis_max {
-                        queries = disMaxQueries
+                        queries = listOf(
+                                buildExactMatchQuery(params.prefLabel, langProperties),
+                                buildPrefixBoostQuery(params.prefLabel, langProperties),
+                                buildStringInPrefLabelQuery(params.prefLabel,langProperties)
+                        )
                     },
                     buildOrgPathQuery(params)
             )
         }
     }
 
-
     private fun buildPrefLabelSearch(params: QueryParams): QueryBuilder {
         val langProperties = LanguageProperties(params.lang)
-        val normalizedExactScore = buildExactMatchScoreBoost(params.prefLabel, langProperties, true)
-        val matchPrefixPhrase = buildMatchPhrasePrefixBoost(params.prefLabel, langProperties)
-        val disMaxQueries = mutableListOf<QueryBuilder>(
-                normalizedExactScore
-        )
-        disMaxQueries.addAll(matchPrefixPhrase)
-
         return dis_max {
-            queries = disMaxQueries
+                queries = listOf(
+                        buildExactMatchQuery(params.prefLabel, langProperties),
+                        buildPrefixBoostQuery(params.prefLabel, langProperties),
+                        buildStringInPrefLabelQuery(params.prefLabel,langProperties)
+                )
         }
     }
 
@@ -118,12 +109,12 @@ class EsSearchService {
 
     private fun buildWithSearchString(searchString: String, preferredLanguage: String): DisMaxQueryBuilder {
         val langProperties = LanguageProperties(preferredLanguage)
-        val prefLabelBoost = buildMatchPhrasePrefixBoost(searchString, langProperties);
         val queryList = mutableListOf<QueryBuilder>(
-                buildExactMatchScoreBoost(searchString, langProperties),
-                QueryBuilders.simpleQueryStringQuery("$searchString $searchString*"))
-        queryList.addAll(prefLabelBoost)
-
+                buildExactMatchQuery(searchString, langProperties),
+                buildStringInPrefLabelQuery(searchString,langProperties),
+                buildSimpleStringQuery(searchString),
+                buildPrefixBoostQuery(searchString, langProperties)
+        )
         return dis_max {
             queries = queryList
         }

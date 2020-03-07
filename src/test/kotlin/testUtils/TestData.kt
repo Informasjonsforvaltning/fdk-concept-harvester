@@ -21,6 +21,17 @@ const val RABBIT_NETWORK_NAME = "rabbitmq"
 const val RABBIT_MQ_PORT = 5672
 const val RABBIT_MQ_PORT_2 = 15672
 
+val MOCK_MULTIPLE_WORDS = mutableMapOf<String,String>(
+        "TWO_CONCATENATED_WORD" to "overføringsfil",
+        "TWO_SPLIT_WORD" to "overførings fil",
+        "SEVERAL_SPLIT_WORDS" to "arbeidsprosess i offentlig sektor",
+        "SEVERAL_SPLIT_VARIATION" to "arbeidsprosess i offentlig sektor",
+        "SEVERAL_SPLIT_WORDS_WITH_DASH" to "arbeidsprosess- og styring",
+        "WORDS_WITH_FORWARD_SLASH" to "arbeidsprosess/styring",
+        "WORDS_WITH_PARENTHESIS" to "arbeid (fritid)",
+        "WORDS_WITHOUT_PARENTHESIS" to "arbeid fritid"
+)
+
 const val WIREMOCK_TEST_HOST = "http://host.testcontainers.internal:$LOCAL_SERVER_PORT"
 val API_IMAGE = System.getProperty("testImageName") ?: "eu.gcr.io/fdk-infra/fdk-concept-harvester:latest"
 
@@ -123,3 +134,4 @@ fun paramsWithQueryStringPrefLabelAndOrgPath() = QueryParams(
         queryString = "Some query",
         orgPath = "STAS/123456/67890",
         uris = setOf("http://dfg4-hdjk-22-sdjk","http://dfgkk-hdjk-22-sdjk"))
+

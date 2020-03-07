@@ -43,8 +43,6 @@ abstract class ApiTestContainer {
                     .withNetwork(apiNetwork)
                     .withNetworkAliases(RABBIT_NETWORK_NAME)
 
-            //legg inn count
-
             rabbitContainer.start()
             elasticContainer.start()
 
