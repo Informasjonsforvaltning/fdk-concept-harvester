@@ -449,4 +449,43 @@ class SearchQueryHelperTest {
 
         }
     }
+
+    @Nested
+    inner class EsQueryString {
+        @Test
+        fun `char extension should return true for special char with no preceding backslash`(){
+            val result = '('.shouldBeEscaped('a')
+            expect(result).to_be_true()
+        }
+        @Test
+        fun `char extension should return false for special char with preceding backslash`(){
+            val result = '('.shouldBeEscaped('\\')
+            expect(result).to_be_false()
+        }
+        @Test
+        fun `char extension should return false for backslash char with preceding backslash`(){
+            val result = '\\'.shouldBeEscaped('\\')
+            expect(result).to_be_false()
+        }
+
+        @Test
+        fun `char extension should return false for letter with preceding specialchar`(){
+            val result = 'a'.shouldBeEscaped('>')
+            expect(result).to_be_false()
+        }
+
+        @Test
+        fun `char extension should return true for special char with preceding specialchar`(){
+            val result = '!'.shouldBeEscaped('(')
+            expect(result).to_be_true()
+        }
+
+        @Test
+        fun `string extension should return esSafeString` () {
+            val expectedString = "test\\\\(t\\\\[\\\\]hjk"
+            val resultString = "test(t[]hjk".esSafe()
+            expect(resultString).to_equal(expectedString)
+        }
+
+    }
 }

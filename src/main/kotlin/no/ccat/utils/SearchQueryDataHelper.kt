@@ -2,7 +2,11 @@
 @file:JvmMultifileClass
 package no.ccat.utils
 
+import java.lang.StringBuilder
 
+
+val esReservedChars = listOf('-', '=', '>', '<' ,'!', '(', ')', '{', '}',
+    '[', ']', '^', '"', '~', '*', '?', ':','\\','/')
 val nn = LanguageProperties("nn", "norwegian")
 val en = LanguageProperties("en", "english")
 val no = LanguageProperties("no", "norwegian")
@@ -128,16 +132,27 @@ data class QueryParams(val queryString: String = "",
     fun shouldfilterOnOrgPath()= orgPath != ""
 
     fun isOrgPathOnly() = orgPath != "" && !isTextSearch() && !isIdSearch()
-
 }
 
+fun String.esSafe(): String {
+    var builder = StringBuilder()
+    forEachIndexed { index, c ->
+        if (index != 0 && c.shouldBeEscaped(this[index-1]) ) {
+            builder.append("""\\""")
+        }
+        builder.append(c)
+    }
+    return builder.toString()
+}
+
+fun Char.shouldBeEscaped( previousChar: Char)= (esReservedChars.any { it == this } && previousChar!='\\')
 
 fun QueryParams.sanitize() =
-       copy(
-                queryString = queryString.sanitizeForQuery(),
-                lang = lang.sanitizeForQuery(),
-                prefLabel = prefLabel.sanitizeForQuery()
-        )
+    copy(
+            queryString = queryString.sanitizeForQuery(),
+            lang = lang.sanitizeForQuery(),
+            prefLabel = prefLabel.sanitizeForQuery()
+    )
 
 private fun String.sanitizeForQuery(): String {
     return trim()

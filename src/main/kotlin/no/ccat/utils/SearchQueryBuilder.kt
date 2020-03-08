@@ -44,7 +44,7 @@ fun buildExactMatchQuery(searchString: String, primaryLanguage: LanguageProperti
 }
 
 fun buildStringInPrefLabelQuery(searchString: String, lang: LanguageProperties) =
-        queryStringQuery("*$searchString*")
+        queryStringQuery("*${searchString.esSafe()}*")
                 .fields(lang.toQueryStringFieldList())
 
 fun buildSimpleStringQuery(searchString: String) : SimpleQueryStringBuilder =
