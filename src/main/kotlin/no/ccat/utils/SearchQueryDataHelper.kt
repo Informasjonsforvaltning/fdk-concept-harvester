@@ -158,7 +158,8 @@ fun QueryParams.sanitize() =
     )
 
 private fun String.sanitizeForQuery(): String {
-    return trim()
+    return removeDoubleQuotes()
+            .trim()
             .dropWhile {
                 (it == ' ' || it == '+')
             }
@@ -166,6 +167,15 @@ private fun String.sanitizeForQuery(): String {
                 (it == '+' || it == ' ')
             }
 }
+
+private fun String.removeDoubleQuotes(): String =
+        if (this.startsWith('"') && this.endsWith('"') && this.split(" ").size == 1 && this.length > 2) {
+            this.drop(1)
+                .dropLast(1)
+        } else {
+            this
+        }
+
 
 enum class QueryType{
     queryStringSearch,

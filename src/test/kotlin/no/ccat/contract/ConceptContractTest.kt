@@ -7,11 +7,8 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import testUtils.ApiTestContainer
-import testUtils.SortResponse
+import testUtils.*
 import testUtils.assertions.apiGet
-import testUtils.jsonPathParser
-import testUtils.jsonValueParser
 import kotlin.test.assertNotEquals
 import kotlin.test.assertNull
 import testUtils.assertions.Expect as expect
@@ -122,6 +119,30 @@ class ConceptContractTest : ApiTestContainer() {
                     sortResult.expectIsLessRelevant(currentValue.toString(), i, currentId)
                 }
             }
+            @Test
+            fun `expect full text search with closed quotationmarks to return exact hit for one word`() {
+                val oneWordString = "%22journal%22"
+                val result = apiGet("/concepts?q=$oneWordString&size=100")
+                val pathParser = jsonPathParser.parse(result)
+                val valueParser = jsonValueParser.parse(result)
+                val sortResult = SortResponse(sortWord = oneWordString,
+                        pathParser = pathParser)
+
+                val responsePaths = sortResult.getPathsForField(jsonPath = prefLabelPath)
+
+
+                for (i in responsePaths.indices) {
+                    val currentValue = valueParser.read<JSONArray>(responsePaths[i])
+                    val currentId = valueParser.read<JSONArray>("$..concepts[$i].id").toString()
+                    if (i == 0) {
+                        val lang = getLanguage(jsonPathParser.parse(currentValue.toString()).read<List<String>>("$.*.*").toString())
+                        val resultWord : String = jsonValueParser.parse(currentValue.toString()).read<JSONArray>("$[0]$lang")[0] as String
+                        expect(resultWord).to_equal("journal")
+                    }
+                    sortResult.expectIsLessRelevant(currentValue.toString(), i, currentId)
+                }
+            }
+
 
             @Test
             fun `expect full text search with orgPath to return list of concepts from corresponding publisher only`() {

@@ -84,7 +84,7 @@ private enum class SortConditions{
     NotSortWordAndIsDuplicate,
 }
 
-private fun  getLanguage(currentPath: String): String? {
+fun getLanguage(currentPath: String): String? {
     allLanguages.forEach { if(currentPath.contains(it)) return it }
     return null
 }
