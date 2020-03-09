@@ -142,6 +142,33 @@ class ConceptContractTest : ApiTestContainer() {
 
                 resultOrgPath.forEach { expect(it).to_be_organisation(expOrgPath) }
             }
+
+            @Test
+            fun `expect full text search with special chars in query to not throw error`() {
+                val openParenthesisString = "Some(thing"
+                val closedParenthesisString = "S(omething)"
+                val openQuoteString = "%22arbeid"
+                val closedQuoteString = "%22arbeid%20fritid%22"
+                val questionStartString = "%3FstratingWith"
+                val questionInString = "strati%3FngWith"
+                val questionEndString = "stratingWith%3F"
+                val mayhem = "has%2F%2Bsgh%21jh%26ff4%29%29%23%2256%28%29asf%5Basf%5Dasf%7C%7Cas%7B%7Dasfa%21%21"
+
+                val result = mapOf<String,String>(
+                        openParenthesisString to apiGet("/concepts?q=$openParenthesisString"),
+                        closedParenthesisString to apiGet("/concepts?q=$closedParenthesisString"),
+                        openQuoteString to apiGet("/concepts?q=$openQuoteString"),
+                        closedQuoteString to apiGet("/concepts?q=$closedQuoteString"),
+                        questionEndString to apiGet("/concepts?q=$questionEndString"),
+                        questionInString to apiGet("/concepts?q=$questionStartString"),
+                        questionEndString to apiGet("/concepts?q=$questionInString"),
+                        mayhem to apiGet("/concepts?q=$mayhem")
+                )
+
+                result.forEach {
+                    expect(it.value).to_not_contain("error",it.key)
+                }
+            }
         }
     }
 

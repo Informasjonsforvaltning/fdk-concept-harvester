@@ -142,6 +142,11 @@ class Expect(_result: Any?) {
         Assertions.assertFalse(result.contains(expected), "expected $result to not contain $expected")
     }
 
+    fun to_not_contain(expected: String, key: String) {
+        result as String
+        Assertions.assertFalse(result.contains(expected), "expected query for $key to not contain $expected")
+    }
+
 }
 
 fun assume_authenticated(status: String) {

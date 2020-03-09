@@ -482,8 +482,8 @@ class SearchQueryHelperTest {
 
         @Test
         fun `string extension should return esSafeString` () {
-            val expectedString = "test\\\\(t\\\\[\\\\]hjk"
-            val resultString = "test(t[]hjk".esSafe()
+            val expectedString = "\\\"test\\(t\\[\\]hjk\\)\\\""
+            val resultString = "\"test(t[]hjk)\"".esSafe()
             expect(resultString).to_equal(expectedString)
         }
 

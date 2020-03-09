@@ -138,7 +138,10 @@ fun String.esSafe(): String {
     var builder = StringBuilder()
     forEachIndexed { index, c ->
         if (index != 0 && c.shouldBeEscaped(this[index-1]) ) {
-            builder.append("""\\""")
+            builder.append("""\""")
+        } else if (index == 0){
+            if(c.shouldBeEscaped('a'))
+                builder.append("""\""")
         }
         builder.append(c)
     }
@@ -157,7 +160,7 @@ fun QueryParams.sanitize() =
 private fun String.sanitizeForQuery(): String {
     return trim()
             .dropWhile {
-                !it.isLetterOrDigit()
+                (it == ' ' || it == '+')
             }
             .dropLastWhile {
                 (it == '+' || it == ' ')
