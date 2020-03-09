@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assumptions
 import org.skyscreamer.jsonassert.JSONAssert
 import testUtils.jsonPathParser
+import javax.validation.constraints.AssertFalse
+import javax.validation.constraints.AssertTrue
 
 
 class Expect(_result: Any?) {
@@ -133,6 +135,11 @@ class Expect(_result: Any?) {
         orgPathParts.indices.forEach {
             Assertions.assertEquals(orgPathParts[it],expOrgPathParts[it])
         }
+    }
+
+    fun to_not_contain(expected: String) {
+        result as String
+        Assertions.assertFalse(result.contains(expected), "expected $result to not contain $expected")
     }
 
 }

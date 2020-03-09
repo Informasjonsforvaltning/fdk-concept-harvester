@@ -56,6 +56,8 @@ fun buildOrgPathQuery(queryParams: QueryParams) =
         if(queryParams.orgPath == "MISSING") {
             buildMissingOrgPathQuery()}
         else {
+            if(queryParams.orgPath.startsWith("/")) {
+            }
             match {
                 "publisher.orgPath" {
                     query = queryParams.orgPath

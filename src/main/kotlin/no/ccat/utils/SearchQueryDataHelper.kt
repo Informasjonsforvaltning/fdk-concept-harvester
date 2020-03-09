@@ -42,7 +42,7 @@ fun secondaryLanguages(langParam: String ): Array<LanguageProperties>{
     }
 }
 
-val allLanguages = listOf<String>("nb","nn","en","no")
+val allLanguages = listOf(nb.key, nn.key, en.key, no.key)
 
 data class LanguageProperties(var key : String = "nb", val analyzer: String = "norwegian", val stemmer: String? = null){
 
@@ -63,12 +63,12 @@ data class LanguageProperties(var key : String = "nb", val analyzer: String = "n
     }
 
     fun toPrefixFieldList(): List<String>? {
-        var fields = mutableListOf<String>("prefLabel.$key^3")
+        val fields = mutableListOf<String>("prefLabel.$key^3")
         fields.addAll(secondaryLanguages(key).map { "prefLabel.${it.key}^2" })
         return fields
     }
     fun toQueryStringFieldList(): MutableMap<String, Float> {
-        var fields = mutableMapOf<String, Float>("prefLabel.$key" to 1.5F)
+        val fields = mutableMapOf<String, Float>("prefLabel.$key" to 1.5F)
         secondaryLanguages(key).forEach {
             fields.put("prefLabel.${it.key}", 1F)
         }

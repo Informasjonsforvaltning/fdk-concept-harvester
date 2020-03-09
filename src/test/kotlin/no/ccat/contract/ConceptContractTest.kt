@@ -125,9 +125,9 @@ class ConceptContractTest : ApiTestContainer() {
 
             @Test
             fun `expect full text search with orgPath to return list of concepts from corresponding publisher only`() {
-                val result = apiGet("/concepts?q=$testString&size=100&orgPath=STAT/87654321/12345678")
+                val result = apiGet("/concepts?q=$testString&size=100&orgPath=/STAT/87654321/12345678")
 
-                val expOrgPath = "STAT/87654321/12345678".split("/")
+                val expOrgPath = "/STAT/87654321/12345678".split("/")
                 val resultOrgPath = jsonValueParser.parse(result).read<List<String>>("\$.._embedded.concepts.*.publisher.orgPath")
 
                 resultOrgPath.forEach { expect(it).to_be_organisation(expOrgPath) }
@@ -135,9 +135,9 @@ class ConceptContractTest : ApiTestContainer() {
 
             @Test
             fun `expect full text search with orgPath and trailing plus chars to return list of concepts from corresponding publisher only`() {
-                val result = apiGet("/concepts?q=$testString++&size=100&orgPath=STAT/87654321/12345678")
+                val result = apiGet("/concepts?q=$testString++&size=100&orgPath=/STAT/87654321/12345678")
 
-                val expOrgPath = "STAT/87654321/12345678".split("/")
+                val expOrgPath = "/STAT/87654321/12345678".split("/")
                 val resultOrgPath = jsonValueParser.parse(result).read<List<String>>("\$.._embedded.concepts.*.publisher.orgPath")
 
                 resultOrgPath.forEach { expect(it).to_be_organisation(expOrgPath) }
@@ -189,8 +189,8 @@ class ConceptContractTest : ApiTestContainer() {
 
         @Test
         fun `expect prefLabel search with orgPath to return list of concepts from corresponding publisher only`() {
-            val expOrgPath = "STAT/87654321/12345678".split("/")
-            val result = apiGet("/concepts?prefLabel=$testString&size=100&orgPath=STAT/87654321/12345678")
+            val expOrgPath = "/STAT/87654321/12345678".split("/")
+            val result = apiGet("/concepts?prefLabel=$testString&size=100&orgPath=/STAT/87654321/12345678")
             val resultOrgPath = jsonValueParser.parse(result).read<List<String>>("\$.._embedded.concepts.*.publisher.orgPath")
 
             resultOrgPath.forEach { expect(it).to_be_organisation(expOrgPath) }
@@ -223,8 +223,8 @@ class ConceptContractTest : ApiTestContainer() {
 
         @Test
         fun `expect orgPath only search to return list of concepts from corresponding publisher only`() {
-            val expOrgPath = "STAT/87654321/12345678".split("/")
-            val result = apiGet("/concepts?size=100&orgPath=STAT/87654321/12345678&aggregations=orgPath")
+            val expOrgPath = "/STAT/87654321/12345678".split("/")
+            val result = apiGet("/concepts?size=100&orgPath=/STAT/87654321/12345678&aggregations=orgPath")
             val resultOrgPath = jsonValueParser.parse(result).read<List<String>>("\$.._embedded.concepts.*.publisher.orgPath")
             resultOrgPath.forEach {
                 expect(it).to_be_organisation(expOrgPath)
@@ -267,6 +267,50 @@ class ConceptContractTest : ApiTestContainer() {
 
             assertEquals(2, resultIdentifiers.size)
             assertTrue(resultIdentifiers.containsAll(conceptIdentifiers))
+        }
+    }
+
+    @Nested
+    inner class verifyUriFromFdkWorking {
+        @Test
+        fun `expect returnvalues for conceptsearch in regiastration soloution to be correct`() {
+            val searchString = "arkiv"
+            val result = apiGet("/concepts?prefLabel=$searchString&returnfields=uri,definition.text,publisher.prefLabel,publisher.name&size=25")
+            val pathParser = jsonPathParser.parse(result)
+            val valueParser = jsonValueParser.parse(result)
+            val sortResult = SortResponse(sortWord = searchString,
+                    pathParser = pathParser)
+            val responsePaths = sortResult.getPathsForField(jsonPath = prefLabelPath)
+
+
+            for (i in responsePaths.indices) {
+                val currentValue = valueParser.read<JSONArray>(responsePaths[i]).toString()
+                val currentId = valueParser.read<JSONArray>("$..concepts[$i].id").toString()
+                sortResult.expectIsLessRelevant(currentValue, i, currentId)
+                expect(currentValue).to_contain(searchString)
+            }
+        }
+
+        @Test
+        fun `expect returnvalues for conceptsearch in fdk portal to be correct`() {
+            val searchString = "dokument"
+            val result = apiGet("/concepts?q=$testString&size=100&orgPath=%2FSTAT%2F87654321%2F12345678")
+            val pathParser = jsonPathParser.parse(result)
+            val valueParser = jsonValueParser.parse(result)
+            val sortResult = SortResponse(sortWord = searchString,
+                    pathParser = pathParser)
+            val responsePaths = sortResult.getPathsForField(jsonPath = prefLabelPath)
+
+            val expOrgPath = "/STAT/87654321/12345678".split("/")
+            val resultOrgPath = jsonValueParser.parse(result).read<List<String>>("\$.._embedded.concepts.*.publisher.orgPath")
+
+            resultOrgPath.forEach { expect(it).to_be_organisation(expOrgPath) }
+
+            for (i in responsePaths.indices) {
+                val currentValue = valueParser.read<JSONArray>(responsePaths[i]).toString()
+                val currentId = valueParser.read<JSONArray>("$..concepts[$i].id").toString()
+                sortResult.expectIsLessRelevant(currentValue, i, currentId)
+            }
         }
     }
 

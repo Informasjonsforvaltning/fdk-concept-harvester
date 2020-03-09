@@ -22,12 +22,9 @@ class EsSearchService {
                 QueryType.queryStringSearchWithOrgPath -> buildDocumentSearchWithOrgPath(this)
                 QueryType.urisSearch -> buildUrisSearchQuery(uris!!)
                 QueryType.identifiersSearch -> buildIdentifiersSearchQuery(identifiers!!)
-                QueryType.orgPathOnlySearch -> buildOrgPathOnlySearch(this)
+                QueryType.orgPathOnlySearch -> buildOrgPathQuery(this)
                 else -> match_all {}
             }
-
-    private fun buildOrgPathOnlySearch(queryParams: QueryParams): QueryBuilder? =
-              buildOrgPathQuery(queryParams)
 
     private fun buildIdentifiersSearchQuery(identifiers: Set<String>): QueryBuilder? =
             bool {
