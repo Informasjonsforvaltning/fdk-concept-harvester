@@ -75,6 +75,24 @@
     dcat:contactPoint             [ a               vcard:Organization ;
                                     vcard:hasEmail  <mailto:begrep@arkivverket.no>
                                   ] .
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/640b53b1-3469-4ce1-825e-7000-fd8d231>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "en enkelt fil som overføres parallelt med en avleverings- eller deponeringspakke og inneholder informasjon om avleverings- eller deponeringspakken"@nb ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "forskrift 19. desember 2017 nr. 2286 om utfyllende tekniske og arkivfaglige bestemmelser om behandling av offentlige arkiver"@nb ;
+                                                              rdfs:seeAlso  <https://lovdata.no/forskrift/2017-12-19-2286/§5-2>
+                                                            ]
+                                  ] ;
+    dct:identifier                "640b53b1-3469-4ce1-825e-e4363fd8d700" ;
+    dct:modified                  "2019-11-08"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "overførings fil"@nb
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
 
 <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/0c44bb76-8d22-4430-ba9d-b6165bf14a1e>
     a                             skos:Concept ;
@@ -94,6 +112,24 @@
     dcat:contactPoint             [ a               vcard:Organization ;
                                     vcard:hasEmail  <mailto:begrep@arkivverket.no>
                                   ] .
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/0c44bb76-8d22-4430-ba9d-b6165bf180a>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "én avgrenset rekkefølge av aktiviteter som gjentatte ganger utøves i en virksomhet for å oppnå et bestemt resultat i samsvar med fastsatte regler"@nb ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "forskrift 19. desember 2017 nr. 2286 om utfyllende tekniske og arkivfaglige bestemmelser om behandling av offentlige arkiver"@nb ;
+                                                              rdfs:seeAlso  <https://lovdata.no/forskrift/2017-12-19-2286/§7-2>
+                                                            ]
+                                  ] ;
+    dct:identifier                "0c44bb76-8d22-4430-ba9d-b6165bf1480a" ;
+    dct:modified                  "2019-11-07"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "arbeidsprosess i offentlig sektor"@nb
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
 
 <https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/4233f299-7943-4dc0-9f12-fd16fdeaf3ed>
     a                             skos:Concept ;
@@ -108,7 +144,7 @@
     dct:modified                  "2019-11-06"^^xsd:date ;
     dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
     skosxl:prefLabel              [ a                   skosxl:Label ;
-                                    skosxl:literalForm  "offentleg organ"@nn
+                                    skosxl:literalForm  "arbeidsprosess for virksomheter"@nn
                                   ] ;
     dcat:contactPoint             [ a               vcard:Organization ;
                                     vcard:hasEmail  <mailto:begrep@arkivverket.no>
@@ -203,7 +239,7 @@
     dct:modified                  "2019-11-08"^^xsd:date ;
     dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
     skosxl:prefLabel              [ a                   skosxl:Label ;
-                                    skosxl:literalForm  "funksjon"@nb
+                                    skosxl:literalForm  "arbeidsprosess- og styring"@nb
                                   ] ;
     dcat:contactPoint             [ a               vcard:Organization ;
                                     vcard:hasEmail  <mailto:begrep@arkivverket.no>
@@ -389,7 +425,25 @@
     dct:modified                  "2020-01-17"^^xsd:date ;
     dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
     skosxl:prefLabel              [ a                   skosxl:Label ;
-                                    skosxl:literalForm  "kassasjon"@nb
+                                    skosxl:literalForm  "arbeid (fritid)"@nb
+                                  ] ;
+    dcat:contactPoint             [ a               vcard:Organization ;
+                                    vcard:hasEmail  <mailto:begrep@arkivverket.no>
+                                  ] .
+<https://registrering-begrep-api.fellesdatakatalog.brreg.no/961181399/c817d592-1247-41a3-a56d-180bbd9c50fe>
+    a                             skos:Concept ;
+    skosno:betydningsbeskrivelse  [ a                       skosno:Definisjon ;
+                                    rdfs:label              "å ta ut og destruere arkivmateriale som ikke skal bevares"@nb ;
+                                    skosno:forholdTilKilde  skosno:sitatFraKilde ;
+                                    dct:source              [ rdfs:label    "forskrift 19. desember 2017 nr. 2286 om utfyllende tekniske og arkivfaglige bestemmelser om behandling av offentlige arkiver"@nb ;
+                                                              rdfs:seeAlso  <https://lovdata.no/forskrift/2017-12-19-2286/§7-2>
+                                                            ]
+                                  ] ;
+    dct:identifier                "c817d592-1247-41a3-a56d-180bbd9c34ee" ;
+    dct:modified                  "2020-01-17"^^xsd:date ;
+    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961189899> ;
+    skosxl:prefLabel              [ a                   skosxl:Label ;
+                                    skosxl:literalForm  "arbeid fritid"@nb
                                   ] ;
     dcat:contactPoint             [ a               vcard:Organization ;
                                     vcard:hasEmail  <mailto:begrep@arkivverket.no>
@@ -546,7 +600,6 @@
                                   ] ;
     dct:identifier                "f1213019-c6cc-4581-bcd9-dd931ca34138" ;
     dct:modified                  "2019-12-19"^^xsd:date ;
-    dct:publisher                 <https://data.brreg.no/enhetsregisteret/api/enheter/961181399> ;
     skosxl:prefLabel              [ a                   skosxl:Label ;
                                     skosxl:literalForm  "journalpost"@nb
                                   ] ;

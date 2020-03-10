@@ -1,0 +1,10 @@
+{
+  "simple_query_string": {
+    "query": "dokument dokument*",
+    "flags": -1,
+    "default_operator": "or",
+    "lenient": false,
+    "analyze_wildcard": false,
+    "boost":0.1
+  }
+}

@@ -380,5 +380,112 @@ class SearchQueryHelperTest {
                 assertTrue(QueryParams(orgPath = "ANNET/123567").isOrgPathOnly())
             }
         }
+
+        @Nested
+        inner class sanitizeString {
+            @Test
+            fun `should remove trailing plus and whitespace in prefLabel`(){
+                val expected = QueryParams(prefLabel = "something")
+                val result = QueryParams(prefLabel = "something+").sanitize()
+                val resultWithWhiteSpace = QueryParams(prefLabel = "something       ").sanitize()
+                val resultWithWhiteSpaceAndPlus = QueryParams(prefLabel = "something       + ").sanitize()
+
+                assertEquals(expected, result);
+                assertEquals(expected, resultWithWhiteSpace);
+                assertEquals(expected, resultWithWhiteSpaceAndPlus);
+            }
+
+            @Test
+            fun `should remove preceding plus and whitespace in prefLabel`(){
+                val expected = QueryParams(prefLabel = "something")
+                val result = QueryParams(prefLabel = "++something").sanitize()
+                val resultWithWhiteSpace = QueryParams(prefLabel = "    something").sanitize()
+                val resultWithWhiteSpaceAndPlus = QueryParams(prefLabel = "    + something").sanitize()
+
+                assertEquals(expected, result);
+                assertEquals(expected, resultWithWhiteSpace);
+                assertEquals(expected, resultWithWhiteSpaceAndPlus);
+            }
+
+            @Test
+            fun `should remove trailing plus and whitespace in queryString`(){
+                val expected = QueryParams(queryString = "something")
+                val result = QueryParams(queryString = "something+").sanitize()
+                val resultWithWhiteSpace = QueryParams(queryString = "something       ").sanitize()
+                val resultWithWhiteSpaceAndPlus = QueryParams(queryString = "something       + ").sanitize()
+
+                assertEquals(expected, result);
+                assertEquals(expected, resultWithWhiteSpace);
+                assertEquals(expected, resultWithWhiteSpaceAndPlus);
+            }
+
+            @Test
+            fun `should remove preceding plus and whitespace in queryString`(){
+                val expected = QueryParams(queryString = "something")
+                val result = QueryParams(queryString = "++something").sanitize()
+                val resultWithWhiteSpace = QueryParams(queryString = "    something").sanitize()
+                val resultWithWhiteSpaceAndPlus = QueryParams(queryString = "    + something").sanitize()
+
+                assertEquals(expected, result);
+                assertEquals(expected, resultWithWhiteSpace);
+                assertEquals(expected, resultWithWhiteSpaceAndPlus);
+            }
+
+
+            @Test
+            fun `should not remove preceding forward slash from orgPath prefLabel search`(){
+                val expected = QueryParams(prefLabel = "something", orgPath = "/STAT/16465799").sanitize()
+                val result = QueryParams(prefLabel = "something +", orgPath = "/STAT/16465799").sanitize()
+                assertEquals(expected, result);
+            }
+
+            @Test
+            fun `should not remove preceding forward slash from orgPath queryString search`(){
+                val expected = QueryParams(queryString = "something +", orgPath = "/STAT/16465799").sanitize()
+                val result = QueryParams(queryString = "something +", orgPath = "/STAT/16465799").sanitize()
+                assertEquals(expected, result);
+            }
+
+
+        }
+    }
+
+    @Nested
+    inner class EsQueryString {
+        @Test
+        fun `char extension should return true for special char with no preceding backslash`(){
+            val result = '('.shouldBeEscaped('a')
+            expect(result).to_be_true()
+        }
+        @Test
+        fun `char extension should return false for special char with preceding backslash`(){
+            val result = '('.shouldBeEscaped('\\')
+            expect(result).to_be_false()
+        }
+        @Test
+        fun `char extension should return false for backslash char with preceding backslash`(){
+            val result = '\\'.shouldBeEscaped('\\')
+            expect(result).to_be_false()
+        }
+
+        @Test
+        fun `char extension should return false for letter with preceding specialchar`(){
+            val result = 'a'.shouldBeEscaped('>')
+            expect(result).to_be_false()
+        }
+
+        @Test
+        fun `char extension should return true for special char with preceding specialchar`(){
+            val result = '!'.shouldBeEscaped('(')
+            expect(result).to_be_true()
+        }
+
+        @Test
+        fun `string extension should return esSafeString` () {
+            val expectedString = "\\\"test\\(t\\[\\]hjk\\)\\\""
+            val resultString = "\"test(t[]hjk)\"".esSafe()
+            expect(resultString).to_equal(expectedString)
+        }
+
     }
 }

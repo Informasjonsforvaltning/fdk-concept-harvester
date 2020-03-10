@@ -2,41 +2,29 @@ package no.ccat.service
 
 import mbuhot.eskotlin.query.compound.bool
 import mbuhot.eskotlin.query.compound.dis_max
-import mbuhot.eskotlin.query.fulltext.match
 import mbuhot.eskotlin.query.term.match_all
-import mbuhot.eskotlin.query.term.term
 import no.ccat.utils.*
-import org.elasticsearch.index.query.BoolQueryBuilder
 import org.elasticsearch.index.query.DisMaxQueryBuilder
 import org.elasticsearch.index.query.QueryBuilder
-import org.elasticsearch.index.query.QueryBuilders
 import org.springframework.stereotype.Service
 
 @Service
 class EsSearchService {
 
     fun buildSearch(queryParams: QueryParams): QueryBuilder? =
+        queryParams.sanitize().buildSearchFromParams()
 
-            when(queryParams.queryType) {
-                QueryType.prefLabelSearch -> buildPrefLabelSearch(queryParams)
-                QueryType.prefLabelSearcgWithOrgPath -> buildPrefLabelSearchWithOrgPath(queryParams)
-                QueryType.queryStringSearch -> buildDocumentSearch(queryParams)
-                QueryType.queryStringSearchWithOrgPath -> buildDocumentSearchWithOrgPath(queryParams)
-                QueryType.urisSearch -> buildUrisSearchQuery(queryParams.uris!!)
-                QueryType.identifiersSearch -> buildIdentifiersSearchQuery(queryParams.identifiers!!)
-                QueryType.orgPathOnlySearch -> buildOrhPathOnlySearch(queryParams.orgPath)
+    private fun QueryParams.buildSearchFromParams(): QueryBuilder? =
+            when(queryType) {
+                QueryType.prefLabelSearch -> buildPrefLabelSearch(this)
+                QueryType.prefLabelSearcgWithOrgPath -> buildPrefLabelSearchWithOrgPath(this)
+                QueryType.queryStringSearch -> buildEntireDocumentSearch(this)
+                QueryType.queryStringSearchWithOrgPath -> buildDocumentSearchWithOrgPath(this)
+                QueryType.urisSearch -> buildUrisSearchQuery(uris!!)
+                QueryType.identifiersSearch -> buildIdentifiersSearchQuery(identifiers!!)
+                QueryType.orgPathOnlySearch -> buildOrgPathQuery(this)
                 else -> match_all {}
             }
-
-    private fun buildOrhPathOnlySearch(orgPath: String): QueryBuilder? =
-              match {
-                  "publisher.orgPath" {
-                      query = orgPath
-                      analyzer = "keyword"
-                      operator= "AND"
-                      minimum_should_match = "100%"
-                  }
-              }
 
     private fun buildIdentifiersSearchQuery(identifiers: Set<String>): QueryBuilder? =
             bool {
@@ -47,7 +35,7 @@ class EsSearchService {
                 )
             }
 
-    private fun buildDocumentSearch(queryParams: QueryParams): QueryBuilder? =
+    private fun buildEntireDocumentSearch(queryParams: QueryParams): QueryBuilder? =
             if (queryParams.isEmpty()) {
                 match_all { }
 
@@ -67,7 +55,6 @@ class EsSearchService {
                         )
                     }
                 }
-
             }
 
     private fun buildUrisSearchQuery(uris: Set<String>): QueryBuilder? =
@@ -81,35 +68,28 @@ class EsSearchService {
 
     private fun buildPrefLabelSearchWithOrgPath(params: QueryParams): QueryBuilder {
         val langProperties = LanguageProperties(params.lang)
-        val normalizedExactScore = buildExactMatchScoreBoost(params.prefLabel, langProperties, true)
-        val matchPrefixPhrase = buildMatchPhrasePrefixBoost(params.prefLabel, langProperties)
-        val disMaxQueries = mutableListOf<QueryBuilder>(
-                normalizedExactScore
-        )
-        disMaxQueries.addAll(matchPrefixPhrase)
-
         return bool {
             must = listOf(
                     dis_max {
-                        queries = disMaxQueries
+                        queries = listOf(
+                                buildExactMatchQuery(params.prefLabel, langProperties),
+                                buildPrefixBoostQuery(params.prefLabel, langProperties),
+                                buildStringInPrefLabelQuery(params.prefLabel,langProperties)
+                        )
                     },
                     buildOrgPathQuery(params)
             )
         }
     }
 
-
     private fun buildPrefLabelSearch(params: QueryParams): QueryBuilder {
         val langProperties = LanguageProperties(params.lang)
-        val normalizedExactScore = buildExactMatchScoreBoost(params.prefLabel, langProperties, true)
-        val matchPrefixPhrase = buildMatchPhrasePrefixBoost(params.prefLabel, langProperties)
-        val disMaxQueries = mutableListOf<QueryBuilder>(
-                normalizedExactScore
-        )
-        disMaxQueries.addAll(matchPrefixPhrase)
-
         return dis_max {
-            queries = disMaxQueries
+                queries = listOf(
+                        buildExactMatchQuery(params.prefLabel, langProperties),
+                        buildPrefixBoostQuery(params.prefLabel, langProperties),
+                        buildStringInPrefLabelQuery(params.prefLabel,langProperties)
+                )
         }
     }
 
@@ -126,12 +106,12 @@ class EsSearchService {
 
     private fun buildWithSearchString(searchString: String, preferredLanguage: String): DisMaxQueryBuilder {
         val langProperties = LanguageProperties(preferredLanguage)
-        val prefLabelBoost = buildMatchPhrasePrefixBoost(searchString, langProperties);
         val queryList = mutableListOf<QueryBuilder>(
-                buildExactMatchScoreBoost(searchString, langProperties),
-                QueryBuilders.simpleQueryStringQuery("$searchString $searchString*"))
-        queryList.addAll(prefLabelBoost)
-
+                buildExactMatchQuery(searchString, langProperties),
+                buildStringInPrefLabelQuery(searchString,langProperties),
+                buildSimpleStringQuery(searchString),
+                buildPrefixBoostQuery(searchString, langProperties)
+        )
         return dis_max {
             queries = queryList
         }

@@ -31,13 +31,14 @@ paths:
       parameters:
         - name: q
           in: query
-          description: The word to perform a fulltext search for our concept collection, ommit for seraches on preferred term only
+          description: The word to perform a fulltext search for our concept collection, ommit for searches on preferred prefLabel only
           required: false
           schema:
             type: string
         - name: orgPath
           in: query
           description: Filters on publisher's organization path (orgPath), e.g. /STAT/972417858/971040238
+                       for organizations without orgPath set parameter to "MISSING"
           required: false
           schema:
             type: string

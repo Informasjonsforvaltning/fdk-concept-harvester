@@ -1,0 +1,52 @@
+{
+  "bool": {
+            "must": [
+              {
+                "constant_score": {
+                  "filter": {
+                    "bool": {
+                      "should": [
+                        {
+                          "term": {
+                            "prefLabel.nb.raw": {
+                              "value": "arkiv"
+                            }
+                          }
+                        },
+                        {
+                          "term": {
+                            "prefLabel.nn.raw": {
+                              "value": "arkiv"
+                            }
+                          }
+                        },
+                        {
+                          "term": {
+                            "prefLabel.en.raw": {
+                              "value": "arkiv"
+                            }
+                          }
+                        },
+                        {
+                          "term": {
+                            "prefLabel.no.raw": {
+                              "value": "arkiv"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "boost": 30
+                }
+              }
+            ],
+            "should": [
+              {
+                "match_phrase_prefix": {
+                  "prefLabel.nb": "arkiv"
+                }
+              }
+            ]
+          }
+}

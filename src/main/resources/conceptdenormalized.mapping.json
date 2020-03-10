@@ -61,22 +61,42 @@
           "nb": {
             "fielddata": true,
             "type": "text",
-            "analyzer": "norwegian"
+            "analyzer": "norwegian",
+            "fields": {
+              "raw": {
+                "type": "keyword"
+              }
+            }
           },
           "nn": {
             "fielddata": true,
             "type": "text",
-            "analyzer": "norwegian"
+            "analyzer": "norwegian",
+            "fields": {
+              "raw": {
+                "type": "keyword"
+              }
+            }
           },
           "en": {
             "fielddata": true,
             "type": "text",
-            "analyzer": "english"
+            "analyzer": "english",
+            "fields": {
+              "raw": {
+                "type": "keyword"
+              }
+            }
           },
           "no": {
             "fielddata": true,
             "type": "text",
-            "analyzer": "norwegian"
+            "analyzer": "norwegian",
+            "fields": {
+              "raw": {
+                "type": "keyword"
+              }
+            }
           }
         }
       },

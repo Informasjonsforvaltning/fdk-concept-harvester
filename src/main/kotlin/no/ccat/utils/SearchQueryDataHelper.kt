@@ -2,7 +2,11 @@
 @file:JvmMultifileClass
 package no.ccat.utils
 
+import java.lang.StringBuilder
 
+
+val esReservedChars = listOf('-', '=', '>', '<' ,'!', '(', ')', '{', '}',
+    '[', ']', '^', '"', '~', '*', '?', ':','\\','/')
 val nn = LanguageProperties("nn", "norwegian")
 val en = LanguageProperties("en", "english")
 val no = LanguageProperties("no", "norwegian")
@@ -38,7 +42,7 @@ fun secondaryLanguages(langParam: String ): Array<LanguageProperties>{
     }
 }
 
-val allLanguages = listOf<String>("nb","nn","en","no")
+val allLanguages = listOf(nb.key, nn.key, en.key, no.key)
 
 data class LanguageProperties(var key : String = "nb", val analyzer: String = "norwegian", val stemmer: String? = null){
 
@@ -57,6 +61,21 @@ data class LanguageProperties(var key : String = "nb", val analyzer: String = "n
 
         return keyList;
     }
+
+    fun toPrefixFieldList(): List<String>? {
+        val fields = mutableListOf<String>("prefLabel.$key^3")
+        fields.addAll(secondaryLanguages(key).map { "prefLabel.${it.key}^2" })
+        return fields
+    }
+    fun toQueryStringFieldList(): MutableMap<String, Float> {
+        val fields = mutableMapOf<String, Float>("prefLabel.$key" to 1.5F)
+        secondaryLanguages(key).forEach {
+            fields.put("prefLabel.${it.key}", 1F)
+        }
+        return fields
+    }
+
+
 }
 
 data class QueryParams(val queryString: String = "",
@@ -86,6 +105,7 @@ data class QueryParams(val queryString: String = "",
             isOrgPathOnly() -> QueryType.orgPathOnlySearch
             else -> QueryType.matchAllSearch
         }
+
     }
 
     fun isEmpty() = this == QueryParams()
@@ -112,8 +132,50 @@ data class QueryParams(val queryString: String = "",
     fun shouldfilterOnOrgPath()= orgPath != ""
 
     fun isOrgPathOnly() = orgPath != "" && !isTextSearch() && !isIdSearch()
-
 }
+
+fun String.esSafe(): String {
+    var builder = StringBuilder()
+    forEachIndexed { index, c ->
+        if (index != 0 && c.shouldBeEscaped(this[index-1]) ) {
+            builder.append("""\""")
+        } else if (index == 0){
+            if(c.shouldBeEscaped('a'))
+                builder.append("""\""")
+        }
+        builder.append(c)
+    }
+    return builder.toString()
+}
+
+fun Char.shouldBeEscaped( previousChar: Char)= (esReservedChars.any { it == this } && previousChar!='\\')
+
+fun QueryParams.sanitize() =
+    copy(
+            queryString = queryString.sanitizeForQuery(),
+            lang = lang.sanitizeForQuery(),
+            prefLabel = prefLabel.sanitizeForQuery()
+    )
+
+private fun String.sanitizeForQuery(): String {
+    return removeDoubleQuotes()
+            .trim()
+            .dropWhile {
+                (it == ' ' || it == '+')
+            }
+            .dropLastWhile {
+                (it == '+' || it == ' ')
+            }
+}
+
+private fun String.removeDoubleQuotes(): String =
+        if (this.startsWith('"') && this.endsWith('"') && this.split(" ").size == 1 && this.length > 2) {
+            this.drop(1)
+                .dropLast(1)
+        } else {
+            this
+        }
+
 
 enum class QueryType{
     queryStringSearch,
