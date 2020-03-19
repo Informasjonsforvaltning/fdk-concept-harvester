@@ -1,6 +1,8 @@
 package no.ccat.contract
 
 import net.minidev.json.JSONArray
+import org.apache.jena.atlas.json.JSON
+import org.apache.jena.atlas.json.JsonArray
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Nested
@@ -9,6 +11,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import testUtils.*
 import testUtils.assertions.apiGet
+import java.time.format.DateTimeFormatter
 import kotlin.test.assertNotEquals
 import kotlin.test.assertNull
 import testUtils.assertions.Expect as expect
@@ -360,7 +363,33 @@ class ConceptContractTest : ApiTestContainer() {
                 sortResult.expectIsLessRelevant(currentValue, i, currentId)
             }
         }
+
+        @Test
+        fun `expect query to return concepts harvested in the last week`() {
+           val result =  apiGet("/concepts?firstHarvested=7&size=100");
+           val dates = jsonPathParser.parse(result).read<JSONArray>("$.._embedded.concepts.*.harvest.firstHarvested")
+
+            //jsonValueParser.parse(result).read<JSONArray>("$.._embedded.concepts.*.harvest.firstHarvested")[0].toString().split("T")[0],
+            dates.forEach {
+                expect((jsonValueParser.parse(result).read<JSONArray>(it.toString())[0] as CharSequence).split("T")[0]).to_be_in_date_range(7)
+            }
+
+        }
+
+        @Test
+        fun `expect query to return concepts harvested in the last month`() {
+            val total = apiGet("/count")
+            val result =  apiGet("/concepts?firstHarvested=30&size=100");
+            val dates = jsonPathParser.parse(result).read<JSONArray>("$.._embedded.concepts.*.harvest.firstHarvested")
+            val hits = jsonValueParser.parse(result).read<JSONArray>("$..page.totalElements")[0];
+            assertEquals(total.toInt(),hits)
+            dates.forEach {
+                expect((jsonValueParser.parse(result).read<JSONArray>(it.toString())[0] as CharSequence).split("T")[0]).to_be_in_date_range(30)
+            }
+
+        }
     }
+
 
     @Nested
     inner class GetWithId {}

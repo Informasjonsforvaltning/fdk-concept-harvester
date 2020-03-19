@@ -12,14 +12,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.time.LocalDate;
+import java.time.*;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 /*
@@ -37,11 +40,13 @@ public class RDFToModelTransformer {
 
     private ConceptBuilderService conceptBuilderService;
     private ConceptDenormalizedRepository conceptDenormalizedRepository;
+    private Environment env;
 
     @Autowired
-    public RDFToModelTransformer(ConceptBuilderService conceptBuilderService, ConceptDenormalizedRepository conceptDenormalizedRepository) {
+    public RDFToModelTransformer(ConceptBuilderService conceptBuilderService, ConceptDenormalizedRepository conceptDenormalizedRepository, Environment environment) {
         this.conceptBuilderService = conceptBuilderService;
         this.conceptDenormalizedRepository = conceptDenormalizedRepository;
+        this.env = environment;
     }
 
     public static Definition extractDefinition(Resource resource) {
@@ -277,6 +282,15 @@ public class RDFToModelTransformer {
         Date harvestDate = new Date();
         HarvestMetadata oldMetadata = null;
 
+        if(randomizeForTest() && existingConcept == null) {
+            logger.info("Randomizing harvest meta data for test");
+            Instant from = Instant.now().minus(30, ChronoUnit.DAYS);
+            Instant to = Instant.now();
+            Date randomDate = new Date (ThreadLocalRandom.current().nextLong(from.toEpochMilli(),to.toEpochMilli()));
+            oldMetadata = new HarvestMetadata();
+            oldMetadata.setFirstHarvested(randomDate);
+        }
+
         // If concept is harvested earlier, we reuse the harvest-metadata:
         if (existingConcept != null) {
             oldMetadata = existingConcept.getHarvest();
@@ -440,5 +454,16 @@ public class RDFToModelTransformer {
             }
         }
         return null;
+    }
+
+    private boolean randomizeForTest(){
+        boolean local = false;
+
+        for (String profile :  env.getActiveProfiles()){
+            if(profile.equals("test") || profile.equals("dev-with-harvester") ){
+                local = true;
+            }
+        }
+        return local;
     }
 }

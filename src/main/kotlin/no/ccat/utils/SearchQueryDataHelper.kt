@@ -3,6 +3,10 @@
 package no.ccat.utils
 
 import java.lang.StringBuilder
+import java.time.Instant
+import java.time.temporal.ChronoUnit
+import java.time.temporal.ChronoUnit.DAYS
+import java.util.*
 
 
 val esReservedChars = listOf('-', '=', '>', '<' ,'!', '(', ')', '{', '}',
@@ -89,7 +93,8 @@ data class QueryParams(val queryString: String = "",
                        val sortField: String = "",
                        val sortDirection: String = "",
                        val uris: Set<String>? = emptySet(),
-                       val identifiers: Set<String>? = emptySet()
+                       val identifiers: Set<String>? = emptySet(),
+                       val firstHarvested: String = "0"
                        ){
 
     val queryType: QueryType
@@ -103,6 +108,7 @@ data class QueryParams(val queryString: String = "",
             isUriSearch() && !isTextSearch() && !isIdentifiersSearch() && !isOrgPathOnly() -> QueryType.urisSearch
             isIdentifiersSearch() && !isTextSearch() && !isUriSearch() && !isOrgPathOnly() -> QueryType.identifiersSearch
             isOrgPathOnly() -> QueryType.orgPathOnlySearch
+            isEmptySearchQuery() && shouldFilterOnDates() -> QueryType.dateRangeOnly
             else -> QueryType.matchAllSearch
         }
 
@@ -132,6 +138,20 @@ data class QueryParams(val queryString: String = "",
     fun shouldfilterOnOrgPath()= orgPath != ""
 
     fun isOrgPathOnly() = orgPath != "" && !isTextSearch() && !isIdSearch()
+
+    fun shouldFilterOnDates () : Boolean =
+            try {
+                firstHarvested.toLong() > 0
+            } catch (e: NumberFormatException) {
+                false
+            }
+
+    fun getFromDate(): Long =
+            try {
+                Instant.now().minus(firstHarvested.toLong(),DAYS).toEpochMilli()
+            } catch (e: Exception) {
+                0L
+            }
 }
 
 fun String.esSafe(): String {
@@ -185,6 +205,7 @@ enum class QueryType{
     prefLabelSearcgWithOrgPath,
     urisSearch,
     identifiersSearch,
+    dateRangeOnly,
     matchAllSearch
 }
 

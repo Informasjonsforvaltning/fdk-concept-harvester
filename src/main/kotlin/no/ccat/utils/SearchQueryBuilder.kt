@@ -6,12 +6,14 @@ import mbuhot.eskotlin.query.fulltext.match
 import mbuhot.eskotlin.query.fulltext.match_phrase_prefix
 import mbuhot.eskotlin.query.fulltext.multi_match
 import mbuhot.eskotlin.query.term.exists
+import mbuhot.eskotlin.query.term.range
 import mbuhot.eskotlin.query.term.term
 import org.elasticsearch.index.query.MultiMatchQueryBuilder
 import org.elasticsearch.index.query.QueryBuilder
 import org.elasticsearch.index.query.QueryBuilders.queryStringQuery
 import org.elasticsearch.index.query.QueryBuilders.simpleQueryStringQuery
 import org.elasticsearch.index.query.SimpleQueryStringBuilder
+import java.time.Instant
 
 fun buildPrefixBoostQuery(searchString: String, preferredLanguage : LanguageProperties): MultiMatchQueryBuilder =
     multi_match {
@@ -68,6 +70,21 @@ fun buildOrgPathQuery(queryParams: QueryParams) =
             }
         }
 
+fun buildDateRangeQuery(queryParams: QueryParams) =
+        range {
+            "harvest.firstHarvested" {
+                from = queryParams.getFromDate()
+                to = Instant.now().toEpochMilli()
+            }
+        }
+
+
+//static RangeQueryBuilder createRangeQueryFromXdaysToNow(int days, String dateField) {
+//        final long DAY_IN_MS = 1000 * 3600 * 24;
+//        long now = new Date().getTime();
+//
+//        return QueryBuilders.rangeQuery(dateField).from(now - days * DAY_IN_MS).to(now).format("epoch_millis");
+//    }
 private fun buildMissingOrgPathQuery() =
         bool { must_not = listOf(exists { field = "publisher.orgPath" }) }
 

@@ -77,6 +77,8 @@ public class ConceptSearchController {
 
         @RequestParam(value = "lang", defaultValue = "", required = false)
         String lang,
+        @RequestParam(value="firstHarvested", defaultValue= "0", required= false)
+        String firstHarvested,
 
         @RequestParam (value = "page", defaultValue = "", required = false)
         String startPage,
@@ -118,7 +120,8 @@ public class ConceptSearchController {
                  sortfield,
                  sortdirection,
                  uris,
-                 identifiers
+                 identifiers,
+                 firstHarvested
                  );
 
          logger.debug("/GET search concepts ", params.toString());

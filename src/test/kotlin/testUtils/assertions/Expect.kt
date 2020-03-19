@@ -3,11 +3,11 @@ package testUtils.assertions
 import com.jayway.jsonpath.DocumentContext
 import no.ccat.utils.LanguageProperties
 import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Assumptions
 import org.skyscreamer.jsonassert.JSONAssert
 import testUtils.jsonPathParser
-import javax.validation.constraints.AssertFalse
-import javax.validation.constraints.AssertTrue
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 
 class Expect(_result: Any?) {
@@ -147,16 +147,14 @@ class Expect(_result: Any?) {
         Assertions.assertFalse(result.contains(expected), "expected query for $key to not contain $expected")
     }
 
-}
+    fun to_be_in_date_range(numberOfDays: Long) {
+        result as String
+        val formatter =  DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val date = LocalDate.parse(result,formatter)
+        val now = LocalDate.now()
+        val startDate = LocalDate.now().minus(numberOfDays+1,ChronoUnit.DAYS)
+        Assertions.assertFalse(date.isAfter(now), "expected $date to not be after $now")
+        Assertions.assertTrue(date.isAfter(startDate), "expected $date to be after $startDate")
+    }
 
-fun assume_authenticated(status: String) {
-    Assumptions.assumeFalse(status.equals("401"))
-}
-
-fun assume_success(status: String) {
-    Assumptions.assumeTrue(status.equals("201"))
-}
-
-fun assume_implemented(status: String){
-    Assumptions.assumeFalse(status.equals("501"))
 }
