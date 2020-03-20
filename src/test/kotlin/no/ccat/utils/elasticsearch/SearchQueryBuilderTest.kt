@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import testUtils.COMPLEX_SEARCH_STRING
 import testUtils.jsonPathParser
 import testUtils.jsonValueParser
 import java.io.File

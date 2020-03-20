@@ -94,7 +94,7 @@ data class QueryParams(val queryString: String = "",
                        val sortDirection: String = "",
                        val uris: Set<String>? = emptySet(),
                        val identifiers: Set<String>? = emptySet(),
-                       val firstHarvested: String = "0"
+                       val firstHarvested: String = ""
                        ){
 
     val queryType: QueryType

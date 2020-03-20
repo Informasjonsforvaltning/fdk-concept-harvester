@@ -5,7 +5,6 @@ import no.ccat.common.model.TextAndURI;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Tag;
-import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
@@ -23,16 +22,13 @@ public class RDFToModelTransformerTest {
     private RDFToModelTransformer transformer;
     private ConceptDenormalizedRepository conceptDenormalizedRepository;
     private ConceptBuilderService conceptBuilderService;
-    private Environment environment;
 
     @Before
     public void setup() {
-
         conceptDenormalizedRepository = mock(ConceptDenormalizedRepository.class);
         conceptBuilderService = mock(ConceptBuilderService.class);
-        environment = mock(Environment.class);
 
-        transformer = new RDFToModelTransformer(conceptBuilderService, conceptDenormalizedRepository, environment);
+        transformer = new RDFToModelTransformer(conceptBuilderService, conceptDenormalizedRepository);
     }
 
     @Test

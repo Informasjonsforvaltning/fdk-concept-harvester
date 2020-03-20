@@ -518,10 +518,5 @@ class SearchQueryHelperTest {
             expect(resultString).to_equal(expectedString)
         }
 
-        @Test
-        fun `should return true if firstHarvested is greater than 0`() {
-
-        }
-
     }
 }

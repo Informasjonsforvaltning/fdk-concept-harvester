@@ -3,12 +3,9 @@ package no.ccat.contract
 import net.minidev.json.JSONArray
 import org.apache.jena.atlas.json.JSON
 import org.apache.jena.atlas.json.JsonArray
+import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Tag
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
 import testUtils.*
 import testUtils.assertions.apiGet
 import java.time.format.DateTimeFormatter
@@ -364,6 +361,7 @@ class ConceptContractTest : ApiTestContainer() {
             }
         }
 
+        @Disabled
         @Test
         fun `expect query to return concepts harvested in the last week`() {
            val result =  apiGet("/concepts?firstHarvested=7&size=100");
@@ -376,6 +374,7 @@ class ConceptContractTest : ApiTestContainer() {
 
         }
 
+        @Disabled
         @Test
         fun `expect query to return concepts harvested in the last month`() {
             val total = apiGet("/count")
