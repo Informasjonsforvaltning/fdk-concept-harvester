@@ -23,6 +23,7 @@ class EsSearchService {
                 QueryType.urisSearch -> buildUrisSearchQuery(uris!!)
                 QueryType.identifiersSearch -> buildIdentifiersSearchQuery(identifiers!!)
                 QueryType.orgPathOnlySearch -> buildOrgPathQuery(this)
+                QueryType.dateRangeOnly -> buildDateRangeQuery(this)
                 else -> match_all {}
             }
 

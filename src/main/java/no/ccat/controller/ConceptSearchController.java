@@ -67,7 +67,7 @@ public class ConceptSearchController {
     public PagedResources<ConceptDenormalized> search(
 
         @RequestParam(value = "q", defaultValue = "" , required = false)
-         String queryString,
+        String queryString,
 
         @RequestParam(value = "orgPath", defaultValue = "", required = false)
         String orgPath,
@@ -78,6 +78,9 @@ public class ConceptSearchController {
         @RequestParam(value = "lang", defaultValue = "", required = false)
         String lang,
 
+        @RequestParam(value = "firstHarvested", defaultValue = "", required = false)
+        String firstHarvested,
+
         @RequestParam (value = "page", defaultValue = "", required = false)
         String startPage,
 
@@ -85,27 +88,26 @@ public class ConceptSearchController {
         String size,
 
         @RequestParam(value = "returnfields", defaultValue = "", required = false)
-            String returnFields,
+        String returnFields,
 
         @RequestParam(value = "aggregations", defaultValue = "false", required = false)
-            String aggregations,
+        String aggregations,
 
         @RequestParam(value = "sortfield", defaultValue = "", required = false)
-            String sortfield,
+        String sortfield,
 
         @RequestParam(value = "sortdirection", defaultValue = "", required = false)
-            String sortdirection,
+        String sortdirection,
 
         @RequestParam(value = "uris", required = false)
-            Set<String> uris,
+        Set<String> uris,
 
         @RequestParam(value = "identifiers",required = false)
-            Set<String> identifiers,
+        Set<String> identifiers,
 
         @PageableDefault()
             Pageable pageable
     ) {
-
          QueryParams params = new QueryParams(
                  queryString,
                  orgPath,
@@ -118,7 +120,8 @@ public class ConceptSearchController {
                  sortfield,
                  sortdirection,
                  uris,
-                 identifiers
+                 identifiers,
+                 firstHarvested
                  );
 
          logger.debug("/GET search concepts ", params.toString());

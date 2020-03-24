@@ -25,7 +25,6 @@ public class RDFToModelTransformerTest {
 
     @Before
     public void setup() {
-
         conceptDenormalizedRepository = mock(ConceptDenormalizedRepository.class);
         conceptBuilderService = mock(ConceptBuilderService.class);
 

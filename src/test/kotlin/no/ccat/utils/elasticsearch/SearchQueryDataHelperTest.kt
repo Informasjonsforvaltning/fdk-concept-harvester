@@ -150,6 +150,16 @@ class SearchQueryHelperTest {
                 assertEquals(QueryType.orgPathOnlySearch, QueryParams(orgPath = "gadshfgasjf", aggregation = "hjaskhfjkasf").queryType)
             }
 
+            @Test
+            fun `should return dateRangeOnly`() {
+                assertEquals(QueryType.dateRangeOnly, QueryParams(firstHarvested = "7").queryType)
+            }
+
+            @Test
+            fun `should not return dateRangeOnly`() {
+                assertNotEquals(QueryType.dateRangeOnly, QueryParams(firstHarvested = "7", prefLabel = "santa").queryType)
+            }
+
 
         }
 
@@ -362,10 +372,31 @@ class SearchQueryHelperTest {
                 assertTrue(paramsWithQueryStringPrefLabelAndOrgPath().shouldfilterOnOrgPath())
             }
 
+            @Test
             fun `should not filter on orgPath`(){
                 assertFalse(paramsWithQueryString().shouldfilterOnOrgPath())
                 assertFalse(paramsWithQueryStringAndUris().shouldfilterOnOrgPath())
                 assertFalse(paramsWithQueryStringAndPrefLabel().shouldfilterOnOrgPath())
+            }
+        }
+
+        @Nested
+        inner class filterOnDates {
+
+            @Test
+            fun `should return true if firstHarvested is greater than 0`() {
+                assertTrue(QueryParams(firstHarvested = "2").shouldFilterOnDates())
+            }
+
+            @Test
+            fun `should return false if firstHarvested is 0`() {
+                assertFalse(QueryParams().shouldfilterOnOrgPath())
+                assertFalse(QueryParams(firstHarvested = "0").shouldFilterOnDates())
+            }
+
+            @Test
+            fun `should return false if firstHarvested is not integer`() {
+                assertFalse(QueryParams(firstHarvested = "notInteger").shouldFilterOnDates())
             }
         }
 
