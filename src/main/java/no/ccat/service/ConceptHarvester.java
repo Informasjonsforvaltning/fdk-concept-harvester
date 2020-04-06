@@ -1,10 +1,13 @@
 package no.ccat.service;
 
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.RequiredArgsConstructor;
 import no.ccat.common.model.ConceptDenormalized;
 import no.ccat.dto.HarvestDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.AmqpException;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.env.Environment;
@@ -21,6 +24,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.springframework.amqp.AmqpException;
+import org.springframework.amqp.core.AmqpTemplate;
+
 /*
     Fetch concepts and insert or update them in the search index.
  */
@@ -35,12 +43,15 @@ public class ConceptHarvester {
     private final RDFToModelTransformer rdfToModelTransformer;
     private final HarvestAdminClient harvestAdminClient;
 
+    private final AmqpTemplate rabbitTemplate;
+
     @Async
     @EventListener(ApplicationReadyEvent.class)
     void harvestOnce() {
         logger.info("Harvest of Concepts start");
         this.harvestAdminClient.getDataSources().forEach(this::harvestFromSingleURLSource);
         logger.info("Harvest of Concepts complete");
+        updateSearch();
     }
 
     void harvestFromSingleURLSource(HarvestDataSource dataSource) {
@@ -105,5 +116,18 @@ public class ConceptHarvester {
             }
         }
         return local;
+    }
+
+    private void updateSearch() {
+        ObjectNode payload = JsonNodeFactory.instance.objectNode();
+
+        payload.put("updatesearch", "concepts");
+
+        try {
+            rabbitTemplate.convertAndSend(payload);
+            logger.info("Successfully sent harvest message for publisher {}", payload);
+        } catch (AmqpException e) {
+            logger.error("Failed to send harvest message for publisher {}", payload, e);
+        }
     }
 }
