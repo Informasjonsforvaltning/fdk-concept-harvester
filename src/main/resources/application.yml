@@ -38,6 +38,9 @@ spring:
     port: 5672
     username: admin
     password: admin
+    template:
+      routing-key: 'harvester.UpdateSearchTrigger'
+      exchange: 'updates'
 application:
   harvestAdminRootUrl: http://localhost:5000/api
   apiRootUrl: http://localhost:5000/api
@@ -59,6 +62,9 @@ spring:
     port: ${RABBIT_PORT}
     username: admin
     password: admin
+    template:
+      routing-key: 'harvester.UpdateSearchTrigger'
+      exchange: 'updates'
 application:
   harvestAdminRootUrl: ${WIREMOCK_TEST_HOST}/api
   apiRootUrl: ${WIREMOCK_TEST_HOST}/api
