@@ -49,6 +49,7 @@ public class ConceptHarvester {
         logger.info("Harvest of Concepts start");
         this.harvestAdminClient.getDataSources().forEach(this::harvestFromSingleURLSource);
         logger.info("Harvest of Concepts complete");
+        updateSearch();
     }
 
     void harvestFromSingleURLSource(HarvestDataSource dataSource) {
@@ -72,7 +73,6 @@ public class ConceptHarvester {
         logger.info("Harvested {} concepts from publisher {} at Uri {} ", concepts.size(), dataSource.getPublisherId(), dataSource.getUrl());
 
         concepts.forEach(conceptDenormalizedRepository::save);
-        updateSearch();
     }
 
     private String readFileFully(String fileURI) {
