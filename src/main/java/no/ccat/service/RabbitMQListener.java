@@ -25,7 +25,7 @@ public class RabbitMQListener {
     private final ConceptHarvester conceptHarvester;
     private final ObjectMapper objectMapper;
 
-    private static List<String> ALLOWED_FIELDS = Collections.singletonList("publisherId");
+    private static List<String> ALLOWED_FIELDS = Arrays.asList("publisherId", "dataType");
 
     private Map<String, String> whitelistFields(Map<String, String> params) {
          return params.entrySet()
