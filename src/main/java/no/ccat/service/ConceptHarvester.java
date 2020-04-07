@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.AmqpException;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Async;
@@ -40,7 +41,7 @@ public class ConceptHarvester {
     private final RDFToModelTransformer rdfToModelTransformer;
     private final HarvestAdminClient harvestAdminClient;
 
-    private final AmqpTemplate rabbitTemplate;
+    private final ApplicationContext context;
 
     @Async
     @EventListener(ApplicationReadyEvent.class)
@@ -71,7 +72,7 @@ public class ConceptHarvester {
         logger.info("Harvested {} concepts from publisher {} at Uri {} ", concepts.size(), dataSource.getPublisherId(), dataSource.getUrl());
 
         concepts.forEach(conceptDenormalizedRepository::save);
-//        updateSearch();
+        updateSearch();
     }
 
     private String readFileFully(String fileURI) {
@@ -115,8 +116,10 @@ public class ConceptHarvester {
         return local;
     }
 
-/*    private void updateSearch() {
+    private void updateSearch() {
         ObjectNode payload = JsonNodeFactory.instance.objectNode();
+
+        AmqpTemplate rabbitTemplate = (AmqpTemplate)context.getBean("jsonRabbitTemplate");
 
         payload.put("updatesearch", "concepts");
 
@@ -126,5 +129,5 @@ public class ConceptHarvester {
         } catch (AmqpException e) {
             logger.error("Failed to send harvest message for publisher {}", payload, e);
         }
-    }*/
+    }
 }
