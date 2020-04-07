@@ -26,6 +26,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.util.LinkedMultiValueMap;
 
 /*
     Fetch concepts and insert or update them in the search index.
@@ -40,12 +41,15 @@ public class ConceptHarvester {
     private final ConceptDenormalizedRepository conceptDenormalizedRepository;
     private final RDFToModelTransformer rdfToModelTransformer;
     private final HarvestAdminClient harvestAdminClient;
-
     private final ApplicationContext context;
+
+    // MultiValueMap<String, String> queryParams
 
     @Async
     @EventListener(ApplicationReadyEvent.class)
     void harvestOnce() {
+        LinkedMultiValueMap<String,String> params= new LinkedMultiValueMap<String, String>();
+        params.add("dataType","concept");
         logger.info("Harvest of Concepts start");
         this.harvestAdminClient.getDataSources().forEach(this::harvestFromSingleURLSource);
         logger.info("Harvest of Concepts complete");
