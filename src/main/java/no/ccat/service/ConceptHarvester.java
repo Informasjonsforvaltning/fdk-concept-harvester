@@ -24,7 +24,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-// import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.core.AmqpTemplate;
 
 /*
     Fetch concepts and insert or update them in the search index.
@@ -40,7 +40,7 @@ public class ConceptHarvester {
     private final RDFToModelTransformer rdfToModelTransformer;
     private final HarvestAdminClient harvestAdminClient;
 
-//    private final AmqpTemplate rabbitTemplate;
+    private final AmqpTemplate rabbitTemplate;
 
     @Async
     @EventListener(ApplicationReadyEvent.class)
