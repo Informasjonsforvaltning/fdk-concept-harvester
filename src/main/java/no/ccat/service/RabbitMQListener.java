@@ -41,6 +41,8 @@ public class RabbitMQListener {
     }
 
     private void harvest(Map<String, String> fields) {
+        // Removelog
+        logger.info(String.format("Received message from key: %s", fields));
         this.harvestAdminClient.getDataSources(createQueryParams(fields))
                 .forEach(conceptHarvester::harvestFromSingleURLSource);
     }
