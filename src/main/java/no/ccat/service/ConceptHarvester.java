@@ -24,7 +24,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-import org.springframework.amqp.core.AmqpTemplate;
+// import org.springframework.amqp.core.AmqpTemplate;
 
 /*
     Fetch concepts and insert or update them in the search index.
@@ -40,7 +40,7 @@ public class ConceptHarvester {
     private final RDFToModelTransformer rdfToModelTransformer;
     private final HarvestAdminClient harvestAdminClient;
 
-    private final AmqpTemplate rabbitTemplate;
+//    private final AmqpTemplate rabbitTemplate;
 
     @Async
     @EventListener(ApplicationReadyEvent.class)
@@ -71,7 +71,7 @@ public class ConceptHarvester {
         logger.info("Harvested {} concepts from publisher {} at Uri {} ", concepts.size(), dataSource.getPublisherId(), dataSource.getUrl());
 
         concepts.forEach(conceptDenormalizedRepository::save);
-        updateSearch();
+//        updateSearch();
     }
 
     private String readFileFully(String fileURI) {
@@ -115,7 +115,7 @@ public class ConceptHarvester {
         return local;
     }
 
-    private void updateSearch() {
+/*    private void updateSearch() {
         ObjectNode payload = JsonNodeFactory.instance.objectNode();
 
         payload.put("updatesearch", "concepts");
@@ -126,5 +126,5 @@ public class ConceptHarvester {
         } catch (AmqpException e) {
             logger.error("Failed to send harvest message for publisher {}", payload, e);
         }
-    }
+    }*/
 }
