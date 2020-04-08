@@ -43,8 +43,6 @@ public class ConceptHarvester {
     private final HarvestAdminClient harvestAdminClient;
     private final ApplicationContext context;
 
-    // MultiValueMap<String, String> queryParams
-
     @Async
     @EventListener(ApplicationReadyEvent.class)
     void harvestOnce() {
