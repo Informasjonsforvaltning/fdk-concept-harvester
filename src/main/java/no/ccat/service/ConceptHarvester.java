@@ -48,10 +48,10 @@ public class ConceptHarvester {
     @Async
     @EventListener(ApplicationReadyEvent.class)
     void harvestOnce() {
-        LinkedMultiValueMap<String,String> params= new LinkedMultiValueMap<String, String>();
+        LinkedMultiValueMap<String,String> params= new LinkedMultiValueMap<>();
         params.add("dataType","concept");
         logger.info("Harvest of Concepts start");
-        this.harvestAdminClient.getDataSources().forEach(this::harvestFromSingleURLSource);
+        this.harvestAdminClient.getDataSources(params).forEach(this::harvestFromSingleURLSource);
         logger.info("Harvest of Concepts complete");
         updateSearch();
     }
