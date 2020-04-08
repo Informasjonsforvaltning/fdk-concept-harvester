@@ -26,7 +26,7 @@ fun startMockServer() {
                 .willReturn(okJson(File("src/test/resources/contract/org-1.json").readText())))
         mockserver.stubFor(get(urlEqualTo("/api/publishers/974760673"))
                 .willReturn(okJson(File("src/test/resources/contract/org-1.json").readText())))
-        mockserver.stubFor(get(urlEqualTo("/api/datasources?datatype=concept"))
+        mockserver.stubFor(get(urlEqualTo("/api/datasources?dataType=concept"))
                 .willReturn(okJson(File("src/main/resources/dev_data/datasource.json").readText())))
         mockserver.stubFor(get(urlEqualTo("/skatteEtaten"))
                 .willReturn(aResponse().withBody(File("./src/main/resources/dev_data/skatteEtaten.turtle").readText())))
