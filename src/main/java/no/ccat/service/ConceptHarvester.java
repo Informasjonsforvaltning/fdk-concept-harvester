@@ -49,12 +49,12 @@ public class ConceptHarvester {
         LinkedMultiValueMap<String,String> params= new LinkedMultiValueMap<>();
         params.add("dataType","concept");
         logger.info("Harvest of Concepts start");
-        this.harvestAdminClient.getDataSources(params).forEach(this::harvestFromSingleURLSource);
+        this.harvestAdminClient.getDataSources(params).forEach(dataSource -> harvestFromSingleURLSource(dataSource, false));
         logger.info("Harvest of Concepts complete");
         updateSearch();
     }
 
-    void harvestFromSingleURLSource(HarvestDataSource dataSource) {
+    void harvestFromSingleURLSource(HarvestDataSource dataSource, Boolean single) {
         Reader reader;
 
         String theEntireDocument = null;
@@ -75,6 +75,10 @@ public class ConceptHarvester {
         logger.info("Harvested {} concepts from publisher {} at Uri {} ", concepts.size(), dataSource.getPublisherId(), dataSource.getUrl());
 
         concepts.forEach(conceptDenormalizedRepository::save);
+
+        if(single){
+            updateSearch();
+        }
     }
 
     private String readFileFully(String fileURI) {

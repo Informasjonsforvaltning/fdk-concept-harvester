@@ -42,7 +42,7 @@ public class RabbitMQListener {
 
     private void harvest(Map<String, String> fields) {
         this.harvestAdminClient.getDataSources(createQueryParams(fields))
-                .forEach(conceptHarvester::harvestFromSingleURLSource);
+                .forEach(dataSource -> conceptHarvester.harvestFromSingleURLSource(dataSource, true));
     }
 
     @RabbitListener(queues = "#{queue.name}")

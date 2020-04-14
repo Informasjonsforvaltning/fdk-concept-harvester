@@ -29,6 +29,7 @@ public class RabbitMQConfig {
     public Queue queue() {
         return new AnonymousQueue();
     }
+
     @Bean
     public Queue sendQueue() {
         return new Queue("harvester.UpdateSearchTrigger", false);
