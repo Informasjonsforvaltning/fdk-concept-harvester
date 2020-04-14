@@ -122,11 +122,10 @@ public class ConceptHarvester {
         ObjectNode payload = JsonNodeFactory.instance.objectNode();
 
         AmqpTemplate rabbitTemplate = (AmqpTemplate)context.getBean("jsonRabbitTemplate");
-
         payload.put("updatesearch", "concepts");
 
         try {
-            rabbitTemplate.convertAndSend(payload);
+            rabbitTemplate.convertAndSend("harvester.UpdateSearchTrigger", payload);
             logger.info("Successfully sent harvest message for publisher {}", payload);
         } catch (AmqpException e) {
             logger.error("Failed to send harvest message for publisher {}", payload, e);
