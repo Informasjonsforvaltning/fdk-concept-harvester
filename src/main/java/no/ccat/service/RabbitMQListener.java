@@ -25,7 +25,7 @@ public class RabbitMQListener {
     private final ConceptHarvester conceptHarvester;
     private final ObjectMapper objectMapper;
 
-    private static List<String> ALLOWED_FIELDS = Collections.singletonList("publisherId");
+    private static List<String> ALLOWED_FIELDS = Arrays.asList("publisherId", "dataType");
 
     private Map<String, String> whitelistFields(Map<String, String> params) {
          return params.entrySet()
@@ -42,7 +42,7 @@ public class RabbitMQListener {
 
     private void harvest(Map<String, String> fields) {
         this.harvestAdminClient.getDataSources(createQueryParams(fields))
-                .forEach(conceptHarvester::harvestFromSingleURLSource);
+                .forEach(dataSource -> conceptHarvester.harvestFromSingleURLSource(dataSource, true));
     }
 
     @RabbitListener(queues = "#{queue.name}")

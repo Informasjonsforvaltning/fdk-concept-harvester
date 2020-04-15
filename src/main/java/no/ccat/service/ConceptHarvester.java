@@ -1,11 +1,15 @@
 package no.ccat.service;
 
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.RequiredArgsConstructor;
 import no.ccat.common.model.ConceptDenormalized;
 import no.ccat.dto.HarvestDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.AmqpException;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Async;
@@ -21,6 +25,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.util.LinkedMultiValueMap;
+
 /*
     Fetch concepts and insert or update them in the search index.
  */
@@ -34,16 +41,20 @@ public class ConceptHarvester {
     private final ConceptDenormalizedRepository conceptDenormalizedRepository;
     private final RDFToModelTransformer rdfToModelTransformer;
     private final HarvestAdminClient harvestAdminClient;
+    private final ApplicationContext context;
 
     @Async
     @EventListener(ApplicationReadyEvent.class)
     void harvestOnce() {
+        LinkedMultiValueMap<String,String> params= new LinkedMultiValueMap<>();
+        params.add("dataType","concept");
         logger.info("Harvest of Concepts start");
-        this.harvestAdminClient.getDataSources().forEach(this::harvestFromSingleURLSource);
+        this.harvestAdminClient.getDataSources(params).forEach(dataSource -> harvestFromSingleURLSource(dataSource, false));
         logger.info("Harvest of Concepts complete");
+        updateSearch();
     }
 
-    void harvestFromSingleURLSource(HarvestDataSource dataSource) {
+    void harvestFromSingleURLSource(HarvestDataSource dataSource, Boolean single) {
         Reader reader;
 
         String theEntireDocument = null;
@@ -64,6 +75,10 @@ public class ConceptHarvester {
         logger.info("Harvested {} concepts from publisher {} at Uri {} ", concepts.size(), dataSource.getPublisherId(), dataSource.getUrl());
 
         concepts.forEach(conceptDenormalizedRepository::save);
+
+        if(single){
+            updateSearch();
+        }
     }
 
     private String readFileFully(String fileURI) {
@@ -105,5 +120,19 @@ public class ConceptHarvester {
             }
         }
         return local;
+    }
+
+    private void updateSearch() {
+        ObjectNode payload = JsonNodeFactory.instance.objectNode();
+
+        AmqpTemplate rabbitTemplate = (AmqpTemplate)context.getBean("jsonRabbitTemplate");
+        payload.put("updatesearch", "concepts");
+
+        try {
+            rabbitTemplate.convertAndSend("harvester.UpdateSearchTrigger", payload);
+            logger.info("Successfully sent harvest message for publisher {}", payload);
+        } catch (AmqpException e) {
+            logger.error("Failed to send harvest message for publisher {}", payload, e);
+        }
     }
 }

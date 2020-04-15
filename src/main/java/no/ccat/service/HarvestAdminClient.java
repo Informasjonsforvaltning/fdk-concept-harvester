@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 import static java.util.Collections.emptyList;
@@ -29,6 +30,7 @@ public class HarvestAdminClient {
     private final RestTemplate restTemplate;
     private HttpHeaders defaultHeaders;
     private final Environment env;
+    private static final String conceptDataType = "concept";
 
     @Value("${application.harvestAdminRootUrl}")
     private String apiHost;
@@ -83,4 +85,13 @@ public class HarvestAdminClient {
         }
         return local;
     }
+
+    private List<HarvestDataSource> filterConceptSources (List<HarvestDataSource> sources) {
+        return sources.stream().filter(HarvestAdminClient :: filterConceptSource).collect(Collectors.toList());
+    }
+
+    private static boolean filterConceptSource (HarvestDataSource source) {
+        return conceptDataType.equals(source.getDataType());
+    }
+
 }
