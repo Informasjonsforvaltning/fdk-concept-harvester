@@ -66,7 +66,6 @@ public class ConceptHarvester {
             theEntireDocument = readURLFully(dataSource.getUrl(), dataSource.getAcceptHeaderValue());
         }
 
-        logger.info(theEntireDocument);
         reader = new StringReader(theEntireDocument);
 
         if (reader == null) return;
