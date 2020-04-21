@@ -19,6 +19,7 @@ abstract class ApiTestContainer {
         var TEST_API: KGenericContainer
         var rabbitContainer: KGenericContainer
         val apiLogger = Slf4jLogConsumer(logger).withPrefix("API")
+        val elasticLogger = Slf4jLogConsumer(logger).withPrefix("ELASTIC")
 
         init {
 
@@ -37,6 +38,7 @@ abstract class ApiTestContainer {
                             .withStartupTimeout(Duration.ofMinutes(1)))
                     .withNetwork(apiNetwork)
                     .withNetworkAliases(ELASTIC_NETWORK_NAME)
+                    .withLogConsumer(elasticLogger)
 
             rabbitContainer = KGenericContainer("rabbitmq:3.8.2-management")
                     .withEnv(RABBIT_MQ_ENV_VALUES)
