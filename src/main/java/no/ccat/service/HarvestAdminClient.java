@@ -62,7 +62,7 @@ public class HarvestAdminClient {
                     new HttpEntity(defaultHeaders),
                     new ParameterizedTypeReference<List<HarvestDataSource>>() {});
 
-            return response.hasBody() ? response.getBody() : emptyList();
+            return response.hasBody() ? filterConceptSources(response.getBody()) : emptyList();
 
         } catch (HttpClientErrorException e) {
             logger.error(String.format("Error fetching harvest urls from GET / %s. %s (%d)",
