@@ -5,15 +5,11 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 
-/**
- * Vocabulary definition for the
- * <a href="http://difi.no/skosno"> SKOS-NO Recommendation</a>.
- */
-public class SKOSNO {
+public class SKOSNO_NEW {
     /**
      * The namespace of the SKOS-NO vocabulary as a string
      */
-    public static final String uri = "http://difi.no/skosno#";
+    public static final String uri = "https://data.norge.no/vocabulary/skosno#";
     /**
      * The RDF model that holds the SKOS-NO entities
      */
@@ -44,5 +40,4 @@ public class SKOSNO {
     public static String getURI() {
         return uri;
     }
-
 }
