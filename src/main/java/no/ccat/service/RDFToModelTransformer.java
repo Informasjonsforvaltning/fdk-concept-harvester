@@ -1,6 +1,7 @@
 package no.ccat.service;
 
 import no.ccat.SKOSNO;
+import no.ccat.SKOSNO_NEW;
 import no.ccat.common.model.*;
 import no.dcat.shared.HarvestMetadata;
 import no.dcat.shared.HarvestMetadataUtil;
@@ -51,34 +52,48 @@ public class RDFToModelTransformer {
         Source source = new Source();
         definition.setSource(source);
 
-        List<Resource> betydningsbeskivelses = getNamedSubPropertiesAsListOfResources(resource, SKOSNO.betydningsbeskrivelse);
+        Property definitionProperty = SKOSNO_NEW.definisjon;
 
-        for (Resource betydningsbeskrivelse : betydningsbeskivelses) {
-            definition.setRange(extractTextAndUri(betydningsbeskrivelse, SKOSNO.omfang));
-
-            List<TextAndURI> sources = extractSources(definition, betydningsbeskrivelse);
-            definition.setSources(sources);
-
-            //We may need to merge the different language strings from the different betydningsbeskrivelses
-            Map<String, String> definitionAsLanguageLiteral = extractLanguageLiteralFromResource(betydningsbeskrivelse, RDFS.label);
-            if (definitionAsLanguageLiteral != null) {
-                definition.getText().putAll(definitionAsLanguageLiteral);
-            }
-
-            Map<String, String> noteAsLanguageLiteral = extractLanguageLiteralFromResource(betydningsbeskrivelse, SKOS.scopeNote);
-            if (noteAsLanguageLiteral != null) {
-                definition.getRemark().putAll(noteAsLanguageLiteral);
-            }
-
-            Map<String, String> sourceAsLanguageLiteral = extractLanguageRDFSLabelFromLabel(betydningsbeskrivelse, DCTerms.source);
-            if (sourceAsLanguageLiteral != null) {
-                if (source.getPrefLabel() == null) {
-                    source.setPrefLabel(new HashMap());
-                }
-
-                definition.getSource().getPrefLabel().putAll(sourceAsLanguageLiteral);
-            }
+        if (resource.hasProperty(SKOSNO.betydningsbeskrivelse)) {
+            definitionProperty = SKOSNO.betydningsbeskrivelse;
+            logger.warn("Invalid property {} used for definition in resource with URI {}", definitionProperty, resource.getURI());
+            logger.warn("Deprecated namespace for property {} found in resource with URI {}", definitionProperty, resource.getURI());
+        } else if (resource.hasProperty(SKOSNO.definisjon)) {
+            definitionProperty = SKOSNO.definisjon;
+            logger.warn("Deprecated namespace for property {} found in resource with URI {}", definitionProperty, resource.getURI());
+        } else if (resource.hasProperty(SKOSNO_NEW.betydningsbeskrivelse)) {
+            definitionProperty = SKOSNO_NEW.betydningsbeskrivelse;
+            logger.warn("Invalid property {} used for definition in resource with URI {}", definitionProperty, resource.getURI());
+            logger.warn("Deprecated property {} found in resource with URI {}", definitionProperty, resource.getURI());
         }
+
+        Resource definitionResource = resource.getProperty(definitionProperty).getResource();
+
+        definition.setRange(extractTextAndUri(definitionResource, definitionResource.hasProperty(SKOSNO.omfang) ? SKOSNO.omfang : SKOSNO_NEW.omfang));
+
+        List<TextAndURI> sources = extractSources(definition, definitionResource);
+        definition.setSources(sources);
+
+        //We may need to merge the different language strings from the different betydningsbeskrivelses
+        Map<String, String> definitionAsLanguageLiteral = extractLanguageLiteralFromResource(definitionResource, RDFS.label);
+        if (definitionAsLanguageLiteral != null) {
+            definition.getText().putAll(definitionAsLanguageLiteral);
+        }
+
+        Map<String, String> noteAsLanguageLiteral = extractLanguageLiteralFromResource(definitionResource, SKOS.scopeNote);
+        if (noteAsLanguageLiteral != null) {
+            definition.getRemark().putAll(noteAsLanguageLiteral);
+        }
+
+        Map<String, String> sourceAsLanguageLiteral = extractLanguageRDFSLabelFromLabel(definitionResource, DCTerms.source);
+        if (sourceAsLanguageLiteral != null) {
+            if (source.getPrefLabel() == null) {
+                source.setPrefLabel(new HashMap());
+            }
+
+            definition.getSource().getPrefLabel().putAll(sourceAsLanguageLiteral);
+        }
+
         return definition;
     }
 
@@ -92,7 +107,8 @@ public class RDFToModelTransformer {
             results.addAll(directlyExtractSources(sourceStatement.getResource()));
         }
 
-        Statement forholdTilKildeStmt = resource.getProperty(SKOSNO.forholdTilKilde);
+        Property forholdTilKildeProperty = resource.hasProperty(SKOSNO.forholdTilKilde) ? SKOSNO.forholdTilKilde : SKOSNO_NEW.forholdTilKilde;
+        Statement forholdTilKildeStmt = resource.getProperty(forholdTilKildeProperty);
         if (forholdTilKildeStmt != null) {
             definition.setSourceRelationship(forholdTilKildeStmt.getObject().asResource().getLocalName());
             logger.debug(forholdTilKildeStmt.toString());
@@ -219,16 +235,6 @@ public class RDFToModelTransformer {
         return extractLanguageLiteralFromResource(subResource, SKOSXL.literalForm);
     }
 
-    public static List<Resource> getNamedSubPropertiesAsListOfResources(Resource source, Property target) {
-        List<Resource> resources = new ArrayList<>();
-        StmtIterator iterator = source.listProperties(target);
-        while (iterator.hasNext()) {
-            Statement stmt = iterator.next();
-            resources.add(stmt.getObject().asResource());
-        }
-        return resources;
-    }
-
     public List<ConceptDenormalized> getConceptsFromStream(Reader reader) {
         try {
             final Model model = ModelFactory.createDefaultModel();
@@ -299,7 +305,8 @@ public class RDFToModelTransformer {
 
         concept.setExample(extractLanguageLiteralFromResource(conceptResource, SKOS.example));
 
-        concept.setApplication(extractLanguageMapList(conceptResource, SKOSNO.bruksområde));
+        Property applicationProperty = conceptResource.hasProperty(SKOSNO.bruksområde) ? SKOSNO.bruksområde : SKOSNO_NEW.bruksområde;
+        concept.setApplication(extractLanguageMapList(conceptResource, applicationProperty));
 
         concept.setPrefLabel(extractLanguageLiteralFromLabel(conceptResource, SKOSXL.prefLabel));
 
