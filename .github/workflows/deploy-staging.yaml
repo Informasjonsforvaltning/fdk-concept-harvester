@@ -1,4 +1,4 @@
-name: Build and deploy to staging (digdir) when pull request is created
+name: Build and deploy to staging when pull request is created
 
 on:
   pull_request:
@@ -47,7 +47,7 @@ jobs:
             helm init --client-only
             helm repo add fdk https://informasjonsforvaltning.github.io/helm-chart/
             helm fetch --untar --untardir ./helm fdk/fdk-concept-harvester
-            helm template --set DOCKER_IMAGE_NAME="eu.gcr.io/digdir-fdk-infra/fdk-concept-harvester:$GITHUB_SHA" -f ./helm/fdk-concept-harvester/values/staging-digdir.yaml ./helm/fdk-concept-harvester/ > ./kubectlapply.yaml
+            helm template --set DOCKER_IMAGE_NAME="eu.gcr.io/digdir-fdk-infra/fdk-concept-harvester:$GITHUB_SHA" -f ./helm/fdk-concept-harvester/values/staging.yaml ./helm/fdk-concept-harvester/ > ./kubectlapply.yaml
             chmod o+w ./kubectlapply.yaml
             cat kubectlapply.yaml
 
@@ -71,4 +71,4 @@ jobs:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         uses: pullreminders/slack-action@master
         with:
-          args: '{\"channel\":\"C7NTH118T\",\"text\":\"Application: fdk-concept-harvester deployed to digdir-staging\"}'
+          args: '{\"channel\":\"C7NTH118T\",\"text\":\"Application: fdk-concept-harvester deployed to staging\"}'
