@@ -25,6 +25,14 @@ public class Publisher {
         this.uri = uri;
     }
 
+    public Publisher(PublisherFromOrganizationCatalog fromOrganizationCatalog) {
+        this.id = fromOrganizationCatalog.getId();
+        this.uri = fromOrganizationCatalog.getNorwegianRegistry();
+        this.name = fromOrganizationCatalog.getName();
+        this.orgPath = fromOrganizationCatalog.getOrgPath();
+        this.prefLabel = fromOrganizationCatalog.getPrefLabel();
+    }
+
     public Publisher() {
         // Default constructor needed for frameworks
     }

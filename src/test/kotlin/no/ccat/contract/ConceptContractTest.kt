@@ -283,7 +283,7 @@ class ConceptContractTest : ApiTestContainer() {
         fun `expect orgPath only search with MISSING to return list of concepts from missing publisher only`() {
             val result = apiGet("/concepts?size=100&orgPath=MISSING")
             val resultOrgPath = jsonValueParser.parse(result).read<List<String>>("\$.._embedded.concepts.*.publisher.orgPath")
-            assertNotEquals(resultOrgPath.size,0)
+            assertNotEquals(0,resultOrgPath.size)
             resultOrgPath.forEach {
                 assertNull(it)
             }
@@ -342,14 +342,14 @@ class ConceptContractTest : ApiTestContainer() {
         @Test
         fun `expect returnvalues for conceptsearch in fdk portal to be correct`() {
             val searchString = "dokument"
-            val result = apiGet("/concepts?q=$testString&size=100&orgPath=%2FSTAT%2F87654321%2F12345678")
+            val result = apiGet("/concepts?q=$testString&size=100&orgPath=%2FSTAT%2F972417807%2F974761076")
             val pathParser = jsonPathParser.parse(result)
             val valueParser = jsonValueParser.parse(result)
             val sortResult = SortResponse(sortWord = searchString,
                     pathParser = pathParser)
             val responsePaths = sortResult.getPathsForField(jsonPath = prefLabelPath)
 
-            val expOrgPath = "/STAT/87654321/12345678".split("/")
+            val expOrgPath = "/STAT/972417807/974761076".split("/")
             val resultOrgPath = jsonValueParser.parse(result).read<List<String>>("\$.._embedded.concepts.*.publisher.orgPath")
 
             resultOrgPath.forEach { expect(it).to_be_organisation(expOrgPath) }

@@ -24,6 +24,7 @@ application:
   apiRootExternalURL: https://fellesdatakatalog.brreg.no/api
   harvestAdminRootUrl: ${HARVEST_ADMIN_ROOT_URL}
   conceptsPath: /concepts
+  organizationCatalogueUrl: ${FDK_ORGANIZATION_CATALOGUE_URL}
 
 ---
 #Utv-miljø lokalt på egen PC
@@ -46,6 +47,7 @@ application:
   apiRootUrl: http://localhost:5000/api
   apiRootExternalURL: http://localhost:5000/api
   conceptsPath: /concepts
+  organizationCatalogueUrl: https://organization-catalogue.staging.fellesdatakatalog.digdir.no/
 server:
   port: 8105
 
@@ -70,6 +72,7 @@ application:
   apiRootUrl: ${WIREMOCK_TEST_HOST}/api
   apiRootExternalURL: ${WIREMOCK_TEST_HOST}/api
   conceptsPath: /concepts
+  organizationCatalogueUrl: {$WIREMOCK_TEST_HOST}
 server:
   port: 8080
 
