@@ -24,6 +24,7 @@ val API_IMAGE = System.getProperty("testImageName") ?: "eu.gcr.io/fdk-infra/fdk-
 
 val API_ENV_VALUES : Map<String,String> = mutableMapOf(
         "SPRING_PROFILES_ACTIVE" to  "test",
+        "FDK_ORGANIZATION_CATALOGUE_URL" to WIREMOCK_TEST_HOST,
         "WIREMOCK_TEST_HOST" to WIREMOCK_TEST_HOST,
         "FDK_ES_CLUSTERNODES" to ELASTIC_CLUSTERNODES,
         "FDK_ES_CLUSTERNAME" to ELASTIC_CLUSERNAME,
