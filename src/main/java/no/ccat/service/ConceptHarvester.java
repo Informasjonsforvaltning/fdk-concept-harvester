@@ -37,6 +37,8 @@ public class ConceptHarvester {
 
     private static final Logger logger = LoggerFactory.getLogger(ConceptHarvester.class);
 
+    private static final String HARVEST_ALL = "all";
+
     private final Environment env;
     private final ConceptDenormalizedRepository conceptDenormalizedRepository;
     private final RDFToModelTransformer rdfToModelTransformer;
@@ -126,10 +128,11 @@ public class ConceptHarvester {
         ObjectNode payload = JsonNodeFactory.instance.objectNode();
 
         AmqpTemplate rabbitTemplate = (AmqpTemplate)context.getBean("jsonRabbitTemplate");
-        payload.put("updatesearch", "concepts");
+
+        payload.put("identifier", HARVEST_ALL);
 
         try {
-            rabbitTemplate.convertAndSend("harvester.UpdateSearchTrigger", payload);
+            rabbitTemplate.convertAndSend("harvests", "concepts.harvester.UpdateSearchTrigger", payload);
             logger.info("Successfully sent harvest message for publisher {}", payload);
         } catch (AmqpException e) {
             logger.error("Failed to send harvest message for publisher {}", payload, e);

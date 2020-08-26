@@ -32,7 +32,7 @@ public class RabbitMQConfig {
 
     @Bean
     public Queue sendQueue() {
-        return new Queue("harvester.UpdateSearchTrigger", false);
+        return new AnonymousQueue();
     }
 
     @Bean
@@ -52,7 +52,7 @@ public class RabbitMQConfig {
 
     @Bean
     public Binding sendBinding(TopicExchange topicExchange, Queue sendQueue) {
-        return BindingBuilder.bind(sendQueue).to(topicExchange).with("harvester.UpdateSearchTrigger");
+        return BindingBuilder.bind(sendQueue).to(topicExchange).with("concepts.harvester.UpdateSearchTrigger");
     }
 
     @Bean
