@@ -27,7 +27,7 @@
         <maven.exec.skip>false</maven.exec.skip>
         <!--end standard properties-->
 
-        <testcontainers.version>1.12.1</testcontainers.version>
+        <testcontainers.version>1.15.1</testcontainers.version>
         <kotlin.version>1.3.61</kotlin.version>
         <jupiter.version>5.5.2</jupiter.version>
         <mockito.version>3.0.0</mockito.version>
