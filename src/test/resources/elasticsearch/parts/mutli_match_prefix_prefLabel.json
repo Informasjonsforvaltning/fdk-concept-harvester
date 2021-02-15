@@ -1,7 +1,0 @@
-{
-  "multi_match" : {
-    "fields" : ["prefLabel.nb^3", "prefLabel.nn^2","prefLabel.no^2","prefLabel.en^2"],
-    "query" : "dokument",
-    "type" : "phrase_prefix"
-  }
-}

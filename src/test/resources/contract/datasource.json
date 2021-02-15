@@ -1,9 +1,0 @@
-[
-  {
-    "id" : "ahsjkfaksfaskhja65765567",
-    "dataType": "concept",
-    "url": "http://host.testcontainers.internal:5000/mockconcepts",
-    "publisherId": "12345678",
-    "acceptHeader": "text/turtle"
-  }
-]

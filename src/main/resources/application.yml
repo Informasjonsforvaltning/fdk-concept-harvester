@@ -1,78 +1,56 @@
+logging:
+  level.root: WARN
+  level.no: ${LOG_LEVEL:DEBUG}
+  level.org.springframework: WARN
+  level.org.springframework.web: WARN
+  level.org.apache.jena: ERROR
+server:
+  port: 8080
 spring:
-  jackson:
-    default-property-inclusion: non_null
-  data:
-    elasticsearch:
-      clusterNodes: ${FDK_ES_CLUSTERNODES:elasticsearch5:9300}
-      clusterName: ${FDK_ES_CLUSTERNAME:elasticsearch}
+  security.oauth2.resourceserver.jwt:
+    jwk-set-uri: ${SSO_HOST:https://sso.staging.fellesdatakatalog.digdir.no}/auth/realms/fdk/protocol/openid-connect/certs
+    issuer-uri: ${SSO_HOST:https://sso.staging.fellesdatakatalog.digdir.no}/auth/realms/fdk
   rabbitmq:
     host: rabbitmq
     port: 5672
     username: ${RABBIT_USERNAME}
     password: ${RABBIT_PASSWORD}
-    template:
-      routing-key: 'harvester.UpdateSearchTrigger'
-      exchange: 'updates'
-logging:
-  level.root: WARN
-  level.no.ccat: ${LOG_LEVEL:INFO}
-  level.org.springframework: WARN
-  level.org.springframework.web: WARN
-  level.org.springframework.data.elasticsearch: ${LOG_LEVEL:INFO}
+  data.mongodb.uri: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@mongodb:27017/conceptHarvester?authSource=admin&authMechanism=SCRAM-SHA-1
 application:
-  apiRootUrl: http://fdk-nginx-search:8080/api
-  apiRootExternalURL: https://fellesdatakatalog.brreg.no/api
-  harvestAdminRootUrl: ${HARVEST_ADMIN_ROOT_URL}
-  conceptsPath: /concepts
-  organizationCatalogueUrl: ${FDK_ORGANIZATION_CATALOGUE_URL}
+  conceptsUri: ${FDK_CONCEPT_HARVESTER_URI:https://concepts.staging.fellesdatakatalog.digdir.no}/concepts
+  collectionsUri: ${FDK_CONCEPT_HARVESTER_URI:https://concepts.staging.fellesdatakatalog.digdir.no}/collections
+  harvestAdminRootUrl: ${HARVEST_ADMIN_ROOT_URL:http://fdk-harvest-admin:8080/api}
+fuseki.unionGraphUri: ${FDK_SPARQL_SERVICE_URI:http://fdk-sparql-service:808}/fuseki/harvested?graph=https://concepts.fellesdatakatalog.digdir.no
 
 ---
-#Utv-miljø lokalt på egen PC
 spring:
-  profiles: develop, unit-integration, dev-with-harvester, unit
-  data:
-    elasticsearch:
-      clusterNodes: localhost:9300
-      clusterName: elasticsearch
+  config.activate.on-profile: develop
   rabbitmq:
     host: 127.0.0.1
     port: 5672
     username: admin
     password: admin
-    template:
-      routing-key: 'harvester.UpdateSearchTrigger'
-      exchange: 'updates'
+  data.mongodb.uri: mongodb://admin:admin@localhost:27017/conceptHarvester?authSource=admin&authMechanism=SCRAM-SHA-1
 application:
-  harvestAdminRootUrl: http://localhost:5000/api
-  apiRootUrl: http://localhost:5000/api
-  apiRootExternalURL: http://localhost:5000/api
-  conceptsPath: /concepts
-  organizationCatalogueUrl: https://organization-catalogue.staging.fellesdatakatalog.digdir.no/
-server:
-  port: 8105
+  conceptsUri: https://concepts.staging.fellesdatakatalog.digdir.no/concepts
+  collectionsUri: https://concepts.staging.fellesdatakatalog.digdir.no/collections
+  harvestAdminRootUrl: https://admin-api.staging.fellesdatakatalog.digdir.no/api
+fuseki.unionGraphUri: http://localhost:3030/fuseki/harvested?graph=https://concepts.fellesdatakatalog.digdir.no
 
 ---
-
 spring:
-  profiles: test
-  data:
-    elasticsearch:
-      clusterNodes: ${FDK_ES_CLUSTERNODES:elasticsearch5:9300}
-      clusterName: ${FDK_ES_CLUSTERNAME:elasticsearch}
+  config.activate.on-profile: contract-test
+  security.oauth2.resourceserver.jwt:
+    jwk-set-uri: http://localhost:5000/auth/realms/fdk/protocol/openid-connect/certs
+    issuer-uri: http://localhost:5000/auth/realms/fdk
   rabbitmq:
-    host: ${RABBIT_HOST}
-    port: ${RABBIT_PORT}
+    host: 127.0.0.1
+    port: 5672
     username: admin
     password: admin
-    template:
-      routing-key: 'harvester.UpdateSearchTrigger'
-      exchange: 'updates'
+  data.mongodb.uri: mongodb://admin:admin@localhost:27017/conceptHarvester?authSource=admin&authMechanism=SCRAM-SHA-1
 application:
-  harvestAdminRootUrl: ${WIREMOCK_TEST_HOST}/api
-  apiRootUrl: ${WIREMOCK_TEST_HOST}/api
-  apiRootExternalURL: ${WIREMOCK_TEST_HOST}/api
-  conceptsPath: /concepts
-  organizationCatalogueUrl: {$WIREMOCK_TEST_HOST}
-server:
-  port: 8080
-
+  conceptsUri: http://localhost:5000/concepts
+  collectionsUri: http://localhost:5000/collections
+  harvestAdminRootUrl: http://localhost:5000/api
+fuseki.unionGraphUri: http://localhost:5000/fuseki/harvested?graph=https://concepts.fellesdatakatalog.digdir.no
