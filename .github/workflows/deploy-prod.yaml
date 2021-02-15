@@ -13,14 +13,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # Setup gcloud CLI
-      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      - name: Setup gcloud CLI
+        uses: google-github-actions/setup-gcloud@master
         with:
           service_account_email: ${{ secrets.GCP_SA_DIGDIR_FDK_GCR_EMAIL }}
           service_account_key: ${{ secrets.GCP_SA_DIGDIR_FDK_GCR_KEY }}
 
-      # Configure docker to use the gcloud command-line tool as a credential helper
-      - run: gcloud auth configure-docker
+      - name: Configure docker to use the gcloud command-line tool as a credential helper
+        run: gcloud auth configure-docker eu.gcr.io
 
       - name: Package with maven
         run: mvn clean package --no-transfer-progress -DskipTests
@@ -35,7 +35,7 @@ jobs:
         run: mvn -DtestImageName="eu.gcr.io/digdir-fdk-infra/fdk-concept-harvester:latest" verify --no-transfer-progress
 
       - name: Publish docker image to Google Cloud
-        run: docker -- push eu.gcr.io/digdir-fdk-infra/fdk-concept-harvester
+        run: docker -- push eu.gcr.io/digdir-fdk-infra/fdk-concept-harvester -a
 
       - name: Apply Helm template
         run: |
