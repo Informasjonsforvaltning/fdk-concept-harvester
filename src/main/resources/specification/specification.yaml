@@ -1,0 +1,147 @@
+openapi: 3.0.2
+info:
+  title: FDK Concept Harvester
+  description: Harvests concept collections (SKOS-AP-NO skos:Collection & skos:Concept)
+  version: '1.0'
+  contact:
+    name: Digitaliseringsdirektoratet
+    url: 'https://fellesdatakatalog.digdir.no'
+    email: fellesdatakatalog@digdir.no
+  license:
+    name: License of API
+    url: 'http://data.norge.no/nlod/no/2.0'
+tags:
+  - name: skos-ap-no-collections
+    description: SKOS-AP-NO collections
+  - name: skos-ap-no-concepts
+    description: SKOS-AP-NO concepts
+servers:
+  - url: 'https://concepts.fellesdatakatalog.digdir.no'
+    description: Produksjonsmiljø
+  - url: 'https://concepts.staging.fellesdatakatalog.digdir.no'
+    description: Testmiljø
+  - url: 'https://concepts.demo.fellesdatakatalog.digdir.no'
+    description: Demomiljø
+paths:
+  /collections:
+    get:
+      tags:
+        - skos-ap-no-collections
+      description: Returns all concept collections
+      operationId: getCollections
+      responses:
+        '200':
+          description: OK
+          content:
+            text/turtle:
+              schema:
+                type: string
+            text/n3:
+              schema:
+                type: string
+            application/rdf+json:
+              schema:
+                type: string
+            application/ld+json:
+              schema:
+                type: string
+            application/rdf+xml:
+              schema:
+                type: string
+            application/n-triples:
+              schema:
+                type: string
+  /collections/{id}:
+    get:
+      tags:
+        - skos-ap-no-collections
+      description: Returns a collection
+      operationId: getCollectionById
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/turtle:
+              schema:
+                type: string
+            text/n3:
+              schema:
+                type: string
+            application/rdf+json:
+              schema:
+                type: string
+            application/ld+json:
+              schema:
+                type: string
+            application/rdf+xml:
+              schema:
+                type: string
+            application/n-triples:
+              schema:
+                type: string
+        '404':
+          description: Concept collection with requested id does not exist
+  /concepts/{id}:
+    get:
+      tags:
+        - skos-ap-no-concepts
+      description: Returns a concept
+      operationId: getConceptById
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/turtle:
+              schema:
+                type: string
+            text/n3:
+              schema:
+                type: string
+            application/rdf+json:
+              schema:
+                type: string
+            application/ld+json:
+              schema:
+                type: string
+            application/rdf+xml:
+              schema:
+                type: string
+            application/n-triples:
+              schema:
+                type: string
+        '404':
+          description: Concept with requested id does not exist
+  '/update/meta':
+    post:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - update
+      description: Updates stored turtle files with current meta data for concepts and collections
+      operationId: updateMetaData
+      responses:
+        '204':
+          description: No Content
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: [ ]
