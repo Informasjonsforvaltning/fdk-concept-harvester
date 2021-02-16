@@ -5,6 +5,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
 import no.fdk.fdk_concept_harvester.adapter.HarvestAdminAdapter
+import no.fdk.fdk_concept_harvester.service.UpdateService
 import org.slf4j.LoggerFactory
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.event.EventListener
@@ -17,6 +18,8 @@ private const val HARVEST_ALL_ID = "all"
 @Service
 class HarvesterActivity(
     private val harvestAdminAdapter: HarvestAdminAdapter,
+    private val harvester: ConceptHarvester,
+    private val updateService: UpdateService
 ) : CoroutineScope by CoroutineScope(Dispatchers.Default) {
 
     @EventListener
@@ -32,7 +35,7 @@ class HarvesterActivity(
                 .filter { it.url != null }
                 .forEach {
                     try {
-                        LOGGER.info("Harvest ${it.url}") // harvester.harvestConceptCollection(it, Calendar.getInstance())
+                        harvester.harvestConceptCollection(it, Calendar.getInstance())
                     } catch (exception: Exception) {
                         LOGGER.error("Harvest of ${it.url} failed", exception)
                     }
@@ -42,7 +45,7 @@ class HarvesterActivity(
         val onHarvestCompletion = launch {
             harvest.join()
             LOGGER.debug("Updating union model")
-            // updateService.updateUnionModel()
+            updateService.updateUnionModel()
 
             if (params.isNullOrEmpty()) LOGGER.debug("completed harvest of all collections")
             else LOGGER.debug("completed harvest with parameters $params")
