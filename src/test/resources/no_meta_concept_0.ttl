@@ -8,17 +8,6 @@
 @prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<https://www.example.com/begrepskatalog/0> a skos:Collection ;
-    rdfs:label "Begrepskatalog 0"@nb ;
-    dct:description "Testbegreper" ;
-    dct:identifier "0" ;
-    dct:publisher <https://data.brreg.no/enhetsregisteret/api/enheter/974760673> ;
-    skos:member <https://example.com/begrep/0>,
-        <https://example.com/begrep/1>;
-    dcat:contactPoint [ a vcard:Organization ;
-            vcard:hasEmail <mailto:test@example.com> ;
-            vcard:hasTelephone <tel:12345678> ] .
-
 <https://example.com/begrep/0>
     a                   skos:Concept ;
     dct:identifier      "ebd994c6-0688-4a11-b500-64d8131152dc" ;
@@ -43,28 +32,3 @@
                          dct:source              [ rdfs:label    "Data Norge"@nb ;
                                                    rdfs:seeAlso  <https://data.norge.no> ] ;
                          skosno:forholdTilKilde  skosno:basertPåKilde ] .
-
-<https://example.com/begrep/1>
-    a                   skos:Concept ;
-    dct:identifier      "af277c65-3e96-4b2b-8a04-72781d390dc4" ;
-    dct:modified        "2019-11-19"^^xsd:date ;
-    dct:publisher       <https://data.brreg.no/enhetsregisteret/api/enheter/910244132> ;
-    dct:subject         "vaskeribransjen"@nb ;
-    skos:example        "Sure sokker lukter ikke godt"@nb ;
-    skosxl:altLabel     [ a                   skosxl:Label ;
-                         skosxl:literalForm  "luktsokkar"@nb ] ;
-    skosxl:hiddenLabel  [ a                   skosxl:Label ;
-                         skosxl:literalForm  "søtsokk"@nb ] ;
-    skosxl:prefLabel    [ a                   skosxl:Label ;
-                         skosxl:literalForm  "Sure sokker"@nb ] ;
-    dcat:contactPoint   [ a                   vcard:Organization ;
-                         vcard:hasEmail      <mailto:mail@post.no> ;
-                         vcard:hasTelephone  <tel:342425667> ] ;
-    skosno:definisjon   [ a                       skosno:Definisjon ;
-                         rdfs:label              "Sokker som burde ha vært vasket"@nb ;
-                         dct:source              []  ;
-                         skos:scopeNote          "Lukt! xx"@nb ;
-                         skosno:forholdTilKilde  skosno:egendefinert ;
-                         skosno:omfang           [ rdfs:label    "omfangtittel"@nb ;
-                                                   rdfs:seeAlso  <https://Vg.no>
-                                                 ] ] .

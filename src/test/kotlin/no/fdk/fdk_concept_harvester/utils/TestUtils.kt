@@ -92,6 +92,15 @@ fun populateDB() {
     val client: MongoClient = MongoClients.create(connectionString)
     val mongoDatabase = client.getDatabase(MONGO_COLLECTION).withCodecRegistry(pojoCodecRegistry)
 
+    val turtleCollection = mongoDatabase.getCollection("turtle")
+    turtleCollection.insertMany(turleDBPopulation())
+
+    val conceptCollection = mongoDatabase.getCollection("conceptMeta")
+    conceptCollection.insertMany(conceptDBPopulation())
+
+    val collectionCollection = mongoDatabase.getCollection("collectionMeta")
+    collectionCollection.insertMany(collectionDBPopulation())
+
     client.close()
 }
 

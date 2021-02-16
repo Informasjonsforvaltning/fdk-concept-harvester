@@ -108,11 +108,11 @@ class ConceptHarvester(
 
     private fun ConceptRDFModel.updateDBOs(
         harvestDate: Calendar,
-        fdkCatalogURI: String
+        fdkCollectionURI: String
     ) {
         val dbMeta = conceptMetaRepository.findByIdOrNull(resourceURI)
         if (conceptHasChanges(dbMeta?.fdkId)) {
-            val modelMeta = mapToDBOMeta(harvestDate, fdkCatalogURI, dbMeta)
+            val modelMeta = mapToDBOMeta(harvestDate, fdkCollectionURI, dbMeta)
             conceptMetaRepository.save(modelMeta)
 
             turtleService.saveAsConcept(
@@ -144,14 +144,14 @@ class ConceptHarvester(
         harvestDate: Calendar,
         dbMeta: CollectionMeta?
     ): CollectionMeta {
-        val catalogURI = resourceURI
-        val fdkId = dbMeta?.fdkId ?: createIdFromUri(catalogURI)
+        val collectionURI = resourceURI
+        val fdkId = dbMeta?.fdkId ?: createIdFromUri(collectionURI)
         val issued = dbMeta?.issued
             ?.let { timestamp -> calendarFromTimestamp(timestamp) }
             ?: harvestDate
 
         return CollectionMeta(
-            uri = catalogURI,
+            uri = collectionURI,
             fdkId = fdkId,
             issued = issued.timeInMillis,
             modified = harvestDate.timeInMillis
@@ -160,7 +160,7 @@ class ConceptHarvester(
 
     private fun ConceptRDFModel.mapToDBOMeta(
         harvestDate: Calendar,
-        fdkCatalogURI: String,
+        fdkCollectionURI: String,
         dbMeta: ConceptMeta?
     ): ConceptMeta {
         val fdkId = dbMeta?.fdkId ?: createIdFromUri(resourceURI)
@@ -171,7 +171,7 @@ class ConceptHarvester(
         return ConceptMeta(
             uri = resourceURI,
             fdkId = fdkId,
-            isPartOf = fdkCatalogURI,
+            isPartOf = fdkCollectionURI,
             issued = issued.timeInMillis,
             modified = harvestDate.timeInMillis
         )

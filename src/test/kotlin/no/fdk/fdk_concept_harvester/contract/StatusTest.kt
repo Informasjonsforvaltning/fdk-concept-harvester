@@ -15,9 +15,6 @@ import org.springframework.http.HttpStatus
 @Tag("contract")
 class StatusTest: ApiTestContext() {
 
-    @LocalServerPort
-    var port: Int = 0
-
     @Test
     fun ping() {
         val response = apiGet(port, "/ping", null)

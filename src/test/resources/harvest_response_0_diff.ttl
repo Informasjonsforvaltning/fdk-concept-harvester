@@ -23,7 +23,6 @@
     a                   skos:Concept ;
     dct:identifier      "ebd994c6-0688-4a11-b500-64d8131152dc" ;
     dct:modified        "2020-04-03"^^xsd:date ;
-    dct:publisher       <https://data.brreg.no/enhetsregisteret/api/enheter/910244132> ;
     dct:subject         "data"@nb ;
     dct:temporal        [ a                 dct:PeriodOfTime ;
                          schema:endDate    "2020-04-23"^^xsd:date ;

@@ -68,3 +68,29 @@
                          skosno:omfang           [ rdfs:label    "omfangtittel"@nb ;
                                                    rdfs:seeAlso  <https://Vg.no>
                                                  ] ] .
+
+<http://localhost:5000/collections/9b8f1c42-1161-33b1-9d43-a733ee94ddfc>
+        a               dcat:CatalogRecord ;
+        dct:identifier  "9b8f1c42-1161-33b1-9d43-a733ee94ddfc" ;
+        dct:issued      "2021-01-05T13:15:39.831Z"^^xsd:dateTime ;
+        dct:modified    "2021-01-05T13:15:39.831Z"^^xsd:dateTime ;
+        <http://xmlns.com/foaf/0.1/primaryTopic>
+                <https://www.example.com/begrepskatalog/0> .
+
+<http://localhost:5000/concepts/db1b701c-b4b9-3c20-bc23-236a91236754>
+        a               dcat:CatalogRecord ;
+        dct:identifier  "db1b701c-b4b9-3c20-bc23-236a91236754" ;
+        dct:isPartOf    <http://localhost:5000/collections/9b8f1c42-1161-33b1-9d43-a733ee94ddfc> ;
+        dct:issued      "2021-01-05T13:15:39.831Z"^^xsd:dateTime ;
+        dct:modified    "2021-01-05T13:15:39.831Z"^^xsd:dateTime ;
+        <http://xmlns.com/foaf/0.1/primaryTopic>
+                <https://example.com/begrep/0> .
+
+<http://localhost:5000/concepts/7dbac738-4944-323a-a777-ad2f83bf75f8>
+        a               dcat:CatalogRecord ;
+        dct:identifier  "7dbac738-4944-323a-a777-ad2f83bf75f8" ;
+        dct:isPartOf    <http://localhost:5000/collections/9b8f1c42-1161-33b1-9d43-a733ee94ddfc> ;
+        dct:issued      "2021-01-05T13:15:39.831Z"^^xsd:dateTime ;
+        dct:modified    "2021-01-05T13:15:39.831Z"^^xsd:dateTime ;
+        <http://xmlns.com/foaf/0.1/primaryTopic>
+                <https://example.com/begrep/1> .
