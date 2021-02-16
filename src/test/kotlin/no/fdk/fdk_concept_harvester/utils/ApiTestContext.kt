@@ -2,6 +2,7 @@ package no.fdk.fdk_concept_harvester.utils
 
 import org.slf4j.LoggerFactory
 import org.springframework.boot.test.util.TestPropertyValues
+import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.context.ApplicationContextInitializer
 import org.springframework.context.ConfigurableApplicationContext
 import org.testcontainers.containers.GenericContainer
@@ -11,6 +12,9 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 abstract class ApiTestContext {
+
+    @LocalServerPort
+    var port: Int = 0
 
     internal class Initializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
         override fun initialize(configurableApplicationContext: ConfigurableApplicationContext) {

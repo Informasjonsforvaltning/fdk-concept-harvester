@@ -1,0 +1,43 @@
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix skosno: <http://difi.no/skosno#> .
+@prefix skosxl: <http://www.w3.org/2008/05/skos-xl#> .
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://example.com/begrep/1>
+    a                   skos:Concept ;
+    dct:identifier      "af277c65-3e96-4b2b-8a04-72781d390dc4" ;
+    dct:modified        "2019-11-19"^^xsd:date ;
+    dct:publisher       <https://data.brreg.no/enhetsregisteret/api/enheter/910244132> ;
+    dct:subject         "vaskeribransjen"@nb ;
+    skos:example        "Sure sokker lukter ikke godt"@nb ;
+    skosxl:altLabel     [ a                   skosxl:Label ;
+                         skosxl:literalForm  "luktsokkar"@nb ] ;
+    skosxl:hiddenLabel  [ a                   skosxl:Label ;
+                         skosxl:literalForm  "søtsokk"@nb ] ;
+    skosxl:prefLabel    [ a                   skosxl:Label ;
+                         skosxl:literalForm  "Sure sokker"@nb ] ;
+    dcat:contactPoint   [ a                   vcard:Organization ;
+                         vcard:hasEmail      <mailto:mail@post.no> ;
+                         vcard:hasTelephone  <tel:342425667> ] ;
+    skosno:definisjon   [ a                       skosno:Definisjon ;
+                         rdfs:label              "Sokker som burde ha vært vasket"@nb ;
+                         dct:source              []  ;
+                         skos:scopeNote          "Lukt! xx"@nb ;
+                         skosno:forholdTilKilde  skosno:egendefinert ;
+                         skosno:omfang           [ rdfs:label    "omfangtittel"@nb ;
+                                                   rdfs:seeAlso  <https://Vg.no>
+                                                 ] ] .
+
+<http://localhost:5000/concepts/7dbac738-4944-323a-a777-ad2f83bf75f8>
+        a               dcat:CatalogRecord ;
+        dct:identifier  "7dbac738-4944-323a-a777-ad2f83bf75f8" ;
+        dct:isPartOf    <http://localhost:5000/collections/9b8f1c42-1161-33b1-9d43-a733ee94ddfc> ;
+        dct:issued      "2021-01-05T13:15:39.831Z"^^xsd:dateTime ;
+        dct:modified    "2021-01-05T13:15:39.831Z"^^xsd:dateTime ;
+        <http://xmlns.com/foaf/0.1/primaryTopic>
+                <https://example.com/begrep/1> .
