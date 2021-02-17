@@ -1,6 +1,8 @@
 package no.fdk.fdk_concept_harvester.rdf
 
 import no.fdk.fdk_concept_harvester.Application
+import org.apache.jena.query.QueryExecutionFactory
+import org.apache.jena.query.QueryFactory
 import org.apache.jena.rdf.model.Model
 import org.apache.jena.rdf.model.ModelFactory
 import org.apache.jena.riot.Lang
@@ -48,3 +50,10 @@ fun Model.createRDFResponse(responseType: Lang): String =
 fun createIdFromUri(uri: String): String =
     UUID.nameUUIDFromBytes(uri.toByteArray())
         .toString()
+
+fun Model.containsTriple(subj: String, pred: String, obj: String): Boolean {
+    val askQuery = "ASK { $subj $pred $obj }"
+
+    val query = QueryFactory.create(askQuery)
+    return QueryExecutionFactory.create(query, this).execAsk()
+}

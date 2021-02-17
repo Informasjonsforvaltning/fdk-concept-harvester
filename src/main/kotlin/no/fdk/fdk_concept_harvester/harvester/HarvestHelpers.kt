@@ -116,10 +116,3 @@ private fun Model.resourceShouldBeAdded(resource: Resource): Boolean {
         else -> true
     }
 }
-
-private fun Model.containsTriple(subj: String, pred: String, obj: String): Boolean {
-    val askQuery = "ASK { $subj $pred $obj }"
-
-    val query = QueryFactory.create(askQuery)
-    return QueryExecutionFactory.create(query, this).execAsk()
-}
