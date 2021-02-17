@@ -1,0 +1,18 @@
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix skosno: <http://difi.no/skosno#> .
+@prefix skosxl: <http://www.w3.org/2008/05/skos-xl#> .
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://www.example.com/begrepskatalog/0> a skos:Collection ;
+    rdfs:label "Begrepskatalog 0"@nb ;
+    dct:description "Testbegreper" ;
+    dct:identifier "0" ;
+    dct:publisher <https://data.brreg.no/enhetsregisteret/api/enheter/974760673> ;
+    dcat:contactPoint [ a vcard:Organization ;
+            vcard:hasEmail <mailto:test@example.com> ;
+            vcard:hasTelephone <tel:12345678> ] .
