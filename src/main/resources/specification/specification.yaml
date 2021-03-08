@@ -88,6 +88,34 @@ paths:
                 type: string
         '404':
           description: Concept collection with requested id does not exist
+  /concepts:
+    get:
+      tags:
+        - skos-ap-no-concepts
+      description: Returns all concept concepts
+      operationId: getConcepts
+      responses:
+        '200':
+          description: OK
+          content:
+            text/turtle:
+              schema:
+                type: string
+            text/n3:
+              schema:
+                type: string
+            application/rdf+json:
+              schema:
+                type: string
+            application/ld+json:
+              schema:
+                type: string
+            application/rdf+xml:
+              schema:
+                type: string
+            application/n-triples:
+              schema:
+                type: string
   /concepts/{id}:
     get:
       tags:

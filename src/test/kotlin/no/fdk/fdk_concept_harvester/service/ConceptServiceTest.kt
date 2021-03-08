@@ -22,7 +22,7 @@ class ConceptServiceTest {
 
         @Test
         fun responseIsomorphicWithEmptyModelForEmptyDB() {
-            whenever(turtleService.getUnion())
+            whenever(turtleService.getCollectionUnion())
                 .thenReturn(null)
 
             val expected = responseReader.parseResponse("", "TURTLE")
@@ -34,7 +34,7 @@ class ConceptServiceTest {
 
         @Test
         fun responseIsIsomorphicWithExpectedModel() {
-            whenever(turtleService.getUnion())
+            whenever(turtleService.getCollectionUnion())
                 .thenReturn(javaClass.classLoader.getResource("collection_0.ttl")!!.readText())
 
             val expected = responseReader.parseFile("collection_0.ttl", "TURTLE")

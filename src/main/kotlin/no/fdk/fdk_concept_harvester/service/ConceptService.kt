@@ -10,7 +10,15 @@ import org.springframework.stereotype.Service
 class ConceptService(private val turtleService: TurtleService) {
 
     fun getAllCollections(returnType: Lang): String =
-        turtleService.getUnion()
+        turtleService.getCollectionUnion()
+            ?.let {
+                if (returnType == Lang.TURTLE) it
+                else parseRDFResponse(it, Lang.TURTLE, null)?.createRDFResponse(returnType)
+            }
+            ?: ModelFactory.createDefaultModel().createRDFResponse(returnType)
+
+    fun getAllConcepts(returnType: Lang): String =
+        turtleService.getConceptUnion()
             ?.let {
                 if (returnType == Lang.TURTLE) it
                 else parseRDFResponse(it, Lang.TURTLE, null)?.createRDFResponse(returnType)

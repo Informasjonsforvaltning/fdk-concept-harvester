@@ -3,7 +3,8 @@ package no.fdk.fdk_concept_harvester.utils
 import no.fdk.fdk_concept_harvester.model.CollectionMeta
 import no.fdk.fdk_concept_harvester.model.ConceptMeta
 import no.fdk.fdk_concept_harvester.model.TurtleDBO
-import no.fdk.fdk_concept_harvester.service.UNION_ID
+import no.fdk.fdk_concept_harvester.service.COLLECTION_UNION_ID
+import no.fdk.fdk_concept_harvester.service.CONCEPT_UNION_ID
 import no.fdk.fdk_concept_harvester.service.gzip
 import org.bson.Document
 
@@ -27,6 +28,12 @@ val CONCEPT_1 = ConceptMeta(
     issued = 1609852539831, modified = 1609852539831
 )
 
+val CONCEPT_2 = ConceptMeta(
+    uri = "https://example.com/begrep/2", fdkId = "no-collection",
+    isPartOf = null,
+    issued = 1609852539831, modified = 1609852539831
+)
+
 val CONCEPT_TURTLE_0_META = TurtleDBO(
     id = "concept-$CONCEPT_0_ID",
     turtle = gzip(responseReader.readFile("concept_0.ttl"))
@@ -47,6 +54,16 @@ val CONCEPT_TURTLE_1_NO_META = TurtleDBO(
     turtle = gzip(responseReader.readFile("no_meta_concept_1.ttl"))
 )
 
+val CONCEPT_TURTLE_2_META = TurtleDBO(
+    id = "concept-no-collection",
+    turtle = gzip(responseReader.readFile("concept_2.ttl"))
+)
+
+val CONCEPT_TURTLE_2_NO_META = TurtleDBO(
+    id = "concept-no-records-no-collection",
+    turtle = gzip(responseReader.readFile("no_meta_concept_2.ttl"))
+)
+
 val COLLECTION_TURTLE_META = TurtleDBO(
     id = "collection-$COLLECTION_0_ID",
     turtle = gzip(responseReader.readFile("collection_0.ttl"))
@@ -57,9 +74,14 @@ val COLLECTION_TURTLE_NO_META = TurtleDBO(
     turtle = gzip(responseReader.readFile("harvest_response_0.ttl"))
 )
 
-val UNION_TURTLE_META = TurtleDBO(
-    id = UNION_ID,
+val COLLECTION_UNION_TURTLE = TurtleDBO(
+    id = COLLECTION_UNION_ID,
     turtle = gzip(responseReader.readFile("collection_0.ttl"))
+)
+
+val CONCEPT_UNION_TURTLE = TurtleDBO(
+    id = CONCEPT_UNION_ID,
+    turtle = gzip(responseReader.readFile("all_concepts.ttl"))
 )
 
 val HARVESTED_TURTLE = TurtleDBO(
@@ -68,12 +90,15 @@ val HARVESTED_TURTLE = TurtleDBO(
 )
 
 fun turleDBPopulation(): List<Document> =
-    listOf(UNION_TURTLE_META, HARVESTED_TURTLE, CONCEPT_TURTLE_0_META, CONCEPT_TURTLE_0_NO_META, CONCEPT_TURTLE_1_META,
-        CONCEPT_TURTLE_1_NO_META, COLLECTION_TURTLE_META, COLLECTION_TURTLE_NO_META)
+    listOf(
+        COLLECTION_UNION_TURTLE, CONCEPT_UNION_TURTLE, HARVESTED_TURTLE, CONCEPT_TURTLE_0_META,
+        CONCEPT_TURTLE_0_NO_META, CONCEPT_TURTLE_1_META, CONCEPT_TURTLE_1_NO_META, COLLECTION_TURTLE_META,
+        COLLECTION_TURTLE_NO_META, CONCEPT_TURTLE_2_META, CONCEPT_TURTLE_2_NO_META
+    )
         .map { it.mapDBO() }
 
 fun conceptDBPopulation(): List<Document> =
-    listOf(CONCEPT_0, CONCEPT_1)
+    listOf(CONCEPT_0, CONCEPT_1, CONCEPT_2)
         .map { it.mapDBO() }
 
 fun collectionDBPopulation(): List<Document> =

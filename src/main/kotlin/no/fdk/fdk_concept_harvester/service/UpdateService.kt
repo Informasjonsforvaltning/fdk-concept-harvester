@@ -28,18 +28,39 @@ class UpdateService(
     private val turtleService: TurtleService
 ) {
 
-    fun updateUnionModel() {
-        var unionModel = ModelFactory.createDefaultModel()
+    fun updateUnionModels() {
+        var collectionUnion = ModelFactory.createDefaultModel()
+        var conceptUnion = ModelFactory.createDefaultModel()
+        var completeUnion = ModelFactory.createDefaultModel()
 
         collectionMetaRepository.findAll()
             .forEach {
                 turtleService.getCollection(it.fdkId, withRecords = true)
                     ?.let { turtle -> parseRDFResponse(turtle, Lang.TURTLE, null) }
-                    ?.run { unionModel = unionModel.union(this) }
+                    ?.run {
+                        collectionUnion = collectionUnion.union(this)
+                        completeUnion = completeUnion.union(this)
+                    }
             }
 
-        fusekiAdapter.storeUnionModel(unionModel)
-        turtleService.saveAsUnion(unionModel)
+        conceptMetaRepository.findAll()
+            .forEach {
+                turtleService.getConcept(it.fdkId, withRecords = true)
+                    ?.let { turtle -> parseRDFResponse(turtle, Lang.TURTLE, null) }
+                    ?.run { conceptUnion = conceptUnion.union(this) }
+            }
+
+        conceptMetaRepository.findAll()
+            .filter { conceptMeta -> !conceptMeta.modelContainsConcept(completeUnion) }
+            .forEach {
+                turtleService.getConcept(it.fdkId, withRecords = true)
+                    ?.let { turtle -> parseRDFResponse(turtle, Lang.TURTLE, null) }
+                    ?.run { completeUnion = completeUnion.union(this) }
+            }
+
+        fusekiAdapter.storeUnionModel(completeUnion)
+        turtleService.saveAsCollectionUnion(collectionUnion)
+        turtleService.saveAsConceptUnion(conceptUnion)
     }
 
     fun updateMetaData() {
@@ -77,7 +98,7 @@ class UpdateService(
                 }
             }
 
-        updateUnionModel()
+        updateUnionModels()
     }
 
     private fun CollectionMeta.createMetaModel(): Model {
