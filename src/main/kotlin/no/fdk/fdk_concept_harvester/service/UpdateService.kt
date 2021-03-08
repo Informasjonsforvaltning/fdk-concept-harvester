@@ -7,6 +7,7 @@ import no.fdk.fdk_concept_harvester.model.CollectionMeta
 import no.fdk.fdk_concept_harvester.model.ConceptMeta
 import no.fdk.fdk_concept_harvester.rdf.containsTriple
 import no.fdk.fdk_concept_harvester.rdf.parseRDFResponse
+import no.fdk.fdk_concept_harvester.rdf.safeAddProperty
 import no.fdk.fdk_concept_harvester.repository.*
 import org.apache.jena.rdf.model.Model
 import org.apache.jena.rdf.model.ModelFactory
@@ -42,6 +43,16 @@ class UpdateService(
     }
 
     fun updateMetaData() {
+        conceptMetaRepository.findAll()
+            .forEach { concept ->
+                val conceptMeta = concept.createMetaModel()
+
+                turtleService.getConcept(concept.fdkId, withRecords = false)
+                    ?.let { conceptNoRecords -> parseRDFResponse(conceptNoRecords, Lang.TURTLE, null) }
+                    ?.let { conceptModelNoRecords -> conceptMeta.union(conceptModelNoRecords) }
+                    ?.run { turtleService.saveAsConcept(this, fdkId = concept.fdkId, withRecords = true) }
+            }
+
         collectionMetaRepository.findAll()
             .forEach { collection ->
                 val collectionNoRecords = turtleService.getCollection(collection.fdkId, withRecords = false)
@@ -56,11 +67,6 @@ class UpdateService(
                         .forEach { concept ->
                             val conceptMeta = concept.createMetaModel()
                             collectionMeta = collectionMeta.union(conceptMeta)
-
-                            turtleService.getConcept(concept.fdkId, withRecords = false)
-                                ?.let { conceptNoRecords -> parseRDFResponse(conceptNoRecords, Lang.TURTLE, null) }
-                                ?.let { conceptModelNoRecords -> conceptMeta.union(conceptModelNoRecords) }
-                                ?.run { turtleService.saveAsConcept(this, fdkId = concept.fdkId, withRecords = true) }
                         }
 
                     turtleService.saveAsCollection(
@@ -98,7 +104,7 @@ class UpdateService(
             .addProperty(RDF.type, DCAT.CatalogRecord)
             .addProperty(DCTerms.identifier, fdkId)
             .addProperty(FOAF.primaryTopic, metaModel.createResource(uri))
-            .addProperty(DCTerms.isPartOf, metaModel.createResource(isPartOf))
+            .safeAddProperty(DCTerms.isPartOf, isPartOf)
             .addProperty(DCTerms.issued, metaModel.createTypedLiteral(calendarFromTimestamp(issued)))
             .addProperty(DCTerms.modified, metaModel.createTypedLiteral(calendarFromTimestamp(modified)))
 

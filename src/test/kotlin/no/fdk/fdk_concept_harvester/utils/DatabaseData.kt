@@ -11,7 +11,8 @@ private val responseReader = TestResponseReader()
 
 val COLLECTION_0 = CollectionMeta(
     uri = "https://www.example.com/begrepskatalog/0", fdkId = "9b8f1c42-1161-33b1-9d43-a733ee94ddfc",
-    issued = 1609852539831, modified = 1609852539831
+    issued = 1609852539831, modified = 1609852539831,
+    concepts = setOf("https://example.com/begrep/0", "https://example.com/begrep/1")
 )
 
 val CONCEPT_0 = ConceptMeta(
@@ -85,6 +86,7 @@ private fun CollectionMeta.mapDBO(): Document =
         .append("fdkId", fdkId)
         .append("issued", issued)
         .append("modified", modified)
+        .append("concepts", concepts)
 
 private fun ConceptMeta.mapDBO(): Document =
     Document()

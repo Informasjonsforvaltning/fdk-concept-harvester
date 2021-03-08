@@ -13,7 +13,7 @@ import org.apache.jena.vocabulary.SKOS
 import java.util.*
 
 
-fun CollectionsAndConcepts.harvestDiff(dboNoRecords: String?): Boolean =
+fun CollectionRDFModel.harvestDiff(dboNoRecords: String?): Boolean =
     if (dboNoRecords == null) true
     else !harvested.isIsomorphicWith(parseRDFResponse(dboNoRecords, Lang.TURTLE, null))
 
@@ -21,37 +21,50 @@ fun ConceptRDFModel.harvestDiff(dboNoRecords: String?): Boolean =
     if (dboNoRecords == null) true
     else !harvested.isIsomorphicWith(parseRDFResponse(dboNoRecords, Lang.TURTLE, null))
 
-fun splitCollectionsFromRDF(harvested: Model): List<CollectionsAndConcepts> =
+fun splitCollectionsFromRDF(harvested: Model, allConcepts: List<ConceptRDFModel>): List<CollectionRDFModel> =
     harvested.listResourcesWithProperty(RDF.type, SKOS.Collection)
         .toList()
         .filter { it.hasProperty(SKOS.member) }
         .map { collectionResource ->
-            val collectionConcepts: List<ConceptRDFModel> = collectionResource.listProperties(SKOS.member)
+            val collectionConcepts: Set<String> = collectionResource.listProperties(SKOS.member)
                 .toList()
-                .map { dataset -> dataset.resource.extractConcept() }
+                .map { dataset -> dataset.resource.uri }
+                .toSet()
 
-            var collectionModelWithoutConcepts = collectionResource.listProperties().toModel()
-            collectionModelWithoutConcepts.setNsPrefixes(harvested.nsPrefixMap)
-
-            collectionResource.listProperties().toList()
-                .filter { it.isResourceProperty() }
-                .forEach {
-                    if (it.predicate != SKOS.member) {
-                        collectionModelWithoutConcepts =
-                            collectionModelWithoutConcepts.recursiveAddNonConceptResource(it.resource, 5)
-                    }
-                }
+            val collectionModelWithoutConcepts = collectionResource.extractCollectionModel()
 
             var collectionModel = collectionModelWithoutConcepts
-            collectionConcepts.forEach { collectionModel = collectionModel.union(it.harvested) }
+            allConcepts.filter { collectionConcepts.contains(it.resourceURI) }
+                .forEach { collectionModel = collectionModel.union(it.harvested) }
 
-            CollectionsAndConcepts(
+            CollectionRDFModel(
                 resourceURI = collectionResource.uri,
-                harvested = collectionModel,
                 harvestedWithoutConcepts = collectionModelWithoutConcepts,
+                harvested = collectionModel,
                 concepts = collectionConcepts
             )
         }
+
+fun splitConceptsFromRDF(harvested: Model): List<ConceptRDFModel> =
+    harvested.listResourcesWithProperty(RDF.type, SKOS.Concept)
+        .toList()
+        .map { conceptResource -> conceptResource.extractConcept() }
+
+fun Resource.extractCollectionModel(): Model {
+    var collectionModelWithoutConcepts = listProperties().toModel()
+    collectionModelWithoutConcepts.setNsPrefixes(model.nsPrefixMap)
+
+    listProperties().toList()
+        .filter { it.isResourceProperty() }
+        .forEach {
+            if (it.predicate != SKOS.member) {
+                collectionModelWithoutConcepts =
+                    collectionModelWithoutConcepts.recursiveAddNonConceptResource(it.resource, 5)
+            }
+        }
+
+    return collectionModelWithoutConcepts
+}
 
 fun Resource.extractConcept(): ConceptRDFModel {
     var conceptModel = listProperties().toModel()
@@ -93,11 +106,11 @@ fun calendarFromTimestamp(timestamp: Long): Calendar {
     return calendar
 }
 
-data class CollectionsAndConcepts(
+data class CollectionRDFModel(
     val resourceURI: String,
     val harvested: Model,
     val harvestedWithoutConcepts: Model,
-    val concepts: List<ConceptRDFModel>,
+    val concepts: Set<String>,
 )
 
 data class ConceptRDFModel(

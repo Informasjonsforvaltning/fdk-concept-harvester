@@ -15,7 +15,7 @@ data class ConceptMeta(
     @Indexed(unique = true)
     val fdkId: String,
 
-    val isPartOf: String,
+    val isPartOf: String? = null,
     val issued: Long,
     val modified: Long
 )
@@ -28,6 +28,7 @@ data class CollectionMeta(
     @Indexed(unique = true)
     val fdkId: String,
 
+    val concepts: Set<String>,
     val issued: Long,
     val modified: Long
 )
