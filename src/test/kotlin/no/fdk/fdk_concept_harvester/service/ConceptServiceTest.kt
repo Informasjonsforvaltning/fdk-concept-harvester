@@ -22,30 +22,33 @@ class ConceptServiceTest {
 
         @Test
         fun responseIsomorphicWithEmptyModelForEmptyDB() {
-            whenever(turtleService.getCollectionUnion())
+            whenever(turtleService.getCollectionUnion(true))
                 .thenReturn(null)
 
             val expected = responseReader.parseResponse("", "TURTLE")
 
-            val response = conceptService.getAllCollections(Lang.TURTLE)
+            val response = conceptService.getAllCollections(Lang.TURTLE, true)
 
             assertTrue(expected.isIsomorphicWith(responseReader.parseResponse(response, "TURTLE")))
         }
 
         @Test
         fun responseIsIsomorphicWithExpectedModel() {
-            whenever(turtleService.getCollectionUnion())
+            whenever(turtleService.getCollectionUnion(true))
                 .thenReturn(javaClass.classLoader.getResource("collection_0.ttl")!!.readText())
+            whenever(turtleService.getCollectionUnion(false))
+                .thenReturn(javaClass.classLoader.getResource("harvest_response_0.ttl")!!.readText())
 
             val expected = responseReader.parseFile("collection_0.ttl", "TURTLE")
+            val expectedNoRecords = responseReader.parseFile("harvest_response_0.ttl", "TURTLE")
 
-            val responseTurtle = conceptService.getAllCollections(Lang.TURTLE)
-            val responseN3 = conceptService.getAllCollections(Lang.N3)
-            val responseNTriples = conceptService.getAllCollections(Lang.NTRIPLES)
+            val responseTurtle = conceptService.getAllCollections(Lang.TURTLE, true)
+            val responseN3 = conceptService.getAllCollections(Lang.N3, true)
+            val responseNTriples = conceptService.getAllCollections(Lang.NTRIPLES, false)
 
             assertTrue(expected.isIsomorphicWith(responseReader.parseResponse(responseTurtle, "TURTLE")))
             assertTrue(expected.isIsomorphicWith(responseReader.parseResponse(responseN3, "N3")))
-            assertTrue(expected.isIsomorphicWith(responseReader.parseResponse(responseNTriples, "N-TRIPLES")))
+            assertTrue(expectedNoRecords.isIsomorphicWith(responseReader.parseResponse(responseNTriples, "N-TRIPLES")))
         }
 
     }
@@ -55,10 +58,10 @@ class ConceptServiceTest {
 
         @Test
         fun responseIsNullWhenNoCatalogIsFound() {
-            whenever(turtleService.getCollection("123", true))
+            whenever(turtleService.getCollection("123", false))
                 .thenReturn(null)
 
-            val response = conceptService.getCollectionById("123", Lang.TURTLE)
+            val response = conceptService.getCollectionById("123", Lang.TURTLE, false)
 
             assertNull(response)
         }
@@ -67,27 +70,30 @@ class ConceptServiceTest {
         fun responseIsIsomorphicWithExpectedModel() {
             whenever(turtleService.getCollection(COLLECTION_0_ID, withRecords = true))
                 .thenReturn(javaClass.classLoader.getResource("collection_0.ttl")!!.readText())
+            whenever(turtleService.getCollection(COLLECTION_0_ID, withRecords = false))
+                .thenReturn(javaClass.classLoader.getResource("harvest_response_0.ttl")!!.readText())
 
-            val responseTurtle = conceptService.getCollectionById(COLLECTION_0_ID, Lang.TURTLE)
-            val responseJsonRDF = conceptService.getCollectionById(COLLECTION_0_ID, Lang.RDFJSON)
+            val responseTurtle = conceptService.getCollectionById(COLLECTION_0_ID, Lang.TURTLE, false)
+            val responseJsonRDF = conceptService.getCollectionById(COLLECTION_0_ID, Lang.RDFJSON, true)
 
             val expected = responseReader.parseFile("collection_0.ttl", "TURTLE")
+            val expectedNoRecords = responseReader.parseFile("harvest_response_0.ttl", "TURTLE")
 
-            assertTrue(expected.isIsomorphicWith(responseReader.parseResponse(responseTurtle!!, "TURTLE")))
+            assertTrue(expectedNoRecords.isIsomorphicWith(responseReader.parseResponse(responseTurtle!!, "TURTLE")))
             assertTrue(expected.isIsomorphicWith(responseReader.parseResponse(responseJsonRDF!!, "RDF/JSON")))
         }
 
     }
 
     @Nested
-    internal inner class InformationModelById {
+    internal inner class ConceptById {
 
         @Test
         fun responseIsNullWhenNoModelIsFound() {
             whenever(turtleService.getConcept("123", true))
                 .thenReturn(null)
 
-            val response = conceptService.getConceptById("123", Lang.TURTLE)
+            val response = conceptService.getConceptById("123", Lang.TURTLE, true)
 
             assertNull(response)
         }
@@ -96,14 +102,17 @@ class ConceptServiceTest {
         fun responseIsIsomorphicWithExpectedModel() {
             whenever(turtleService.getConcept(CONCEPT_0_ID, true))
                 .thenReturn(javaClass.classLoader.getResource("concept_0.ttl")!!.readText())
+            whenever(turtleService.getConcept(CONCEPT_0_ID, false))
+                .thenReturn(javaClass.classLoader.getResource("no_meta_concept_0.ttl")!!.readText())
 
-            val responseTurtle = conceptService.getConceptById(CONCEPT_0_ID, Lang.TURTLE)
-            val responseRDFXML = conceptService.getConceptById(CONCEPT_0_ID, Lang.RDFXML)
+            val responseTurtle = conceptService.getConceptById(CONCEPT_0_ID, Lang.TURTLE, true)
+            val responseRDFXML = conceptService.getConceptById(CONCEPT_0_ID, Lang.RDFXML, false)
 
             val expected = responseReader.parseFile("concept_0.ttl", "TURTLE")
+            val expectedNoRecords = responseReader.parseFile("no_meta_concept_0.ttl", "TURTLE")
 
             assertTrue(expected.isIsomorphicWith(responseReader.parseResponse(responseTurtle!!, "TURTLE")))
-            assertTrue(expected.isIsomorphicWith(responseReader.parseResponse(responseRDFXML!!, "RDF/XML")))
+            assertTrue(expectedNoRecords.isIsomorphicWith(responseReader.parseResponse(responseRDFXML!!, "RDF/XML")))
         }
 
     }

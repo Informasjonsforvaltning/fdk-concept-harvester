@@ -14,27 +14,26 @@ import java.util.zip.GZIPOutputStream
 import kotlin.text.Charsets.UTF_8
 
 private const val NO_RECORDS_ID_PREFIX = "no-records-"
-const val COLLECTION_UNION_ID = "collection-union-graph"
-const val CONCEPT_UNION_ID = "concept-union-graph"
+const val UNION_ID = "union-graph"
 private const val COLLECTION_ID_PREFIX = "collection-"
 private const val CONCEPT_ID_PREFIX = "concept-"
 
 @Service
 class TurtleService(private val turtleRepository: TurtleRepository) {
 
-    fun saveAsCollectionUnion(model: Model): TurtleDBO =
-        turtleRepository.save(model.createUnionTurtleDBO(COLLECTION_UNION_ID))
+    fun saveAsCollectionUnion(model: Model, withRecords: Boolean): TurtleDBO =
+        turtleRepository.save(model.createCollectionTurtleDBO(UNION_ID, withRecords))
 
-    fun getCollectionUnion(): String? =
-        turtleRepository.findByIdOrNull(COLLECTION_UNION_ID)
+    fun getCollectionUnion(withRecords: Boolean): String? =
+        turtleRepository.findByIdOrNull(collectionTurtleID(UNION_ID, withRecords))
             ?.turtle
             ?.let { ungzip(it) }
 
-    fun saveAsConceptUnion(model: Model): TurtleDBO =
-        turtleRepository.save(model.createUnionTurtleDBO(CONCEPT_UNION_ID))
+    fun saveAsConceptUnion(model: Model, withRecords: Boolean): TurtleDBO =
+        turtleRepository.save(model.createConceptTurtleDBO(UNION_ID, withRecords))
 
-    fun getConceptUnion(): String? =
-        turtleRepository.findByIdOrNull(CONCEPT_UNION_ID)
+    fun getConceptUnion(withRecords: Boolean): String? =
+        turtleRepository.findByIdOrNull(conceptTurtleID(UNION_ID, withRecords))
             ?.turtle
             ?.let { ungzip(it) }
 
@@ -69,12 +68,6 @@ private fun collectionTurtleID(fdkId: String, withFDKRecords: Boolean): String =
 
 private fun conceptTurtleID(fdkId: String, withFDKRecords: Boolean): String =
     "$CONCEPT_ID_PREFIX${if (withFDKRecords) "" else NO_RECORDS_ID_PREFIX}$fdkId"
-
-private fun Model.createUnionTurtleDBO(unionId: String): TurtleDBO =
-    TurtleDBO(
-        id = unionId,
-        turtle = gzip(createRDFResponse(Lang.TURTLE))
-    )
 
 private fun Model.createHarvestSourceTurtleDBO(uri: String): TurtleDBO =
     TurtleDBO(

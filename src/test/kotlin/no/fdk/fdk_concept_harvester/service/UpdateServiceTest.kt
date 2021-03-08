@@ -118,6 +118,8 @@ class UpdateServiceTest {
 
             whenever(turtleService.getCollection(COLLECTION_0_ID, true))
                 .thenReturn(responseReader.readFile("collection_0.ttl"))
+            whenever(turtleService.getCollection(COLLECTION_0_ID, false))
+                .thenReturn(responseReader.readFile("harvest_response_0.ttl"))
 
             whenever(turtleService.getConcept(CONCEPT_0_ID, true))
                 .thenReturn(responseReader.readFile("concept_0.ttl"))
@@ -126,10 +128,19 @@ class UpdateServiceTest {
             whenever(turtleService.getConcept(CONCEPT_2.fdkId, true))
                 .thenReturn(responseReader.readFile("concept_2.ttl"))
 
+            whenever(turtleService.getConcept(CONCEPT_0_ID, false))
+                .thenReturn(responseReader.readFile("no_meta_concept_0.ttl"))
+            whenever(turtleService.getConcept(CONCEPT_1_ID, false))
+                .thenReturn(responseReader.readFile("no_meta_concept_1.ttl"))
+            whenever(turtleService.getConcept(CONCEPT_2.fdkId, false))
+                .thenReturn(responseReader.readFile("no_meta_concept_2.ttl"))
+
             updateService.updateUnionModels()
 
             val collectionUnion = responseReader.parseFile("collection_0.ttl", "TURTLE")
+            val collectionUnionNoRecords = responseReader.parseFile("harvest_response_0.ttl", "TURTLE")
             val conceptUnion = responseReader.parseFile("all_concepts.ttl", "TURTLE")
+            val conceptUnionNoRecords = responseReader.parseFile("no_meta_all_concepts.ttl", "TURTLE")
             val completeUnion = responseReader.parseFile("complete_union.ttl", "TURTLE")
 
             argumentCaptor<Model>().apply {
@@ -137,14 +148,18 @@ class UpdateServiceTest {
                 assertTrue(checkIfIsomorphicAndPrintDiff(firstValue, completeUnion, "updateUnionModel-fuseki"))
             }
 
-            argumentCaptor<Model>().apply {
-                verify(turtleService, times(1)).saveAsCollectionUnion(capture())
-                assertTrue(checkIfIsomorphicAndPrintDiff(firstValue, collectionUnion, "updateUnionModel-collection"))
+            argumentCaptor<Model, Boolean>().apply {
+                verify(turtleService, times(2)).saveAsCollectionUnion(first.capture(), second.capture())
+                assertTrue(checkIfIsomorphicAndPrintDiff(first.firstValue, collectionUnion, "updateUnionModel-collection"))
+                assertTrue(checkIfIsomorphicAndPrintDiff(first.secondValue, collectionUnionNoRecords, "updateUnionModel-collection-norecords"))
+                assertEquals(listOf(true, false), second.allValues)
             }
 
-            argumentCaptor<Model>().apply {
-                verify(turtleService, times(1)).saveAsConceptUnion(capture())
-                assertTrue(checkIfIsomorphicAndPrintDiff(firstValue, conceptUnion, "updateUnionModel-concept"))
+            argumentCaptor<Model, Boolean>().apply {
+                verify(turtleService, times(2)).saveAsConceptUnion(first.capture(), second.capture())
+                assertTrue(checkIfIsomorphicAndPrintDiff(first.firstValue, conceptUnion, "updateUnionModel-concept"))
+                assertTrue(checkIfIsomorphicAndPrintDiff(first.secondValue, conceptUnionNoRecords, "updateUnionModel-concept-norecords"))
+                assertEquals(listOf(true, false), second.allValues)
             }
         }
     }

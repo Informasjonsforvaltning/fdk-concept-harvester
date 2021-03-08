@@ -23,14 +23,15 @@ open class ConceptsController(private val conceptService: ConceptService) {
     @GetMapping("/{id}")
     fun getConceptById(
         @RequestHeader(HttpHeaders.ACCEPT) accept: String?,
-        @PathVariable id: String
+        @PathVariable id: String,
+        @RequestParam(value = "catalogrecords", required = false) catalogrecords: Boolean = false
     ): ResponseEntity<String> {
         LOGGER.info("get concept with id $id")
         val returnType = jenaTypeFromAcceptHeader(accept)
 
         return if (returnType == Lang.RDFNULL) ResponseEntity(HttpStatus.NOT_ACCEPTABLE)
         else {
-            conceptService.getConceptById(id, returnType ?: Lang.TURTLE)
+            conceptService.getConceptById(id, returnType ?: Lang.TURTLE, catalogrecords)
                 ?.let { ResponseEntity(it, HttpStatus.OK) }
                 ?: ResponseEntity(HttpStatus.NOT_FOUND)
         }
@@ -38,13 +39,14 @@ open class ConceptsController(private val conceptService: ConceptService) {
 
     @GetMapping
     fun getConcepts(
-        @RequestHeader(HttpHeaders.ACCEPT) accept: String?
+        @RequestHeader(HttpHeaders.ACCEPT) accept: String?,
+        @RequestParam(value = "catalogrecords", required = false) catalogrecords: Boolean = false
     ): ResponseEntity<String> {
         LOGGER.info("get all concepts")
         val returnType = jenaTypeFromAcceptHeader(accept)
 
         return if (returnType == Lang.RDFNULL) ResponseEntity(HttpStatus.NOT_ACCEPTABLE)
-        else ResponseEntity(conceptService.getAllConcepts(returnType ?: Lang.TURTLE), HttpStatus.OK)
+        else ResponseEntity(conceptService.getAllConcepts(returnType ?: Lang.TURTLE, catalogrecords), HttpStatus.OK)
     }
 
 }

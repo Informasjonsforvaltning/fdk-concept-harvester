@@ -29,6 +29,14 @@ paths:
         - skos-ap-no-collections
       description: Returns all concept collections
       operationId: getCollections
+      parameters:
+        - name: catalogrecords
+          in: query
+          description: Include FDK catalog records
+          required: false
+          schema:
+            type: boolean
+            default: false
       responses:
         '200':
           description: OK
@@ -64,6 +72,13 @@ paths:
           required: true
           schema:
             type: string
+        - name: catalogrecords
+          in: query
+          description: Include FDK catalog records
+          required: false
+          schema:
+            type: boolean
+            default: false
       responses:
         '200':
           description: OK
@@ -94,6 +109,14 @@ paths:
         - skos-ap-no-concepts
       description: Returns all concept concepts
       operationId: getConcepts
+      parameters:
+        - name: catalogrecords
+          in: query
+          description: Include FDK catalog records
+          required: false
+          schema:
+            type: boolean
+            default: false
       responses:
         '200':
           description: OK
@@ -129,6 +152,13 @@ paths:
           required: true
           schema:
             type: string
+        - name: catalogrecords
+          in: query
+          description: Include FDK catalog records
+          required: false
+          schema:
+            type: boolean
+            default: false
       responses:
         '200':
           description: OK
