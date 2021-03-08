@@ -17,11 +17,22 @@ class CollectionsTest: ApiTestContext() {
     private val responseReader = TestResponseReader()
 
     @Test
-    fun findSpecific() {
-        val response = apiGet(port, "/collections/$COLLECTION_0_ID", "application/rdf+xml")
+    fun findSpecificWithRecords() {
+        val response = apiGet(port, "/collections/$COLLECTION_0_ID?catalogrecords=true", "application/rdf+xml")
         Assumptions.assumeTrue(HttpStatus.OK.value() == response["status"])
 
         val expected = responseReader.parseFile("collection_0.ttl", "TURTLE")
+        val responseModel = responseReader.parseResponse(response["body"] as String, "RDFXML")
+
+        assertTrue(expected.isIsomorphicWith(responseModel))
+    }
+
+    @Test
+    fun findSpecificNoRecords() {
+        val response = apiGet(port, "/collections/$COLLECTION_0_ID", "application/rdf+xml")
+        Assumptions.assumeTrue(HttpStatus.OK.value() == response["status"])
+
+        val expected = responseReader.parseFile("harvest_response_0.ttl", "TURTLE")
         val responseModel = responseReader.parseResponse(response["body"] as String, "RDFXML")
 
         assertTrue(expected.isIsomorphicWith(responseModel))
@@ -34,11 +45,21 @@ class CollectionsTest: ApiTestContext() {
     }
 
     @Test
-    fun findAll() {
-        val response = apiGet(port, "/collections", "text/turtle")
+    fun findAllWithRecords() {
+        val response = apiGet(port, "/collections?catalogrecords=true", "text/turtle")
         Assumptions.assumeTrue(HttpStatus.OK.value() == response["status"])
 
         val expected = responseReader.parseFile("collection_0.ttl", "TURTLE")
+        val responseModel = responseReader.parseResponse(response["body"] as String, "TURTLE")
+        assertTrue(expected.isIsomorphicWith(responseModel))
+    }
+
+    @Test
+    fun findAllNoRecords() {
+        val response = apiGet(port, "/collections", "text/turtle")
+        Assumptions.assumeTrue(HttpStatus.OK.value() == response["status"])
+
+        val expected = responseReader.parseFile("harvest_response_0.ttl", "TURTLE")
         val responseModel = responseReader.parseResponse(response["body"] as String, "TURTLE")
         assertTrue(expected.isIsomorphicWith(responseModel))
     }

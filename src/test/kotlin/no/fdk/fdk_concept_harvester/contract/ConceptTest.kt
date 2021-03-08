@@ -17,11 +17,22 @@ class ConceptTest: ApiTestContext() {
     private val responseReader = TestResponseReader()
 
     @Test
-    fun findSpecific() {
-        val response = apiGet(port, "/concepts/$CONCEPT_0_ID", "application/rdf+json")
+    fun findSpecificWithRecords() {
+        val response = apiGet(port, "/concepts/$CONCEPT_0_ID?catalogrecords=true", "application/rdf+json")
         Assumptions.assumeTrue(HttpStatus.OK.value() == response["status"])
 
         val expected = responseReader.parseFile("concept_0.ttl", "TURTLE")
+        val responseModel = responseReader.parseResponse(response["body"] as String, "RDF/JSON")
+
+        assertTrue(expected.isIsomorphicWith(responseModel))
+    }
+
+    @Test
+    fun findSpecificNoRecords() {
+        val response = apiGet(port, "/concepts/$CONCEPT_0_ID", "application/rdf+json")
+        Assumptions.assumeTrue(HttpStatus.OK.value() == response["status"])
+
+        val expected = responseReader.parseFile("no_meta_concept_0.ttl", "TURTLE")
         val responseModel = responseReader.parseResponse(response["body"] as String, "RDF/JSON")
 
         assertTrue(expected.isIsomorphicWith(responseModel))
@@ -34,11 +45,21 @@ class ConceptTest: ApiTestContext() {
     }
 
     @Test
-    fun findAll() {
-        val response = apiGet(port, "/concepts", "text/turtle")
+    fun findAllWithRecords() {
+        val response = apiGet(port, "/concepts?catalogrecords=true", "text/turtle")
         Assumptions.assumeTrue(HttpStatus.OK.value() == response["status"])
 
         val expected = responseReader.parseFile("all_concepts.ttl", "TURTLE")
+        val responseModel = responseReader.parseResponse(response["body"] as String, "TURTLE")
+        assertTrue(checkIfIsomorphicAndPrintDiff(responseModel, expected, "ConceptTest-findAll"))
+    }
+
+    @Test
+    fun findAllNoRecords() {
+        val response = apiGet(port, "/concepts", "text/turtle")
+        Assumptions.assumeTrue(HttpStatus.OK.value() == response["status"])
+
+        val expected = responseReader.parseFile("no_meta_all_concepts.ttl", "TURTLE")
         val responseModel = responseReader.parseResponse(response["body"] as String, "TURTLE")
         assertTrue(checkIfIsomorphicAndPrintDiff(responseModel, expected, "ConceptTest-findAll"))
     }

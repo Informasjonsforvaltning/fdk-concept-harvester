@@ -9,31 +9,31 @@ import org.springframework.stereotype.Service
 @Service
 class ConceptService(private val turtleService: TurtleService) {
 
-    fun getAllCollections(returnType: Lang): String =
-        turtleService.getCollectionUnion()
+    fun getAllCollections(returnType: Lang, withRecords: Boolean): String =
+        turtleService.getCollectionUnion(withRecords)
             ?.let {
                 if (returnType == Lang.TURTLE) it
                 else parseRDFResponse(it, Lang.TURTLE, null)?.createRDFResponse(returnType)
             }
             ?: ModelFactory.createDefaultModel().createRDFResponse(returnType)
 
-    fun getAllConcepts(returnType: Lang): String =
-        turtleService.getConceptUnion()
+    fun getAllConcepts(returnType: Lang, withRecords: Boolean): String =
+        turtleService.getConceptUnion(withRecords)
             ?.let {
                 if (returnType == Lang.TURTLE) it
                 else parseRDFResponse(it, Lang.TURTLE, null)?.createRDFResponse(returnType)
             }
             ?: ModelFactory.createDefaultModel().createRDFResponse(returnType)
 
-    fun getCollectionById(id: String, returnType: Lang): String? =
-        turtleService.getCollection(id, withRecords = true)
+    fun getCollectionById(id: String, returnType: Lang, withRecords: Boolean): String? =
+        turtleService.getCollection(id, withRecords)
             ?.let {
                 if (returnType == Lang.TURTLE) it
                 else parseRDFResponse(it, Lang.TURTLE, null)?.createRDFResponse(returnType)
             }
 
-    fun getConceptById(id: String, returnType: Lang): String? =
-        turtleService.getConcept(id, withRecords = true)
+    fun getConceptById(id: String, returnType: Lang, withRecords: Boolean): String? =
+        turtleService.getConcept(id, withRecords)
             ?.let {
                 if (returnType == Lang.TURTLE) it
                 else parseRDFResponse(it, Lang.TURTLE, null)?.createRDFResponse(returnType)
