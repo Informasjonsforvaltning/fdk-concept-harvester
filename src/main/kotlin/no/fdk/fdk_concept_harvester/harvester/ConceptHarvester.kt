@@ -58,14 +58,34 @@ class ConceptHarvester(
             LOGGER.info("Changes detected, saving data from $sourceURL and updating FDK meta data")
             turtleService.saveAsHarvestSource(harvested, sourceURL)
 
-            val collections = splitCollectionsFromRDF(harvested)
+            val concepts = splitConceptsFromRDF(harvested)
 
-            if (collections.isEmpty()) LOGGER.error("No collection with conceptss found in data harvested from $sourceURL")
-            else updateDB(collections, harvestDate)
+            if (concepts.isEmpty()) LOGGER.error("No collection with conceptss found in data harvested from $sourceURL")
+            else {
+                updateConcepts(concepts, harvestDate)
+                updateCollections(splitCollectionsFromRDF(harvested, concepts), harvestDate)
+
+            }
         }
     }
 
-    private fun updateDB(collections: List<CollectionsAndConcepts>, harvestDate: Calendar) {
+    private fun updateConcepts(concepts: List<ConceptRDFModel>, harvestDate: Calendar) {
+        concepts.forEach { concept ->
+            val dbMeta = conceptMetaRepository.findByIdOrNull(concept.resourceURI)
+            if (concept.conceptHasChanges(dbMeta?.fdkId)) {
+                val modelMeta = concept.mapToDBOMeta(harvestDate, dbMeta)
+                conceptMetaRepository.save(modelMeta)
+
+                turtleService.saveAsConcept(
+                    model = concept.harvested,
+                    fdkId = modelMeta.fdkId,
+                    withRecords = false
+                )
+            }
+        }
+    }
+
+    private fun updateCollections(collections: List<CollectionRDFModel>, harvestDate: Calendar) {
         collections
             .map { Pair(it, collectionMetaRepository.findByIdOrNull(it.resourceURI)) }
             .filter { it.first.collectionHasChanges(it.second?.fdkId) }
@@ -81,66 +101,13 @@ class ConceptHarvester(
 
                 val fdkUri = "${applicationProperties.collectionsUri}/${updatedCollectionMeta.fdkId}"
 
-                it.first.concepts.forEach { infoModel ->
-                    infoModel.updateDBOs(harvestDate, fdkUri)
+                it.first.concepts.forEach { conceptURI ->
+                    addIsPartOfToConcept(conceptURI, fdkUri)
                 }
-
-                var collectionModel = it.first.harvestedWithoutConcepts
-                collectionModel.createResource(fdkUri)
-                    .addProperty(RDF.type, DCAT.CatalogRecord)
-                    .addProperty(DCTerms.identifier, updatedCollectionMeta.fdkId)
-                    .addProperty(FOAF.primaryTopic, collectionModel.createResource(updatedCollectionMeta.uri))
-                    .addProperty(DCTerms.issued, collectionModel.createTypedLiteral(calendarFromTimestamp(updatedCollectionMeta.issued)))
-                    .addProperty(DCTerms.modified, collectionModel.createTypedLiteral(harvestDate))
-
-                conceptMetaRepository.findAllByIsPartOf(fdkUri)
-                    .mapNotNull { infoMeta -> turtleService.getConcept(infoMeta.fdkId, withRecords = true) }
-                    .map { infoModelTurtle -> parseRDFResponse(infoModelTurtle, Lang.TURTLE, null) }
-                    .forEach { infoModel -> collectionModel = collectionModel.union(infoModel) }
-
-                turtleService.saveAsCollection(
-                    model = collectionModel,
-                    fdkId = updatedCollectionMeta.fdkId,
-                    withRecords = true
-                )
             }
     }
 
-    private fun ConceptRDFModel.updateDBOs(
-        harvestDate: Calendar,
-        fdkCollectionURI: String
-    ) {
-        val dbMeta = conceptMetaRepository.findByIdOrNull(resourceURI)
-        if (conceptHasChanges(dbMeta?.fdkId)) {
-            val modelMeta = mapToDBOMeta(harvestDate, fdkCollectionURI, dbMeta)
-            conceptMetaRepository.save(modelMeta)
-
-            turtleService.saveAsConcept(
-                model = harvested,
-                fdkId = modelMeta.fdkId,
-                withRecords = false
-            )
-
-            val fdkUri = "${applicationProperties.conceptsUri}/${modelMeta.fdkId}"
-            val metaModel = ModelFactory.createDefaultModel()
-
-            metaModel.createResource(fdkUri)
-                .addProperty(RDF.type, DCAT.CatalogRecord)
-                .addProperty(DCTerms.identifier, modelMeta.fdkId)
-                .addProperty(FOAF.primaryTopic, metaModel.createResource(resourceURI))
-                .addProperty(DCTerms.isPartOf, metaModel.createResource(modelMeta.isPartOf))
-                .addProperty(DCTerms.issued, metaModel.createTypedLiteral(calendarFromTimestamp(modelMeta.issued)))
-                .addProperty(DCTerms.modified, metaModel.createTypedLiteral(harvestDate))
-
-            turtleService.saveAsConcept(
-                model = metaModel.union(harvested),
-                fdkId = modelMeta.fdkId,
-                withRecords = true
-            )
-        }
-    }
-
-    private fun CollectionsAndConcepts.mapToCollectionMeta(
+    private fun CollectionRDFModel.mapToCollectionMeta(
         harvestDate: Calendar,
         dbMeta: CollectionMeta?
     ): CollectionMeta {
@@ -154,13 +121,13 @@ class ConceptHarvester(
             uri = collectionURI,
             fdkId = fdkId,
             issued = issued.timeInMillis,
-            modified = harvestDate.timeInMillis
+            modified = harvestDate.timeInMillis,
+            concepts = concepts
         )
     }
 
     private fun ConceptRDFModel.mapToDBOMeta(
         harvestDate: Calendar,
-        fdkCollectionURI: String,
         dbMeta: ConceptMeta?
     ): ConceptMeta {
         val fdkId = dbMeta?.fdkId ?: createIdFromUri(resourceURI)
@@ -171,13 +138,16 @@ class ConceptHarvester(
         return ConceptMeta(
             uri = resourceURI,
             fdkId = fdkId,
-            isPartOf = fdkCollectionURI,
             issued = issued.timeInMillis,
             modified = harvestDate.timeInMillis
         )
     }
 
-    private fun CollectionsAndConcepts.collectionHasChanges(fdkId: String?): Boolean =
+    private fun addIsPartOfToConcept(conceptURI: String, collectionURI: String) =
+        conceptMetaRepository.findByIdOrNull(conceptURI)
+            ?.run { conceptMetaRepository.save(copy(isPartOf = collectionURI)) }
+
+    private fun CollectionRDFModel.collectionHasChanges(fdkId: String?): Boolean =
         if (fdkId == null) true
         else harvestDiff(turtleService.getCollection(fdkId, withRecords = false))
 

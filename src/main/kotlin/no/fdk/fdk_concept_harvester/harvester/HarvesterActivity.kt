@@ -45,7 +45,7 @@ class HarvesterActivity(
         val onHarvestCompletion = launch {
             harvest.join()
             LOGGER.debug("Updating union model")
-            updateService.updateUnionModel()
+            updateService.updateMetaData()
 
             if (params.isNullOrEmpty()) LOGGER.debug("completed harvest of all collections")
             else LOGGER.debug("completed harvest with parameters $params")

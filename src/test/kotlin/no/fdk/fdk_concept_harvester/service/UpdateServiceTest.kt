@@ -32,6 +32,8 @@ class UpdateServiceTest {
         fun catalogRecordsIsRecreatedFromMetaDBO() {
             whenever(collectionMetaRepository.findAll())
                 .thenReturn(listOf(COLLECTION_0))
+            whenever(conceptMetaRepository.findAll())
+                .thenReturn(listOf(CONCEPT_0, CONCEPT_1))
             whenever(conceptMetaRepository.findAllByIsPartOf("http://localhost:5000/collections/${COLLECTION_0_ID}"))
                 .thenReturn(listOf(CONCEPT_0, CONCEPT_1))
             whenever(turtleService.getCollection(COLLECTION_0_ID, false))

@@ -34,6 +34,10 @@ class HarvesterTest {
             .thenReturn(responseReader.readFile("harvest_response_0.ttl"))
         whenever(conceptRepository.findAllByIsPartOf("http://localhost:5000/collections/$COLLECTION_0_ID"))
             .thenReturn(listOf(CONCEPT_0, CONCEPT_1))
+        whenever(conceptRepository.findById(CONCEPT_0.uri))
+            .thenReturn(Optional.of(CONCEPT_0.copy(isPartOf = null)))
+        whenever(conceptRepository.findById(CONCEPT_1.uri))
+            .thenReturn(Optional.of(CONCEPT_1.copy(isPartOf = null)))
 
         whenever(turtleService.getConcept(CONCEPT_0_ID, true))
             .thenReturn(responseReader.readFile("concept_0.ttl"))
@@ -54,11 +58,10 @@ class HarvesterTest {
         }
 
         argumentCaptor<Model, String, Boolean>().apply {
-            verify(turtleService, times(2)).saveAsCollection(first.capture(), second.capture(), third.capture())
+            verify(turtleService, times(1)).saveAsCollection(first.capture(), second.capture(), third.capture())
             assertTrue(checkIfIsomorphicAndPrintDiff(first.allValues[0], responseReader.parseFile("harvest_response_0.ttl", "TURTLE"), "harvestDataSourceSavedWhenDBIsEmpty-norecords-collection0"))
-            assertTrue(checkIfIsomorphicAndPrintDiff(first.allValues[1], responseReader.parseFile("collection_0.ttl", "TURTLE"), "harvestDataSourceSavedWhenDBIsEmpty-collection0"))
-            assertEquals(listOf(COLLECTION_0_ID, COLLECTION_0_ID), second.allValues)
-            Assertions.assertEquals(listOf(false, true), third.allValues)
+            assertEquals(listOf(COLLECTION_0_ID), second.allValues)
+            Assertions.assertEquals(listOf(false), third.allValues)
         }
 
         argumentCaptor<CollectionMeta>().apply {
@@ -67,18 +70,16 @@ class HarvesterTest {
         }
 
         argumentCaptor<Model, String, Boolean>().apply {
-            verify(turtleService, times(4)).saveAsConcept(first.capture(), second.capture(), third.capture())
-            assertTrue(checkIfIsomorphicAndPrintDiff(first.allValues[0], responseReader.parseFile("no_meta_concept_1.ttl", "TURTLE"), "harvestDataSourceSavedWhenDBIsEmpty-norecords-concept1"))
-            assertTrue(checkIfIsomorphicAndPrintDiff(first.allValues[1], responseReader.parseFile("concept_1.ttl", "TURTLE"), "harvestDataSourceSavedWhenDBIsEmpty-concept1"))
-            assertTrue(checkIfIsomorphicAndPrintDiff(first.allValues[2], responseReader.parseFile("no_meta_concept_0.ttl", "TURTLE"), "harvestDataSourceSavedWhenDBIsEmpty-norecords-concept0"))
-            assertTrue(checkIfIsomorphicAndPrintDiff(first.allValues[3], responseReader.parseFile("concept_0.ttl", "TURTLE"), "harvestDataSourceSavedWhenDBIsEmpty-concept0"))
-            assertEquals(listOf(CONCEPT_1_ID, CONCEPT_1_ID, CONCEPT_0_ID, CONCEPT_0_ID), second.allValues)
-            Assertions.assertEquals(listOf(false, true, false, true), third.allValues)
+            verify(turtleService, times(2)).saveAsConcept(first.capture(), second.capture(), third.capture())
+            assertTrue(checkIfIsomorphicAndPrintDiff(first.allValues[0], responseReader.parseFile("no_meta_concept_0.ttl", "TURTLE"), "harvestDataSourceSavedWhenDBIsEmpty-norecords-concept0"))
+            assertTrue(checkIfIsomorphicAndPrintDiff(first.allValues[1], responseReader.parseFile("no_meta_concept_1.ttl", "TURTLE"), "harvestDataSourceSavedWhenDBIsEmpty-norecords-concept1"))
+            assertEquals(listOf(CONCEPT_0_ID, CONCEPT_1_ID), second.allValues)
+            Assertions.assertEquals(listOf(false, false), third.allValues)
         }
 
         argumentCaptor<ConceptMeta>().apply {
-            verify(conceptRepository, times(2)).save(capture())
-            assertEquals(listOf(CONCEPT_0, CONCEPT_1), allValues.sortedBy { it.uri })
+            verify(conceptRepository, times(4)).save(capture())
+            assertEquals(listOf(CONCEPT_0.copy(isPartOf = null), CONCEPT_1.copy(isPartOf = null), CONCEPT_1, CONCEPT_0), allValues)
         }
     }
 
@@ -116,8 +117,6 @@ class HarvesterTest {
             .thenReturn(responseReader.readFile("harvest_response_0.ttl"))
         whenever(turtleService.getHarvestSource(TEST_HARVEST_SOURCE_0.url!!))
             .thenReturn(responseReader.readFile("harvest_response_0_diff.ttl"))
-        whenever(conceptRepository.findAllByIsPartOf("http://localhost:5000/collections/$COLLECTION_0_ID"))
-            .thenReturn(listOf(CONCEPT_0.copy(modified = NEW_TEST_HARVEST_DATE.timeInMillis), CONCEPT_1))
 
         whenever(valuesMock.collectionsUri)
             .thenReturn("http://localhost:5000/collections")
@@ -127,7 +126,7 @@ class HarvesterTest {
         whenever(collectionRepository.findById(COLLECTION_0.uri))
             .thenReturn(Optional.of(COLLECTION_0))
         whenever(conceptRepository.findById(CONCEPT_0.uri))
-            .thenReturn(Optional.of(CONCEPT_0))
+            .thenReturn(Optional.of(CONCEPT_0.copy(modified = NEW_TEST_HARVEST_DATE.timeInMillis, isPartOf = null)))
         whenever(conceptRepository.findById(CONCEPT_1.uri))
             .thenReturn(Optional.of(CONCEPT_1))
 
@@ -157,24 +156,24 @@ class HarvesterTest {
         }
 
         argumentCaptor<ConceptMeta>().apply {
-            verify(conceptRepository, times(1)).save(capture())
-            assertEquals(CONCEPT_0.copy(modified = NEW_TEST_HARVEST_DATE.timeInMillis), firstValue)
+            verify(conceptRepository, times(3)).save(capture())
+            assertEquals(CONCEPT_0.copy(modified = NEW_TEST_HARVEST_DATE.timeInMillis, isPartOf = null), firstValue)
+            assertEquals(CONCEPT_0.copy(modified = NEW_TEST_HARVEST_DATE.timeInMillis), thirdValue)
+            assertEquals(CONCEPT_1, secondValue)
         }
 
         argumentCaptor<Model, String, Boolean>().apply {
-            verify(turtleService, times(2)).saveAsCollection(first.capture(), second.capture(), third.capture())
+            verify(turtleService, times(1)).saveAsCollection(first.capture(), second.capture(), third.capture())
             assertTrue(checkIfIsomorphicAndPrintDiff(first.allValues[0], responseReader.parseFile("harvest_response_0.ttl", "TURTLE"), "onlyRelevantUpdatedWhenHarvestedFromDB-norecords-collection0"))
-            assertTrue(checkIfIsomorphicAndPrintDiff(first.allValues[1], responseReader.parseFile("collection_0_updated.ttl", "TURTLE"), "onlyRelevantUpdatedWhenHarvestedFromDB-collection0"))
-            assertEquals(listOf(COLLECTION_0_ID, COLLECTION_0_ID), second.allValues)
-            Assertions.assertEquals(listOf(false, true), third.allValues)
+            assertEquals(listOf(COLLECTION_0_ID), second.allValues)
+            Assertions.assertEquals(listOf(false), third.allValues)
         }
 
         argumentCaptor<Model, String, Boolean>().apply {
-            verify(turtleService, times(2)).saveAsConcept(first.capture(), second.capture(), third.capture())
+            verify(turtleService, times(1)).saveAsConcept(first.capture(), second.capture(), third.capture())
             assertTrue(checkIfIsomorphicAndPrintDiff(first.allValues[0], responseReader.parseFile("no_meta_concept_0.ttl", "TURTLE"), "onlyRelevantUpdatedWhenHarvestedFromDB-norecords-concept0"))
-            assertTrue(checkIfIsomorphicAndPrintDiff(first.allValues[1], responseReader.parseFile("concept_0_updated.ttl", "TURTLE"), "onlyRelevantUpdatedWhenHarvestedFromDB-concept0"))
-            assertEquals(listOf(CONCEPT_0_ID, CONCEPT_0_ID), second.allValues)
-            Assertions.assertEquals(listOf(false, true), third.allValues)
+            assertEquals(listOf(CONCEPT_0_ID), second.allValues)
+            Assertions.assertEquals(listOf(false), third.allValues)
         }
 
     }

@@ -5,6 +5,8 @@ import org.apache.jena.query.QueryExecutionFactory
 import org.apache.jena.query.QueryFactory
 import org.apache.jena.rdf.model.Model
 import org.apache.jena.rdf.model.ModelFactory
+import org.apache.jena.rdf.model.Property
+import org.apache.jena.rdf.model.Resource
 import org.apache.jena.riot.Lang
 import org.slf4j.LoggerFactory
 import java.io.ByteArrayOutputStream
@@ -57,3 +59,7 @@ fun Model.containsTriple(subj: String, pred: String, obj: String): Boolean {
     val query = QueryFactory.create(askQuery)
     return QueryExecutionFactory.create(query, this).execAsk()
 }
+
+fun Resource.safeAddProperty(property: Property, value: String?): Resource =
+    if (value.isNullOrEmpty()) this
+    else addProperty(property, model.createResource(value))
