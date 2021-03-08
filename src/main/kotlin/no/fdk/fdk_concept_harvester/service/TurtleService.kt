@@ -14,18 +14,27 @@ import java.util.zip.GZIPOutputStream
 import kotlin.text.Charsets.UTF_8
 
 private const val NO_RECORDS_ID_PREFIX = "no-records-"
-const val UNION_ID = "concept-union-graph"
+const val COLLECTION_UNION_ID = "collection-union-graph"
+const val CONCEPT_UNION_ID = "concept-union-graph"
 private const val COLLECTION_ID_PREFIX = "collection-"
 private const val CONCEPT_ID_PREFIX = "concept-"
 
 @Service
 class TurtleService(private val turtleRepository: TurtleRepository) {
 
-    fun saveAsUnion(model: Model): TurtleDBO =
-        turtleRepository.save(model.createUnionTurtleDBO())
+    fun saveAsCollectionUnion(model: Model): TurtleDBO =
+        turtleRepository.save(model.createUnionTurtleDBO(COLLECTION_UNION_ID))
 
-    fun getUnion(): String? =
-        turtleRepository.findByIdOrNull(UNION_ID)
+    fun getCollectionUnion(): String? =
+        turtleRepository.findByIdOrNull(COLLECTION_UNION_ID)
+            ?.turtle
+            ?.let { ungzip(it) }
+
+    fun saveAsConceptUnion(model: Model): TurtleDBO =
+        turtleRepository.save(model.createUnionTurtleDBO(CONCEPT_UNION_ID))
+
+    fun getConceptUnion(): String? =
+        turtleRepository.findByIdOrNull(CONCEPT_UNION_ID)
             ?.turtle
             ?.let { ungzip(it) }
 
@@ -61,9 +70,9 @@ private fun collectionTurtleID(fdkId: String, withFDKRecords: Boolean): String =
 private fun conceptTurtleID(fdkId: String, withFDKRecords: Boolean): String =
     "$CONCEPT_ID_PREFIX${if (withFDKRecords) "" else NO_RECORDS_ID_PREFIX}$fdkId"
 
-private fun Model.createUnionTurtleDBO(): TurtleDBO =
+private fun Model.createUnionTurtleDBO(unionId: String): TurtleDBO =
     TurtleDBO(
-        id = UNION_ID,
+        id = unionId,
         turtle = gzip(createRDFResponse(Lang.TURTLE))
     )
 

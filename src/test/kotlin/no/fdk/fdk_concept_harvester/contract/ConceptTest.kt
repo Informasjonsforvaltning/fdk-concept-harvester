@@ -1,9 +1,6 @@
 package no.fdk.fdk_concept_harvester.contract
 
-import no.fdk.fdk_concept_harvester.utils.ApiTestContext
-import no.fdk.fdk_concept_harvester.utils.CONCEPT_0_ID
-import no.fdk.fdk_concept_harvester.utils.TestResponseReader
-import no.fdk.fdk_concept_harvester.utils.apiGet
+import no.fdk.fdk_concept_harvester.utils.*
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.springframework.boot.test.context.SpringBootTest
@@ -34,6 +31,16 @@ class ConceptTest: ApiTestContext() {
     fun idDoesNotExist() {
         val response = apiGet(port, "/concepts/123", "text/turtle")
         Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response["status"])
+    }
+
+    @Test
+    fun findAll() {
+        val response = apiGet(port, "/concepts", "text/turtle")
+        Assumptions.assumeTrue(HttpStatus.OK.value() == response["status"])
+
+        val expected = responseReader.parseFile("all_concepts.ttl", "TURTLE")
+        val responseModel = responseReader.parseResponse(response["body"] as String, "TURTLE")
+        assertTrue(checkIfIsomorphicAndPrintDiff(responseModel, expected, "ConceptTest-findAll"))
     }
 
 }
