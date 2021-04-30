@@ -27,8 +27,8 @@ spring:
   rabbitmq:
     host: 127.0.0.1
     port: 5672
-    username: admin
-    password: admin
+    username: guest
+    password: guest
   data.mongodb.uri: mongodb://admin:admin@localhost:27017/conceptHarvester?authSource=admin&authMechanism=SCRAM-SHA-1
 application:
   conceptsUri: https://concepts.staging.fellesdatakatalog.digdir.no/concepts
@@ -44,8 +44,8 @@ spring:
   rabbitmq:
     host: 127.0.0.1
     port: 5672
-    username: admin
-    password: admin
+    username: guest
+    password: guest
   data.mongodb.uri: mongodb://admin:admin@localhost:27017/conceptHarvester?authSource=admin&authMechanism=SCRAM-SHA-1
 application:
   conceptsUri: http://localhost:5000/concepts
