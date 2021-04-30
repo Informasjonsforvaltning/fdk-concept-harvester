@@ -20,7 +20,6 @@ application:
   conceptsUri: ${FDK_CONCEPT_HARVESTER_URI:https://concepts.staging.fellesdatakatalog.digdir.no}/concepts
   collectionsUri: ${FDK_CONCEPT_HARVESTER_URI:https://concepts.staging.fellesdatakatalog.digdir.no}/collections
   harvestAdminRootUrl: ${HARVEST_ADMIN_ROOT_URL:http://fdk-harvest-admin:8080/api}
-fuseki.unionGraphUri: ${FDK_SPARQL_SERVICE_URI:http://fdk-sparql-service:808}/fuseki/harvested?graph=https://concepts.fellesdatakatalog.digdir.no
 
 ---
 spring:
@@ -35,7 +34,6 @@ application:
   conceptsUri: https://concepts.staging.fellesdatakatalog.digdir.no/concepts
   collectionsUri: https://concepts.staging.fellesdatakatalog.digdir.no/collections
   harvestAdminRootUrl: https://admin-api.staging.fellesdatakatalog.digdir.no/api
-fuseki.unionGraphUri: http://localhost:3030/fuseki/harvested?graph=https://concepts.fellesdatakatalog.digdir.no
 
 ---
 spring:
@@ -53,4 +51,3 @@ application:
   conceptsUri: http://localhost:5000/concepts
   collectionsUri: http://localhost:5000/collections
   harvestAdminRootUrl: http://localhost:5000/api
-fuseki.unionGraphUri: http://localhost:5000/fuseki/harvested?graph=https://concepts.fellesdatakatalog.digdir.no

@@ -1,6 +1,5 @@
 package no.fdk.fdk_concept_harvester.service
 
-import no.fdk.fdk_concept_harvester.adapter.FusekiAdapter
 import no.fdk.fdk_concept_harvester.configuration.ApplicationProperties
 import no.fdk.fdk_concept_harvester.harvester.calendarFromTimestamp
 import no.fdk.fdk_concept_harvester.model.CollectionMeta
@@ -22,7 +21,6 @@ import org.springframework.stereotype.Service
 @Service
 class UpdateService(
     private val applicationProperties: ApplicationProperties,
-    private val fusekiAdapter: FusekiAdapter,
     private val collectionMetaRepository: CollectionMetaRepository,
     private val conceptMetaRepository: ConceptMetaRepository,
     private val turtleService: TurtleService
@@ -33,16 +31,12 @@ class UpdateService(
         var collectionUnionNoRecords = ModelFactory.createDefaultModel()
         var conceptUnion = ModelFactory.createDefaultModel()
         var conceptUnionNoRecords = ModelFactory.createDefaultModel()
-        var completeUnion = ModelFactory.createDefaultModel()
 
         collectionMetaRepository.findAll()
             .forEach {
                 turtleService.getCollection(it.fdkId, withRecords = true)
                     ?.let { turtle -> parseRDFResponse(turtle, Lang.TURTLE, null) }
-                    ?.run {
-                        collectionUnion = collectionUnion.union(this)
-                        completeUnion = completeUnion.union(this)
-                    }
+                    ?.run { collectionUnion = collectionUnion.union(this) }
 
                 turtleService.getCollection(it.fdkId, withRecords = false)
                     ?.let { turtle -> parseRDFResponse(turtle, Lang.TURTLE, null) }
@@ -60,15 +54,6 @@ class UpdateService(
                     ?.run { conceptUnionNoRecords = conceptUnionNoRecords.union(this) }
             }
 
-        conceptMetaRepository.findAll()
-            .filter { conceptMeta -> !conceptMeta.modelContainsConcept(completeUnion) }
-            .forEach {
-                turtleService.getConcept(it.fdkId, withRecords = true)
-                    ?.let { turtle -> parseRDFResponse(turtle, Lang.TURTLE, null) }
-                    ?.run { completeUnion = completeUnion.union(this) }
-            }
-
-        fusekiAdapter.storeUnionModel(completeUnion)
         turtleService.saveAsCollectionUnion(collectionUnion, true)
         turtleService.saveAsCollectionUnion(collectionUnionNoRecords, false)
         turtleService.saveAsConceptUnion(conceptUnion, true)
