@@ -7,11 +7,13 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.http.HttpStatus
+import org.springframework.test.context.ContextConfiguration
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest(
     properties = ["spring.profiles.active=contract-test"],
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ContextConfiguration(initializers = [ApiTestContext.Initializer::class])
 @Tag("contract")
 class StatusTest: ApiTestContext() {
 

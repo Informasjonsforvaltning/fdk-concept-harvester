@@ -1,7 +1,6 @@
 package no.fdk.fdk_concept_harvester.service
 
 import com.nhaarman.mockitokotlin2.*
-import no.fdk.fdk_concept_harvester.adapter.FusekiAdapter
 import no.fdk.fdk_concept_harvester.configuration.ApplicationProperties
 import no.fdk.fdk_concept_harvester.repository.CollectionMetaRepository
 import no.fdk.fdk_concept_harvester.repository.ConceptMetaRepository
@@ -18,10 +17,9 @@ class UpdateServiceTest {
     private val collectionMetaRepository: CollectionMetaRepository = mock()
     private val conceptMetaRepository: ConceptMetaRepository = mock()
     private val valuesMock: ApplicationProperties = mock()
-    private val fusekiAdapter: FusekiAdapter = mock()
     private val turtleService: TurtleService = mock()
     private val updateService = UpdateService(
-        valuesMock, fusekiAdapter, collectionMetaRepository, conceptMetaRepository, turtleService)
+        valuesMock, collectionMetaRepository, conceptMetaRepository, turtleService)
 
     private val responseReader = TestResponseReader()
 
@@ -142,11 +140,6 @@ class UpdateServiceTest {
             val conceptUnion = responseReader.parseFile("all_concepts.ttl", "TURTLE")
             val conceptUnionNoRecords = responseReader.parseFile("no_meta_all_concepts.ttl", "TURTLE")
             val completeUnion = responseReader.parseFile("complete_union.ttl", "TURTLE")
-
-            argumentCaptor<Model>().apply {
-                verify(fusekiAdapter, times(1)).storeUnionModel(capture())
-                assertTrue(checkIfIsomorphicAndPrintDiff(firstValue, completeUnion, "updateUnionModel-fuseki"))
-            }
 
             argumentCaptor<Model, Boolean>().apply {
                 verify(turtleService, times(2)).saveAsCollectionUnion(first.capture(), second.capture())
