@@ -13,7 +13,7 @@
     <parent>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-parent</artifactId>
-      <version>2.4.2</version>
+      <version>2.4.5</version>
       <relativePath/>
     </parent>
 
@@ -28,8 +28,8 @@
         <maven.exec.skip>false</maven.exec.skip>
         <!--end standard properties-->
 
-        <kotlin.version>1.4.30</kotlin.version>
-        <testcontainers.version>1.15.1</testcontainers.version>
+        <kotlin.version>1.4.32</kotlin.version>
+        <testcontainers.version>1.15.3</testcontainers.version>
         <jena.version>3.17.0</jena.version>
     </properties>
 
