@@ -83,16 +83,6 @@ val COLLECTION_UNION_TURTLE_NO_RECORDS = TurtleDBO(
     turtle = gzip(responseReader.readFile("harvest_response_0.ttl"))
 )
 
-val CONCEPT_UNION_TURTLE = TurtleDBO(
-    id = "concept-$UNION_ID",
-    turtle = gzip(responseReader.readFile("all_concepts.ttl"))
-)
-
-val CONCEPT_UNION_TURTLE_NO_RECORDS = TurtleDBO(
-    id = "concept-no-records-$UNION_ID",
-    turtle = gzip(responseReader.readFile("no_meta_all_concepts.ttl"))
-)
-
 val HARVESTED_TURTLE = TurtleDBO(
     id = TEST_HARVEST_SOURCE_0.url!!,
     turtle = gzip(responseReader.readFile("harvest_response_0.ttl"))
@@ -100,10 +90,10 @@ val HARVESTED_TURTLE = TurtleDBO(
 
 fun turleDBPopulation(): List<Document> =
     listOf(
-        COLLECTION_UNION_TURTLE, CONCEPT_UNION_TURTLE, HARVESTED_TURTLE, CONCEPT_TURTLE_0_META,
+        COLLECTION_UNION_TURTLE, HARVESTED_TURTLE, CONCEPT_TURTLE_0_META,
         CONCEPT_TURTLE_0_NO_META, CONCEPT_TURTLE_1_META, CONCEPT_TURTLE_1_NO_META, COLLECTION_TURTLE_META,
         COLLECTION_TURTLE_NO_META, CONCEPT_TURTLE_2_META, CONCEPT_TURTLE_2_NO_META,
-        COLLECTION_UNION_TURTLE_NO_RECORDS, CONCEPT_UNION_TURTLE_NO_RECORDS
+        COLLECTION_UNION_TURTLE_NO_RECORDS
     )
         .map { it.mapDBO() }
 

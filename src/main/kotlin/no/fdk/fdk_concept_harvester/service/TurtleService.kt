@@ -29,14 +29,6 @@ class TurtleService(private val turtleRepository: TurtleRepository) {
             ?.turtle
             ?.let { ungzip(it) }
 
-    fun saveAsConceptUnion(model: Model, withRecords: Boolean): TurtleDBO =
-        turtleRepository.save(model.createConceptTurtleDBO(UNION_ID, withRecords))
-
-    fun getConceptUnion(withRecords: Boolean): String? =
-        turtleRepository.findByIdOrNull(conceptTurtleID(UNION_ID, withRecords))
-            ?.turtle
-            ?.let { ungzip(it) }
-
     fun saveAsCollection(model: Model, fdkId: String, withRecords: Boolean): TurtleDBO =
         turtleRepository.save(model.createCollectionTurtleDBO(fdkId, withRecords))
 

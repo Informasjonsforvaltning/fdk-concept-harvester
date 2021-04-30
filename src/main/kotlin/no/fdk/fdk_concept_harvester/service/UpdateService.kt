@@ -29,8 +29,6 @@ class UpdateService(
     fun updateUnionModels() {
         var collectionUnion = ModelFactory.createDefaultModel()
         var collectionUnionNoRecords = ModelFactory.createDefaultModel()
-        var conceptUnion = ModelFactory.createDefaultModel()
-        var conceptUnionNoRecords = ModelFactory.createDefaultModel()
 
         collectionMetaRepository.findAll()
             .forEach {
@@ -43,21 +41,8 @@ class UpdateService(
                     ?.run { collectionUnionNoRecords = collectionUnionNoRecords.union(this) }
             }
 
-        conceptMetaRepository.findAll()
-            .forEach {
-                turtleService.getConcept(it.fdkId, withRecords = true)
-                    ?.let { turtle -> parseRDFResponse(turtle, Lang.TURTLE, null) }
-                    ?.run { conceptUnion = conceptUnion.union(this) }
-
-                turtleService.getConcept(it.fdkId, withRecords = false)
-                    ?.let { turtle -> parseRDFResponse(turtle, Lang.TURTLE, null) }
-                    ?.run { conceptUnionNoRecords = conceptUnionNoRecords.union(this) }
-            }
-
         turtleService.saveAsCollectionUnion(collectionUnion, true)
         turtleService.saveAsCollectionUnion(collectionUnionNoRecords, false)
-        turtleService.saveAsConceptUnion(conceptUnion, true)
-        turtleService.saveAsConceptUnion(conceptUnionNoRecords, false)
     }
 
     fun updateMetaData() {
