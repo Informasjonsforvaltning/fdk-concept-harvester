@@ -45,23 +45,9 @@ class ConceptTest: ApiTestContext() {
     }
 
     @Test
-    fun findAllWithRecords() {
-        val response = apiGet(port, "/concepts?catalogrecords=true", "text/turtle")
-        Assumptions.assumeTrue(HttpStatus.OK.value() == response["status"])
-
-        val expected = responseReader.parseFile("all_concepts.ttl", "TURTLE")
-        val responseModel = responseReader.parseResponse(response["body"] as String, "TURTLE")
-        assertTrue(checkIfIsomorphicAndPrintDiff(responseModel, expected, "ConceptTest-findAll"))
-    }
-
-    @Test
-    fun findAllNoRecords() {
+    fun unionDoesNotExist() {
         val response = apiGet(port, "/concepts", "text/turtle")
-        Assumptions.assumeTrue(HttpStatus.OK.value() == response["status"])
-
-        val expected = responseReader.parseFile("no_meta_all_concepts.ttl", "TURTLE")
-        val responseModel = responseReader.parseResponse(response["body"] as String, "TURTLE")
-        assertTrue(checkIfIsomorphicAndPrintDiff(responseModel, expected, "ConceptTest-findAll"))
+        Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response["status"])
     }
 
 }

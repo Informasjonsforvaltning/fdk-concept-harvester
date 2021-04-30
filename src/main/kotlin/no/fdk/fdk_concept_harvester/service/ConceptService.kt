@@ -17,14 +17,6 @@ class ConceptService(private val turtleService: TurtleService) {
             }
             ?: ModelFactory.createDefaultModel().createRDFResponse(returnType)
 
-    fun getAllConcepts(returnType: Lang, withRecords: Boolean): String =
-        turtleService.getConceptUnion(withRecords)
-            ?.let {
-                if (returnType == Lang.TURTLE) it
-                else parseRDFResponse(it, Lang.TURTLE, null)?.createRDFResponse(returnType)
-            }
-            ?: ModelFactory.createDefaultModel().createRDFResponse(returnType)
-
     fun getCollectionById(id: String, returnType: Lang, withRecords: Boolean): String? =
         turtleService.getCollection(id, withRecords)
             ?.let {

@@ -37,16 +37,4 @@ open class ConceptsController(private val conceptService: ConceptService) {
         }
     }
 
-    @GetMapping
-    fun getConcepts(
-        @RequestHeader(HttpHeaders.ACCEPT) accept: String?,
-        @RequestParam(value = "catalogrecords", required = false) catalogrecords: Boolean = false
-    ): ResponseEntity<String> {
-        LOGGER.info("get all concepts")
-        val returnType = jenaTypeFromAcceptHeader(accept)
-
-        return if (returnType == Lang.RDFNULL) ResponseEntity(HttpStatus.NOT_ACCEPTABLE)
-        else ResponseEntity(conceptService.getAllConcepts(returnType ?: Lang.TURTLE, catalogrecords), HttpStatus.OK)
-    }
-
 }
