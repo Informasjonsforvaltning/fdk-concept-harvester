@@ -2,6 +2,7 @@ package no.fdk.fdk_concept_harvester.harvester
 
 import com.nhaarman.mockitokotlin2.*
 import no.fdk.fdk_concept_harvester.adapter.ConceptsAdapter
+import no.fdk.fdk_concept_harvester.adapter.OrganizationsAdapter
 import no.fdk.fdk_concept_harvester.configuration.ApplicationProperties
 import no.fdk.fdk_concept_harvester.model.CollectionMeta
 import no.fdk.fdk_concept_harvester.model.ConceptMeta
@@ -24,8 +25,9 @@ class HarvesterTest {
     private val turtleService: TurtleService = mock()
     private val valuesMock: ApplicationProperties = mock()
     private val adapter: ConceptsAdapter = mock()
+    private val orgAdapter: OrganizationsAdapter = mock()
 
-    private val harvester = ConceptHarvester(adapter, collectionRepository, conceptRepository, turtleService, valuesMock)
+    private val harvester = ConceptHarvester(adapter, orgAdapter, collectionRepository, conceptRepository, turtleService, valuesMock)
     private val responseReader = TestResponseReader()
 
     @Test
@@ -200,6 +202,56 @@ class HarvesterTest {
         }
         argumentCaptor<ConceptMeta>().apply {
             verify(conceptRepository, times(0)).save(capture())
+        }
+    }
+
+    @Test
+    fun conceptsWithNoCollectionIsAddedToHarvestSourceCollection() {
+        whenever(adapter.getConcepts(TEST_HARVEST_SOURCE_0))
+            .thenReturn(responseReader.readFile("no_meta_concept_0.ttl"))
+        whenever(conceptRepository.findById(CONCEPT_0.uri))
+            .thenReturn(Optional.of(CONCEPT_0.copy(isPartOf = null)))
+
+        whenever(turtleService.getConcept(CONCEPT_0_ID, true))
+            .thenReturn(responseReader.readFile("concept_0.ttl"))
+
+        whenever(orgAdapter.getOrganization("123456789")).thenReturn(ORGANIZATION_0)
+
+        whenever(valuesMock.collectionsUri)
+            .thenReturn("http://localhost:5000/collections")
+        whenever(valuesMock.conceptsUri)
+            .thenReturn("http://localhost:5000/concepts")
+
+        harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE)
+
+        argumentCaptor<Model, String>().apply {
+            verify(turtleService, times(1)).saveAsHarvestSource(first.capture(), second.capture())
+            assertTrue(first.firstValue.isIsomorphicWith(responseReader.parseFile("no_meta_concept_0.ttl", "TURTLE")))
+            Assertions.assertEquals(TEST_HARVEST_SOURCE_0.url, second.firstValue)
+        }
+
+        argumentCaptor<Model, String, Boolean>().apply {
+            verify(turtleService, times(1)).saveAsCollection(first.capture(), second.capture(), third.capture())
+            assertTrue(checkIfIsomorphicAndPrintDiff(first.firstValue, responseReader.parseFile("no_meta_generated_collection.ttl", "TURTLE"), "conceptsWithNoCollectionIsAddedToHarvestSourceCollection-collection"))
+            assertEquals(listOf(GENERATED_COLLECTION_ID), second.allValues)
+            Assertions.assertEquals(listOf(false), third.allValues)
+        }
+
+        argumentCaptor<CollectionMeta>().apply {
+            verify(collectionRepository, times(1)).save(capture())
+            assertEquals(GENERATED_COLLECTION, firstValue)
+        }
+
+        argumentCaptor<Model, String, Boolean>().apply {
+            verify(turtleService, times(1)).saveAsConcept(first.capture(), second.capture(), third.capture())
+            assertTrue(checkIfIsomorphicAndPrintDiff(first.allValues[0], responseReader.parseFile("no_meta_concept_0.ttl", "TURTLE"), "conceptsWithNoCollectionIsAddedToHarvestSourceCollection-concept"))
+            assertEquals(listOf(CONCEPT_0_ID), second.allValues)
+            Assertions.assertEquals(listOf(false), third.allValues)
+        }
+
+        argumentCaptor<ConceptMeta>().apply {
+            verify(conceptRepository, times(2)).save(capture())
+            assertEquals(listOf(CONCEPT_0.copy(isPartOf = null), CONCEPT_0.copy(isPartOf = "http://localhost:5000/collections/$GENERATED_COLLECTION_ID")), allValues)
         }
     }
 

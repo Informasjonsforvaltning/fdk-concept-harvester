@@ -1,6 +1,7 @@
 package no.fdk.fdk_concept_harvester.harvester
 
 import no.fdk.fdk_concept_harvester.adapter.ConceptsAdapter
+import no.fdk.fdk_concept_harvester.adapter.OrganizationsAdapter
 import no.fdk.fdk_concept_harvester.configuration.ApplicationProperties
 import no.fdk.fdk_concept_harvester.model.*
 import no.fdk.fdk_concept_harvester.rdf.*
@@ -23,6 +24,7 @@ private val LOGGER = LoggerFactory.getLogger(ConceptHarvester::class.java)
 @Service
 class ConceptHarvester(
     private val adapter: ConceptsAdapter,
+    private val orgAdapter: OrganizationsAdapter,
     private val collectionMetaRepository: CollectionMetaRepository,
     private val conceptMetaRepository: ConceptMetaRepository,
     private val turtleService: TurtleService,
@@ -44,11 +46,16 @@ class ConceptHarvester(
                 jenaWriterType == null -> LOGGER.error("Not able to harvest from ${source.url}, no accept header supplied")
                 jenaWriterType == Lang.RDFNULL -> LOGGER.error("Not able to harvest from ${source.url}, header ${source.acceptHeaderValue} is not acceptable ")
                 harvested == null -> LOGGER.info("Not able to harvest ${source.url}")
-                else -> saveIfHarvestedContainsChanges(harvested, source.url, harvestDate)
+                else -> saveIfHarvestedContainsChanges(harvested, source.url, harvestDate, source.publisherId)
             }
         } else LOGGER.error("Harvest source is not defined")
 
-    private fun saveIfHarvestedContainsChanges(harvested: Model, sourceURL: String, harvestDate: Calendar) {
+    private fun saveIfHarvestedContainsChanges(
+        harvested: Model,
+        sourceURL: String,
+        harvestDate: Calendar,
+        publisherId: String?
+    ) {
         val dbData = turtleService.getHarvestSource(sourceURL)
             ?.let { parseRDFResponse(it, Lang.TURTLE, null) }
 
@@ -60,11 +67,16 @@ class ConceptHarvester(
 
             val concepts = splitConceptsFromRDF(harvested)
 
-            if (concepts.isEmpty()) LOGGER.error("No collection with conceptss found in data harvested from $sourceURL")
+            if (concepts.isEmpty()) LOGGER.error("No collection with concepts found in data harvested from $sourceURL")
             else {
                 updateConcepts(concepts, harvestDate)
-                updateCollections(splitCollectionsFromRDF(harvested, concepts), harvestDate)
 
+                val organization = if (publisherId != null && concepts.containsFreeConcepts()) {
+                    orgAdapter.getOrganization(publisherId)
+                } else null
+
+                val collections = splitCollectionsFromRDF(harvested, concepts, sourceURL, organization)
+                updateCollections(collections, harvestDate)
             }
         }
     }

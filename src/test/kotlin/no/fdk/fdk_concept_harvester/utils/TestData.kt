@@ -1,6 +1,9 @@
 package no.fdk.fdk_concept_harvester.utils
 
+import no.fdk.fdk_concept_harvester.model.CollectionMeta
 import no.fdk.fdk_concept_harvester.model.HarvestDataSource
+import no.fdk.fdk_concept_harvester.model.Organization
+import no.fdk.fdk_concept_harvester.model.PrefLabel
 import org.testcontainers.shaded.com.google.common.collect.ImmutableMap
 import java.util.*
 
@@ -23,17 +26,34 @@ val TEST_HARVEST_SOURCE_0 = HarvestDataSource(
     url = "http://localhost:5000/concept-harvest-source-0",
     acceptHeaderValue = "text/turtle",
     dataType = "concept",
-    dataSourceType = "SKOS-AP-NO"
+    dataSourceType = "SKOS-AP-NO",
+    publisherId = "123456789"
 )
 
 val TEST_HARVEST_SOURCE_1 = HarvestDataSource(
     url = "http://localhost:5000/concept-harvest-source-1",
     acceptHeaderValue = "text/turtle",
     dataType = "concept",
-    dataSourceType = "SKOS-AP-NO"
+    dataSourceType = "SKOS-AP-NO",
+    publisherId = "987654321"
 )
 
 const val COLLECTION_0_ID = "9b8f1c42-1161-33b1-9d43-a733ee94ddfc"
 
 const val CONCEPT_0_ID = "db1b701c-b4b9-3c20-bc23-236a91236754"
 const val CONCEPT_1_ID = "7dbac738-4944-323a-a777-ad2f83bf75f8"
+
+const val GENERATED_COLLECTION_ID = "24a90ee1-bd80-390b-8cfc-983960909392"
+
+val GENERATED_COLLECTION = CollectionMeta(
+    uri = "http://localhost:5000/concept-harvest-source-0#GeneratedCollection", fdkId = GENERATED_COLLECTION_ID,
+    issued = 1609852539831, modified = 1609852539831,
+    concepts = setOf("https://example.com/begrep/0")
+)
+
+val ORGANIZATION_0 = Organization(
+    organizationId = "123456789",
+    uri = "http://localhost:5000/organizations/123456789",
+    name = "TESTDIREKTORATET",
+    prefLabel = PrefLabel(nb = "Testdirektoratet")
+)

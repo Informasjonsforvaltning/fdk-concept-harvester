@@ -1,15 +1,13 @@
 package no.fdk.fdk_concept_harvester.harvester
 
+import no.fdk.fdk_concept_harvester.model.HarvestDataSource
+import no.fdk.fdk_concept_harvester.model.Organization
 import no.fdk.fdk_concept_harvester.rdf.*
 import org.apache.jena.query.QueryExecutionFactory
 import org.apache.jena.query.QueryFactory
-import org.apache.jena.rdf.model.Model
-import org.apache.jena.rdf.model.Resource
-import org.apache.jena.rdf.model.ResourceRequiredException
-import org.apache.jena.rdf.model.Statement
+import org.apache.jena.rdf.model.*
 import org.apache.jena.riot.Lang
-import org.apache.jena.vocabulary.RDF
-import org.apache.jena.vocabulary.SKOS
+import org.apache.jena.vocabulary.*
 import java.util.*
 
 
@@ -21,8 +19,13 @@ fun ConceptRDFModel.harvestDiff(dboNoRecords: String?): Boolean =
     if (dboNoRecords == null) true
     else !harvested.isIsomorphicWith(parseRDFResponse(dboNoRecords, Lang.TURTLE, null))
 
-fun splitCollectionsFromRDF(harvested: Model, allConcepts: List<ConceptRDFModel>): List<CollectionRDFModel> =
-    harvested.listResourcesWithProperty(RDF.type, SKOS.Collection)
+fun splitCollectionsFromRDF(
+    harvested: Model,
+    allConcepts: List<ConceptRDFModel>,
+    sourceURL: String,
+    organization: Organization?
+): List<CollectionRDFModel> {
+    val harvestedCollections = harvested.listResourcesWithProperty(RDF.type, SKOS.Collection)
         .toList()
         .filter { it.hasProperty(SKOS.member) }
         .map { collectionResource ->
@@ -44,6 +47,12 @@ fun splitCollectionsFromRDF(harvested: Model, allConcepts: List<ConceptRDFModel>
                 concepts = collectionConcepts
             )
         }
+
+    val conceptsNotMemberOfCollection = allConcepts.filterNot { it.isMemberOfAnyCollection }
+
+    return if (conceptsNotMemberOfCollection.isEmpty()) harvestedCollections
+    else harvestedCollections.plus(generatedCollection(conceptsNotMemberOfCollection, sourceURL, organization))
+}
 
 fun splitConceptsFromRDF(harvested: Model): List<ConceptRDFModel> =
     harvested.listResourcesWithProperty(RDF.type, SKOS.Concept)
@@ -74,7 +83,11 @@ fun Resource.extractConcept(): ConceptRDFModel {
         .filter { it.isResourceProperty() }
         .forEach { conceptModel = conceptModel.recursiveAddNonConceptResource(it.resource, 10) }
 
-    return ConceptRDFModel(resourceURI = uri, harvested = conceptModel)
+    return ConceptRDFModel(
+        resourceURI = uri,
+        harvested = conceptModel,
+        isMemberOfAnyCollection = isMemberOfAnyCollection()
+    )
 }
 
 private fun Model.recursiveAddNonConceptResource(resource: Resource, recursiveCount: Int): Model {
@@ -90,6 +103,79 @@ private fun Model.recursiveAddNonConceptResource(resource: Resource, recursiveCo
         }
     }
 
+    return this
+}
+
+private fun generatedCollection(
+    concepts: List<ConceptRDFModel>,
+    sourceURL: String,
+    organization: Organization?
+): CollectionRDFModel {
+    val conceptURIs = concepts.map { it.resourceURI }.toSet()
+    val generatedCollectionURI = "$sourceURL#GeneratedCollection"
+    val collectionModelWithoutConcepts = createModelForHarvestSourceCollection(generatedCollectionURI, conceptURIs, organization)
+
+    var collectionModel = collectionModelWithoutConcepts
+    concepts.forEach { collectionModel = collectionModel.union(it.harvested) }
+
+    return CollectionRDFModel(
+        resourceURI = generatedCollectionURI,
+        harvestedWithoutConcepts = collectionModelWithoutConcepts,
+        harvested = collectionModel,
+        concepts = conceptURIs
+    )
+}
+
+private fun createModelForHarvestSourceCollection(
+    collectionURI: String,
+    concepts: Set<String>,
+    organization: Organization?
+): Model {
+    val collectionModel = ModelFactory.createDefaultModel()
+    collectionModel.createResource(collectionURI)
+        .addProperty(RDF.type, SKOS.Collection)
+        .addPublisherForGeneratedCollection(organization?.uri)
+        .addLabelForGeneratedCollection(organization)
+        .addMembersForGeneratedCollection(concepts)
+
+    return collectionModel
+}
+
+private fun Resource.addPublisherForGeneratedCollection(publisherURI: String?): Resource {
+    if (publisherURI != null) {
+        addProperty(
+            DCTerms.publisher,
+            ResourceFactory.createResource(publisherURI)
+        )
+    }
+
+    return this
+}
+
+private fun Resource.addLabelForGeneratedCollection(organization: Organization?): Resource {
+    val nb: String? = organization?.prefLabel?.nb ?: organization?.name
+    if (!nb.isNullOrBlank()) {
+        val label = model.createLiteral("$nb - Begrepssamling", "nb")
+        addProperty(RDFS.label, label)
+    }
+
+    val nn: String? = organization?.prefLabel?.nn ?: organization?.name
+    if (!nb.isNullOrBlank()) {
+        val label = model.createLiteral("$nn - Begrepssamling", "nn")
+        addProperty(RDFS.label, label)
+    }
+
+    val en: String? = organization?.prefLabel?.en ?: organization?.name
+    if (!en.isNullOrBlank()) {
+        val label = model.createLiteral("$en - Concept collection", "en")
+        addProperty(RDFS.label, label)
+    }
+
+    return this
+}
+
+private fun Resource.addMembersForGeneratedCollection(concepts: Set<String>): Resource {
+    concepts.forEach { addProperty(SKOS.member, model.createResource(it)) }
     return this
 }
 
@@ -115,7 +201,8 @@ data class CollectionRDFModel(
 
 data class ConceptRDFModel(
     val resourceURI: String,
-    val harvested: Model
+    val harvested: Model,
+    val isMemberOfAnyCollection: Boolean
 )
 
 private fun Model.resourceShouldBeAdded(resource: Resource): Boolean {
@@ -129,3 +216,17 @@ private fun Model.resourceShouldBeAdded(resource: Resource): Boolean {
         else -> true
     }
 }
+
+private fun Resource.isMemberOfAnyCollection(): Boolean {
+    val askQuery = """ASK {
+        ?collection a <${SKOS.Collection.uri}> .
+        ?collection <${SKOS.member.uri}> <$uri> .
+    }""".trimMargin()
+
+    val query = QueryFactory.create(askQuery)
+    return QueryExecutionFactory.create(query, model).execAsk()
+}
+
+fun List<ConceptRDFModel>.containsFreeConcepts(): Boolean =
+    firstOrNull { !it.isMemberOfAnyCollection } != null
+
