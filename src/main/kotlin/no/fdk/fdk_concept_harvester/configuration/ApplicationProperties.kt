@@ -8,5 +8,6 @@ import org.springframework.boot.context.properties.ConstructorBinding
 data class ApplicationProperties(
     val conceptsUri: String,
     val collectionsUri: String,
+    val organizationsUri: String,
     val harvestAdminRootUrl: String
 )

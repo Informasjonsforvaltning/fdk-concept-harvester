@@ -19,6 +19,7 @@ spring:
 application:
   conceptsUri: ${FDK_CONCEPT_HARVESTER_URI:https://concepts.staging.fellesdatakatalog.digdir.no}/concepts
   collectionsUri: ${FDK_CONCEPT_HARVESTER_URI:https://concepts.staging.fellesdatakatalog.digdir.no}/collections
+  organizationsUri: ${ORGANIZATION_CATALOGUE_URI:https://organization-catalogue.staging.fellesdatakatalog.digdir.no}/organizations
   harvestAdminRootUrl: ${HARVEST_ADMIN_ROOT_URL:http://fdk-harvest-admin:8080/api}
 
 ---
@@ -33,6 +34,7 @@ spring:
 application:
   conceptsUri: https://concepts.staging.fellesdatakatalog.digdir.no/concepts
   collectionsUri: https://concepts.staging.fellesdatakatalog.digdir.no/collections
+  organizationsUri: https://organization-catalogue.staging.fellesdatakatalog.digdir.no/organizations
   harvestAdminRootUrl: https://admin-api.staging.fellesdatakatalog.digdir.no/api
 
 ---
@@ -50,4 +52,5 @@ spring:
 application:
   conceptsUri: http://localhost:5000/concepts
   collectionsUri: http://localhost:5000/collections
+  organizationsUri: http://localhost:5000/organizations
   harvestAdminRootUrl: http://localhost:5000/api
