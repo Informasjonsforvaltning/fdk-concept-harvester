@@ -36,4 +36,11 @@ open class RabbitMQConfig {
             .to(topicExchange)
             .with("concept.*.HarvestTrigger")
 
+    @Bean
+    open fun sendBinding(topicExchange: TopicExchange?, senderQueue: Queue?): Binding =
+        BindingBuilder
+            .bind(senderQueue)
+            .to(topicExchange)
+            .with("concepts.harvester.UpdateSearchTrigger")
+
 }
