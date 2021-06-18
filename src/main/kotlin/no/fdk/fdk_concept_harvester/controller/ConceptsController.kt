@@ -16,7 +16,8 @@ private val LOGGER = LoggerFactory.getLogger(ConceptsController::class.java)
 @CrossOrigin
 @RequestMapping(
     value = ["/concepts"],
-    produces = ["text/turtle", "text/n3", "application/rdf+json", "application/ld+json", "application/rdf+xml", "application/n-triples"]
+    produces = ["text/turtle", "text/n3", "application/rdf+json", "application/ld+json", "application/rdf+xml",
+        "application/n-triples", "application/n-quads", "application/trig", "application/trix"]
 )
 open class ConceptsController(private val conceptService: ConceptService) {
 

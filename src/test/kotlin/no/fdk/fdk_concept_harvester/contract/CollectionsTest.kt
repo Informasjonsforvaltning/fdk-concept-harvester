@@ -1,6 +1,7 @@
 package no.fdk.fdk_concept_harvester.contract
 
 import no.fdk.fdk_concept_harvester.utils.*
+import org.apache.jena.riot.Lang
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.springframework.boot.test.context.SpringBootTest
@@ -29,11 +30,11 @@ class CollectionsTest: ApiTestContext() {
 
     @Test
     fun findSpecificNoRecords() {
-        val response = apiGet(port, "/collections/$COLLECTION_0_ID", "application/rdf+xml")
+        val response = apiGet(port, "/collections/$COLLECTION_0_ID", "application/trix")
         Assumptions.assumeTrue(HttpStatus.OK.value() == response["status"])
 
         val expected = responseReader.parseFile("harvest_response_0.ttl", "TURTLE")
-        val responseModel = responseReader.parseResponse(response["body"] as String, "RDFXML")
+        val responseModel = responseReader.parseResponse(response["body"] as String, Lang.TRIX.name)
 
         assertTrue(expected.isIsomorphicWith(responseModel))
     }
@@ -56,11 +57,11 @@ class CollectionsTest: ApiTestContext() {
 
     @Test
     fun findAllNoRecords() {
-        val response = apiGet(port, "/collections", "text/turtle")
+        val response = apiGet(port, "/collections", "application/trig")
         Assumptions.assumeTrue(HttpStatus.OK.value() == response["status"])
 
         val expected = responseReader.parseFile("harvest_response_0.ttl", "TURTLE")
-        val responseModel = responseReader.parseResponse(response["body"] as String, "TURTLE")
+        val responseModel = responseReader.parseResponse(response["body"] as String, Lang.TRIG.name)
         assertTrue(expected.isIsomorphicWith(responseModel))
     }
 
