@@ -1,6 +1,7 @@
 package no.fdk.fdk_concept_harvester.contract
 
 import no.fdk.fdk_concept_harvester.utils.*
+import org.apache.jena.riot.Lang
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.springframework.boot.test.context.SpringBootTest
@@ -29,11 +30,11 @@ class ConceptTest: ApiTestContext() {
 
     @Test
     fun findSpecificNoRecords() {
-        val response = apiGet(port, "/concepts/$CONCEPT_0_ID", "application/rdf+json")
+        val response = apiGet(port, "/concepts/$CONCEPT_0_ID", "application/n-quads")
         Assumptions.assumeTrue(HttpStatus.OK.value() == response["status"])
 
         val expected = responseReader.parseFile("no_meta_concept_0.ttl", "TURTLE")
-        val responseModel = responseReader.parseResponse(response["body"] as String, "RDF/JSON")
+        val responseModel = responseReader.parseResponse(response["body"] as String, Lang.NQUADS.name)
 
         assertTrue(expected.isIsomorphicWith(responseModel))
     }
