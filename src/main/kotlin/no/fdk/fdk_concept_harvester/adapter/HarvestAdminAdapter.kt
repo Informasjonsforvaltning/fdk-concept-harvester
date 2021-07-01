@@ -3,6 +3,7 @@ package no.fdk.fdk_concept_harvester.adapter
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import no.fdk.fdk_concept_harvester.configuration.ApplicationProperties
+import no.fdk.fdk_concept_harvester.harvester.HarvestException
 import no.fdk.fdk_concept_harvester.model.HarvestDataSource
 import org.slf4j.LoggerFactory
 import org.springframework.http.*
@@ -36,10 +37,10 @@ class HarvestAdminAdapter(private val applicationProperties: ApplicationProperti
                     val body = inputStream.bufferedReader().use(BufferedReader::readText)
                     return jacksonObjectMapper().readValue(body)
                 } else {
-                    logger.error(Exception("Fetch of harvest urls from $url failed, status: $responseCode").stackTraceToString())
+                    logger.error("Fetch of harvest urls from $url failed, status: $responseCode", Exception("Fetch of data sources failed"))
                 }
             } catch (ex: Exception) {
-                logger.error("${ex.stackTraceToString()}: Error fetching harvest urls from $url")
+                logger.error("Error fetching harvest urls from $url", ex)
             } finally {
                 disconnect()
             }
