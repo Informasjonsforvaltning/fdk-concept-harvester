@@ -230,3 +230,4 @@ private fun Resource.isMemberOfAnyCollection(): Boolean {
 fun List<ConceptRDFModel>.containsFreeConcepts(): Boolean =
     firstOrNull { !it.isMemberOfAnyCollection } != null
 
+class HarvestException(url: String) : Exception("Harvest failed for $url")

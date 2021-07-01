@@ -28,10 +28,10 @@ class OrganizationsAdapter(private val applicationProperties: ApplicationPropert
                         .readValue<Organization?>(body)
                         ?.copy(uri = uri)
                 } else {
-                    logger.error(Exception("Fetch of organization with id $id failed, status: $responseCode").stackTraceToString())
+                    logger.error("Fetch of organization with id $id failed, status: $responseCode", Exception("Fetch of organization with id $id failed"))
                 }
             } catch (ex: Exception) {
-                logger.error("${ex.stackTraceToString()}: Error fetching organization with id $id")
+                logger.error("Error fetching organization with id $id", ex)
             } finally {
                 disconnect()
             }
