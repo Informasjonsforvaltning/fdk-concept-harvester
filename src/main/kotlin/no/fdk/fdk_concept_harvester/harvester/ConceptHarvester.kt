@@ -43,12 +43,12 @@ class ConceptHarvester(
             }
 
             when {
-                jenaWriterType == null -> LOGGER.error("Not able to harvest from ${source.url}, no accept header supplied")
-                jenaWriterType == Lang.RDFNULL -> LOGGER.error("Not able to harvest from ${source.url}, header ${source.acceptHeaderValue} is not acceptable ")
+                jenaWriterType == null -> LOGGER.error(Exception("Not able to harvest from ${source.url}, no accept header supplied").stackTraceToString())
+                jenaWriterType == Lang.RDFNULL -> LOGGER.error(Exception("Not able to harvest from ${source.url}, header ${source.acceptHeaderValue} is not acceptable").stackTraceToString())
                 harvested == null -> LOGGER.info("Not able to harvest ${source.url}")
                 else -> saveIfHarvestedContainsChanges(harvested, source.url, harvestDate, source.publisherId)
             }
-        } else LOGGER.error("Harvest source is not defined")
+        } else LOGGER.error(Exception("Harvest source is not defined").stackTraceToString())
 
     private fun saveIfHarvestedContainsChanges(
         harvested: Model,
@@ -67,7 +67,7 @@ class ConceptHarvester(
 
             val concepts = splitConceptsFromRDF(harvested)
 
-            if (concepts.isEmpty()) LOGGER.error("No collection with concepts found in data harvested from $sourceURL")
+            if (concepts.isEmpty()) LOGGER.error(Exception("No collection with concepts found in data harvested from $sourceURL").stackTraceToString())
             else {
                 updateConcepts(concepts, harvestDate)
 
