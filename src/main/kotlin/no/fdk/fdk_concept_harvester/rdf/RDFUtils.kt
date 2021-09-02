@@ -59,8 +59,10 @@ fun createIdFromUri(uri: String): String =
 fun Model.containsTriple(subj: String, pred: String, obj: String): Boolean {
     val askQuery = "ASK { $subj $pred $obj }"
 
-    val query = QueryFactory.create(askQuery)
-    return QueryExecutionFactory.create(query, this).execAsk()
+    return try {
+        val query = QueryFactory.create(askQuery)
+        QueryExecutionFactory.create(query, this).execAsk()
+    } catch (ex: Exception) { false }
 }
 
 fun Resource.safeAddProperty(property: Property, value: String?): Resource =
