@@ -33,7 +33,7 @@ class CollectionsTest: ApiTestContext() {
         val response = apiGet(port, "/collections/$COLLECTION_0_ID", "application/trix")
         Assumptions.assumeTrue(HttpStatus.OK.value() == response["status"])
 
-        val expected = responseReader.parseFile("harvest_response_0.ttl", "TURTLE")
+        val expected = responseReader.parseFile("no_meta_collection_0.ttl", "TURTLE")
         val responseModel = responseReader.parseResponse(response["body"] as String, Lang.TRIX.name)
 
         assertTrue(expected.isIsomorphicWith(responseModel))
@@ -60,7 +60,7 @@ class CollectionsTest: ApiTestContext() {
         val response = apiGet(port, "/collections", "application/trig")
         Assumptions.assumeTrue(HttpStatus.OK.value() == response["status"])
 
-        val expected = responseReader.parseFile("harvest_response_0.ttl", "TURTLE")
+        val expected = responseReader.parseFile("no_meta_collection_0.ttl", "TURTLE")
         val responseModel = responseReader.parseResponse(response["body"] as String, Lang.TRIG.name)
         assertTrue(expected.isIsomorphicWith(responseModel))
     }
