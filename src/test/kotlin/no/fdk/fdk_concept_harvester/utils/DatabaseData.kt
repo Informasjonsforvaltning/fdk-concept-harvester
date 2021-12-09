@@ -70,7 +70,7 @@ val COLLECTION_TURTLE_META = TurtleDBO(
 
 val COLLECTION_TURTLE_NO_META = TurtleDBO(
     id = "collection-no-records-$COLLECTION_0_ID",
-    turtle = gzip(responseReader.readFile("harvest_response_0.ttl"))
+    turtle = gzip(responseReader.readFile("no_meta_collection_0.ttl"))
 )
 
 val COLLECTION_UNION_TURTLE = TurtleDBO(
@@ -80,7 +80,7 @@ val COLLECTION_UNION_TURTLE = TurtleDBO(
 
 val COLLECTION_UNION_TURTLE_NO_RECORDS = TurtleDBO(
     id = "collection-no-records-$UNION_ID",
-    turtle = gzip(responseReader.readFile("harvest_response_0.ttl"))
+    turtle = gzip(responseReader.readFile("no_meta_collection_0.ttl"))
 )
 
 val HARVESTED_TURTLE = TurtleDBO(

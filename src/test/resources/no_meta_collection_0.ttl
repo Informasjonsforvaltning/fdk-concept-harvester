@@ -14,15 +14,10 @@
     dct:identifier "0" ;
     dct:publisher <https://data.brreg.no/enhetsregisteret/api/enheter/974760673> ;
     skos:member <https://example.com/begrep/0>,
-        <https://example.com/begrep/1>,
-        [ a skos:Concept ; dct:identifier "is-filtered" ];
+        <https://example.com/begrep/1>;
     dcat:contactPoint [ a vcard:Organization ;
             vcard:hasEmail <mailto:test@example.com> ;
             vcard:hasTelephone <tel:12345678> ] .
-
-[   a           skos:Collection ;
-    rdfs:label  "Is filtered"@en
-] .
 
 <https://example.com/begrep/0>
     a                   skos:Concept ;

@@ -35,7 +35,7 @@ class UpdateServiceTest {
             whenever(conceptMetaRepository.findAllByIsPartOf("http://localhost:5000/collections/${COLLECTION_0_ID}"))
                 .thenReturn(listOf(CONCEPT_0, CONCEPT_1))
             whenever(turtleService.getCollection(COLLECTION_0_ID, false))
-                .thenReturn(responseReader.readFile("harvest_response_0.ttl"))
+                .thenReturn(responseReader.readFile("no_meta_collection_0.ttl"))
             whenever(turtleService.getConcept(CONCEPT_0_ID, false))
                 .thenReturn(responseReader.readFile("no_meta_concept_0.ttl"))
             whenever(turtleService.getConcept(CONCEPT_1_ID, false))

@@ -1,6 +1,6 @@
 package no.fdk.fdk_concept_harvester.harvester
 
-import no.fdk.fdk_concept_harvester.model.HarvestDataSource
+import no.fdk.fdk_concept_harvester.Application
 import no.fdk.fdk_concept_harvester.model.Organization
 import no.fdk.fdk_concept_harvester.rdf.*
 import org.apache.jena.query.QueryExecutionFactory
@@ -8,8 +8,10 @@ import org.apache.jena.query.QueryFactory
 import org.apache.jena.rdf.model.*
 import org.apache.jena.riot.Lang
 import org.apache.jena.vocabulary.*
+import org.slf4j.LoggerFactory
 import java.util.*
 
+private val LOGGER = LoggerFactory.getLogger(Application::class.java)
 
 fun CollectionRDFModel.harvestDiff(dboNoRecords: String?): Boolean =
     if (dboNoRecords == null) true
@@ -27,11 +29,14 @@ fun splitCollectionsFromRDF(
 ): List<CollectionRDFModel> {
     val harvestedCollections = harvested.listResourcesWithProperty(RDF.type, SKOS.Collection)
         .toList()
+        .filterBlankNodeCollectionsAndConcepts(sourceURL)
         .filter { it.hasProperty(SKOS.member) }
         .map { collectionResource ->
             val collectionConcepts: Set<String> = collectionResource.listProperties(SKOS.member)
                 .toList()
-                .map { dataset -> dataset.resource.uri }
+                .map { it.resource }
+                .filterBlankNodeCollectionsAndConcepts(sourceURL)
+                .map { it.uri }
                 .toSet()
 
             val collectionModelWithoutConcepts = collectionResource.extractCollectionModel()
@@ -54,26 +59,43 @@ fun splitCollectionsFromRDF(
     else harvestedCollections.plus(generatedCollection(conceptsNotMemberOfCollection, sourceURL, organization))
 }
 
-fun splitConceptsFromRDF(harvested: Model): List<ConceptRDFModel> =
+private fun List<Resource>.filterBlankNodeCollectionsAndConcepts(sourceURL: String): List<Resource> =
+    filter {
+        if (it.isURIResource) true
+        else {
+            LOGGER.error(
+                "Failed harvest of collection or concept for $sourceURL, unable to harvest blank node collections and concepts",
+                Exception("unable to harvest blank node collections and concepts")
+            )
+            false
+        }
+    }
+
+fun splitConceptsFromRDF(harvested: Model, sourceURL: String): List<ConceptRDFModel> =
     harvested.listResourcesWithProperty(RDF.type, SKOS.Concept)
         .toList()
+        .filterBlankNodeCollectionsAndConcepts(sourceURL)
         .map { conceptResource -> conceptResource.extractConcept() }
 
 fun Resource.extractCollectionModel(): Model {
-    var collectionModelWithoutConcepts = listProperties().toModel()
+    val collectionModelWithoutConcepts = ModelFactory.createDefaultModel()
     collectionModelWithoutConcepts.setNsPrefixes(model.nsPrefixMap)
 
-    listProperties().toList()
-        .filter { it.isResourceProperty() }
-        .forEach {
-            if (it.predicate != SKOS.member) {
-                collectionModelWithoutConcepts =
-                    collectionModelWithoutConcepts.recursiveAddNonConceptResource(it.resource, 5)
-            }
-        }
+    listProperties()
+        .toList()
+        .forEach { collectionModelWithoutConcepts.addCatalogProperties(it) }
 
     return collectionModelWithoutConcepts
 }
+
+private fun Model.addCatalogProperties(property: Statement): Model =
+    when {
+        property.predicate != SKOS.member && property.isResourceProperty() ->
+            add(property).recursiveAddNonConceptResource(property.resource, 5)
+        property.predicate != SKOS.member -> add(property)
+        property.isResourceProperty() && property.resource.isURIResource -> add(property)
+        else -> this
+    }
 
 fun Resource.extractConcept(): ConceptRDFModel {
     var conceptModel = listProperties().toModel()
@@ -212,6 +234,7 @@ private fun Model.resourceShouldBeAdded(resource: Resource): Boolean {
 
     return when {
         types.contains(SKOS.Concept) -> false
+        !resource.isURIResource -> true
         containsTriple("<${resource.uri}>", "a", "?o") -> false
         else -> true
     }

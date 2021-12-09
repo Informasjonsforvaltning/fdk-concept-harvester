@@ -65,7 +65,7 @@ class ConceptHarvester(
             LOGGER.info("Changes detected, saving data from $sourceURL and updating FDK meta data")
             turtleService.saveAsHarvestSource(harvested, sourceURL)
 
-            val concepts = splitConceptsFromRDF(harvested)
+            val concepts = splitConceptsFromRDF(harvested, sourceURL)
 
             if (concepts.isEmpty()) LOGGER.error("No collection with concepts found in data harvested from $sourceURL", HarvestException(sourceURL))
             else {

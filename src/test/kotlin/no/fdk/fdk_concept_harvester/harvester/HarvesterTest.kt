@@ -61,7 +61,7 @@ class HarvesterTest {
 
         argumentCaptor<Model, String, Boolean>().apply {
             verify(turtleService, times(1)).saveAsCollection(first.capture(), second.capture(), third.capture())
-            assertTrue(checkIfIsomorphicAndPrintDiff(first.allValues[0], responseReader.parseFile("harvest_response_0.ttl", "TURTLE"), "harvestDataSourceSavedWhenDBIsEmpty-norecords-collection0"))
+            assertTrue(checkIfIsomorphicAndPrintDiff(first.allValues[0], responseReader.parseFile("no_meta_collection_0.ttl", "TURTLE"), "harvestDataSourceSavedWhenDBIsEmpty-norecords-collection0"))
             assertEquals(listOf(COLLECTION_0_ID), second.allValues)
             Assertions.assertEquals(listOf(false), third.allValues)
         }
@@ -166,7 +166,7 @@ class HarvesterTest {
 
         argumentCaptor<Model, String, Boolean>().apply {
             verify(turtleService, times(1)).saveAsCollection(first.capture(), second.capture(), third.capture())
-            assertTrue(checkIfIsomorphicAndPrintDiff(first.allValues[0], responseReader.parseFile("harvest_response_0.ttl", "TURTLE"), "onlyRelevantUpdatedWhenHarvestedFromDB-norecords-collection0"))
+            assertTrue(checkIfIsomorphicAndPrintDiff(first.allValues[0], responseReader.parseFile("no_meta_collection_0.ttl", "TURTLE"), "onlyRelevantUpdatedWhenHarvestedFromDB-norecords-collection0"))
             assertEquals(listOf(COLLECTION_0_ID), second.allValues)
             Assertions.assertEquals(listOf(false), third.allValues)
         }
