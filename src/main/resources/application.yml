@@ -21,7 +21,20 @@ application:
   collectionsUri: ${FDK_CONCEPT_HARVESTER_URI:https://concepts.staging.fellesdatakatalog.digdir.no}/collections
   organizationsUri: ${ORGANIZATION_CATALOGUE_URI:https://organization-catalogue.staging.fellesdatakatalog.digdir.no}/organizations
   harvestAdminRootUrl: ${HARVEST_ADMIN_ROOT_URL:http://fdk-harvest-admin:8080/api}
-
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  metrics:
+    export:
+      statsd:
+        enabled: true
+        flavor: telegraf
+        host: fdk-monitoring-services-telegraf
+        port: 8125
+    tags:
+      application: fdk-concept-harvester
 ---
 spring:
   config.activate.on-profile: develop
