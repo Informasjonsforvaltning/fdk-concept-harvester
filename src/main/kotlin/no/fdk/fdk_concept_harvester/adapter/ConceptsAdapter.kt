@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service
 import java.io.BufferedReader
 import java.net.HttpURLConnection
 import java.net.URL
+import java.nio.charset.Charset
 
 private val LOGGER = LoggerFactory.getLogger(ConceptsAdapter::class.java)
 
@@ -24,9 +25,11 @@ class ConceptsAdapter {
                 LOGGER.error("${source.url} responded with ${connection.responseCode}, harvest will be aborted", HarvestException(source.url ?: "undefined"))
                 null
             } else {
+                val charset = if(connection.contentEncoding != null)
+                    Charset.forName(connection.contentEncoding) else Charsets.UTF_8
                 connection
                     .inputStream
-                    .bufferedReader()
+                    .bufferedReader(charset)
                     .use(BufferedReader::readText)
             }
 

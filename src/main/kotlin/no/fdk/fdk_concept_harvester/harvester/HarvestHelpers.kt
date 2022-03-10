@@ -29,13 +29,13 @@ fun splitCollectionsFromRDF(
 ): List<CollectionRDFModel> {
     val harvestedCollections = harvested.listResourcesWithProperty(RDF.type, SKOS.Collection)
         .toList()
-        .filterBlankNodeCollectionsAndConcepts(sourceURL)
+        .excludeBlankNodeCollectionsAndConcepts(sourceURL)
         .filter { it.hasProperty(SKOS.member) }
         .map { collectionResource ->
             val collectionConcepts: Set<String> = collectionResource.listProperties(SKOS.member)
                 .toList()
                 .map { it.resource }
-                .filterBlankNodeCollectionsAndConcepts(sourceURL)
+                .excludeBlankNodeCollectionsAndConcepts(sourceURL)
                 .map { it.uri }
                 .toSet()
 
@@ -59,7 +59,7 @@ fun splitCollectionsFromRDF(
     else harvestedCollections.plus(generatedCollection(conceptsNotMemberOfCollection, sourceURL, organization))
 }
 
-private fun List<Resource>.filterBlankNodeCollectionsAndConcepts(sourceURL: String): List<Resource> =
+private fun List<Resource>.excludeBlankNodeCollectionsAndConcepts(sourceURL: String): List<Resource> =
     filter {
         if (it.isURIResource) true
         else {
@@ -74,7 +74,7 @@ private fun List<Resource>.filterBlankNodeCollectionsAndConcepts(sourceURL: Stri
 fun splitConceptsFromRDF(harvested: Model, sourceURL: String): List<ConceptRDFModel> =
     harvested.listResourcesWithProperty(RDF.type, SKOS.Concept)
         .toList()
-        .filterBlankNodeCollectionsAndConcepts(sourceURL)
+        .excludeBlankNodeCollectionsAndConcepts(sourceURL)
         .map { conceptResource -> conceptResource.extractConcept() }
 
 fun Resource.extractCollectionModel(): Model {

@@ -1,19 +1,21 @@
 package no.fdk.fdk_concept_harvester.harvester
 
 import no.fdk.fdk_concept_harvester.adapter.ConceptsAdapter
-import no.fdk.fdk_concept_harvester.adapter.OrganizationsAdapter
+import no.fdk.fdk_concept_harvester.adapter.DefaultOrganizationsAdapter
 import no.fdk.fdk_concept_harvester.configuration.ApplicationProperties
-import no.fdk.fdk_concept_harvester.model.*
-import no.fdk.fdk_concept_harvester.rdf.*
-import no.fdk.fdk_concept_harvester.repository.*
+import no.fdk.fdk_concept_harvester.model.CollectionMeta
+import no.fdk.fdk_concept_harvester.model.ConceptMeta
+import no.fdk.fdk_concept_harvester.model.ContentType
+import no.fdk.fdk_concept_harvester.model.HarvestDataSource
+import no.fdk.fdk_concept_harvester.rdf.createIdFromUri
+import no.fdk.fdk_concept_harvester.rdf.jenaTypeFromAcceptHeader
+import no.fdk.fdk_concept_harvester.rdf.parseRDFResponse
+import no.fdk.fdk_concept_harvester.repository.CollectionMetaRepository
+import no.fdk.fdk_concept_harvester.repository.ConceptMetaRepository
 import no.fdk.fdk_concept_harvester.service.TurtleService
+import no.fdk.fdk_concept_harvester.tbx.parseTBXResponse
 import org.apache.jena.rdf.model.Model
-import org.apache.jena.rdf.model.ModelFactory
 import org.apache.jena.riot.Lang
-import org.apache.jena.sparql.vocabulary.FOAF
-import org.apache.jena.vocabulary.DCAT
-import org.apache.jena.vocabulary.DCTerms
-import org.apache.jena.vocabulary.RDF
 import org.slf4j.LoggerFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -24,7 +26,7 @@ private val LOGGER = LoggerFactory.getLogger(ConceptHarvester::class.java)
 @Service
 class ConceptHarvester(
     private val adapter: ConceptsAdapter,
-    private val orgAdapter: OrganizationsAdapter,
+    private val orgAdapter: DefaultOrganizationsAdapter,
     private val collectionMetaRepository: CollectionMetaRepository,
     private val conceptMetaRepository: ConceptMetaRepository,
     private val turtleService: TurtleService,
@@ -34,21 +36,48 @@ class ConceptHarvester(
     fun harvestConceptCollection(source: HarvestDataSource, harvestDate: Calendar) =
         if (source.url != null) {
             LOGGER.debug("Starting harvest of ${source.url}")
-            val jenaWriterType = jenaTypeFromAcceptHeader(source.acceptHeaderValue)
+            val contentType = ContentType.fromValue(source.acceptHeaderValue)
+            if (contentType != null) {
+                if(contentType.isRDF()) {
+                    harvestConceptCollectionFromRDF(source, harvestDate)
+                } else if(contentType.isTBX()) {
+                    harvestConceptCollectionFromTBX(source, harvestDate)
+                } else {
+                    LOGGER.error("Harvest source contains an unsupported content-type", HarvestException("undefined"))
+                }
 
-            val harvested = when (jenaWriterType) {
-                null -> null
-                Lang.RDFNULL -> null
-                else -> adapter.getConcepts(source)?.let { parseRDFResponse(it, jenaWriterType, source.url) }
+            } else {
+                LOGGER.error("Harvest source contains an unsupported accept header", HarvestException("undefined"))
             }
 
-            when {
-                jenaWriterType == null -> LOGGER.error("Not able to harvest from ${source.url}, no accept header supplied", HarvestException(source.url))
-                jenaWriterType == Lang.RDFNULL -> LOGGER.error("Not able to harvest from ${source.url}, header ${source.acceptHeaderValue} is not acceptable", HarvestException(source.url))
-                harvested == null -> LOGGER.info("Not able to harvest ${source.url}")
-                else -> saveIfHarvestedContainsChanges(harvested, source.url, harvestDate, source.publisherId)
-            }
         } else LOGGER.error("Harvest source is not defined", HarvestException("undefined"))
+
+    private fun harvestConceptCollectionFromRDF(source: HarvestDataSource, harvestDate: Calendar) {
+        val jenaWriterType = jenaTypeFromAcceptHeader(source.acceptHeaderValue)
+
+        val harvested = when (jenaWriterType) {
+            null -> null
+            Lang.RDFNULL -> null
+            else -> adapter.getConcepts(source)?.let {
+                parseRDFResponse(it, jenaWriterType, source.url) }
+        }
+
+        when {
+            jenaWriterType == null -> LOGGER.error("Not able to harvest from ${source.url}, no accept header supplied", HarvestException(source.url!!))
+            jenaWriterType == Lang.RDFNULL -> LOGGER.error("Not able to harvest from ${source.url}, header ${source.acceptHeaderValue} is not acceptable", HarvestException(source.url!!))
+            harvested == null -> LOGGER.info("Not able to harvest ${source.url}")
+            else -> saveIfHarvestedContainsChanges(harvested, source.url!!, harvestDate, source.publisherId)
+        }
+    }
+
+    private fun harvestConceptCollectionFromTBX(source: HarvestDataSource, harvestDate: Calendar) {
+        val harvested = adapter.getConcepts(source)?.let { parseTBXResponse(it, source.url, orgAdapter) }
+
+        when {
+            harvested == null -> LOGGER.info("Not able to harvest ${source.url}")
+            else -> saveIfHarvestedContainsChanges(harvested, source.url!!, harvestDate, source.publisherId)
+        }
+    }
 
     private fun saveIfHarvestedContainsChanges(
         harvested: Model,

@@ -1,0 +1,121 @@
+@prefix dcat:   <http://www.w3.org/ns/dcat#> .
+@prefix dct:    <http://purl.org/dc/terms/> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos:   <http://www.w3.org/2004/02/skos/core#> .
+@prefix skosno: <https://data.norge.no/vocabulary/skosno#> .
+@prefix skosxl: <http://www.w3.org/2008/05/skos-xl#> .
+@prefix vcard:  <http://www.w3.org/2001/vcard-rdf/3.0#> .
+
+<https://sd-tl-dev-search-app.azurewebsites.net/term/163589244203537/deu>
+        a                  skos:Concept ;
+        dct:identifier     "e56c0bb5-1f98-4df6-99ff-ef4fbedded4d" ;
+        dct:publisher      <http://organization/985942897> ;
+        skosxl:prefLabel   [ skosxl:literalForm  "lufting"@nb , "aeration"@en ] ;
+        skosno:definisjon  [ a           skosno:Definisjon ;
+                             rdfs:label  "tilførsel av luft eller oksygen"@nb , "introduction of air or oxygen"@en
+                           ] .
+
+<https://sd-tl-dev-search-app.azurewebsites.net/term/163589245004019/deu>
+        a                  skos:Concept ;
+        dct:identifier     "70750ca4-e3a6-4c24-8ea6-614eefd5bb08" ;
+        dct:publisher      <http://organization/985942897> ;
+        skosxl:prefLabel   [ skosxl:literalForm  "arbeidsstykke"@nb , "workpiece"@en ] ;
+        skosno:definisjon  [ a           skosno:Definisjon ;
+                             rdfs:label  "gjenstand som blir bearbeidet av et kraftdrevet verktøy"@nb , "item being operated upon by a power tool"@en
+                           ] .
+
+<https://sd-tl-dev-search-app.azurewebsites.net/term/163589240500798/deu>
+        a                  skos:Concept ;
+        dct:identifier     "65764219-74e7-4ce9-a184-3fed78334d9f" ;
+        dct:publisher      <http://organization/985942897> ;
+        skosxl:prefLabel   [ skosxl:literalForm  "tom emballasje"@nb , "empty packaging"@en ] ;
+        skosno:definisjon  [ a           skosno:Definisjon ;
+                             rdfs:label  "en emballasje er tom når brukeren, under normale og forventede forhold,\n                        har tømt den for alle produktrester som det er mulig å fjerne, ved hjelp av metoder som er\n                        vanlig for emballasjetypen. En ikke-uttømmende liste over slike vanlige metoder er gitt\n                        nedenfor: fjerne et innerbelegg; helle ut; pumpe ut; suge ut; riste ut; skrape ut; presse ut;\n                        spyle ut; tørke ut.\n                    "@nb , "packaging is empty if - under normal and foreseeable circumstances - all\n                        product residues that can be removed by the emptier have been removed using practices commonly\n                        employed for that type of packaging\n                        A non-exhaustive list of common practices includes: removing an inner liner; pouring; pumping;\n                        aspirating; shaking; scraping; squeezing; rinsing; wiping-out.\n                    "@en
+                           ] .
+
+<https://sd-tl-dev-search-app.azurewebsites.net/term/163589240400769/deu>
+        a                  skos:Concept ;
+        dct:identifier     "44f32700-9603-4ebc-9b97-ff4eab5cfa47" ;
+        dct:publisher      <http://organization/985942897> ;
+        skosxl:prefLabel   [ skosxl:literalForm  "renovering"@nb , "reconditioning"@en ] ;
+        skosno:definisjon  [ a           skosno:Definisjon ;
+                             rdfs:label  "operasjoner som er nødvendige for å føre gjenbruksemballasjen tilbake til\n                        funksjonsdyktig stand\n                    "@nb , "operations necessary to restore a reusable packaging to a functional\n                        state\n                    "@en
+                           ] .
+
+<https://sd-tl-dev-search-app.azurewebsites.net/term/163589244904008/deu>
+        a                  skos:Concept ;
+        dct:identifier     "c8e8f735-4b36-44ad-8d12-3ce6c22d1a69" ;
+        dct:publisher      <http://organization/985942897> ;
+        skosxl:prefLabel   [ skosxl:literalForm  "verktøydrift"@nb , "tool operation"@en ] ;
+        skosno:definisjon  [ a           skosno:Definisjon ;
+                             rdfs:label  "enhver periode der et kraftdrevet verktøy er i drift og operatøren\n                        eksponeres for håndoverførte vibrasjoner\n                    "@nb , "any period during which a power tool is operating and the operator is\n                        being exposed to hand-transmitted vibration\n                    "@en
+                           ] .
+
+<https://sd-tl-dev-search-app.azurewebsites.net/term/163589244203511/deu>
+        a                  skos:Concept ;
+        dct:identifier     "9b19b61e-8204-411e-aca5-465c0315b7e3" ;
+        dct:publisher      <http://organization/985942897> ;
+        skosxl:prefLabel   [ skosxl:literalForm  "luftet sandfang"@nb , "aerated grit chamber"@en ] ;
+        skosno:definisjon  [ a           skosno:Definisjon ;
+                             rdfs:label  "konstruksjon for å separere sand og annet mineralsk materiale fra\n                        avløpsvann ved bruk av luft for å indusere sirkulasjon. Den kan kombineres med fjerning av\n                        flytende materiale\n                    "@nb , "structure for separating sand and other mineral matter from wastewater,\n                        using air to induce circulation. It may be combined with the removal of floating matter\n                    "@en
+                           ] .
+
+<https://sd-tl-dev-search-app.azurewebsites.net/term/163589243903265/deu>
+        a                  skos:Concept ;
+        dct:identifier     "70b71008-abf9-4aad-9494-15095eaa21ae" ;
+        dct:publisher      <http://organization/985942897> ;
+        skosxl:prefLabel   [ skosxl:literalForm  "underlag"@nb , "fixing surface"@en ] ;
+        skosno:definisjon  [ a           skosno:Definisjon ;
+                             rdfs:label  "plan, stiv overflate som flisen legges på"@nb , "plane rigid surface upon which the tile is fixed"@en
+                           ] .
+
+<https://sd-tl-dev-search-app.azurewebsites.net/term/163589244203524/deu>
+        a                  skos:Concept ;
+        dct:identifier     "a1a621fd-adb3-4807-8b10-452306bb749e" ;
+        dct:publisher      <http://organization/985942897> ;
+        skosxl:prefLabel   [ skosxl:literalForm  "luftet biologisk dam"@nb , "aerated lagoon"@en ] ;
+        skosno:definisjon  [ a           skosno:Definisjon ;
+                             rdfs:label  "avløpsdam med kunstig lufting og uten resirkulering av slam"@nb , "wastewater lagoon with artificial aeration and without sludge\n                        recirculation\n                    "@en
+                           ] .
+
+<https://sd-api-management.azure-api.net/sd-tl-export-dev/TbxAPNOv1?page=0>
+        a              skos:Collection ;
+        rdfs:label     "Standard Norway Terminology"@en ;
+        dct:publisher  <http://organization/985942897> ;
+        skos:member    <https://sd-tl-dev-search-app.azurewebsites.net/term/163589240500798/deu> , <https://sd-tl-dev-search-app.azurewebsites.net/term/163589244904008/deu> , <https://sd-tl-dev-search-app.azurewebsites.net/term/163589240400769/deu> , <https://sd-tl-dev-search-app.azurewebsites.net/term/163589244903986/deu> , <https://sd-tl-dev-search-app.azurewebsites.net/term/163589245004019/deu> , <https://sd-tl-dev-search-app.azurewebsites.net/term/163589244903975/deu> , <https://sd-tl-dev-search-app.azurewebsites.net/term/163589244203511/deu> , <https://sd-tl-dev-search-app.azurewebsites.net/term/163589243903265/deu> , <https://sd-tl-dev-search-app.azurewebsites.net/term/163589244203537/deu> , <https://sd-tl-dev-search-app.azurewebsites.net/term/163589244103424/deu> , <https://sd-tl-dev-search-app.azurewebsites.net/term/163589244903997/deu> , <https://sd-tl-dev-search-app.azurewebsites.net/term/163589244203524/deu> .
+
+<https://sd-tl-dev-search-app.azurewebsites.net/term/163589244103424/deu>
+        a                  skos:Concept ;
+        dct:identifier     "90799b9b-d9f7-4c31-8113-be5a46b5342a" ;
+        dct:publisher      <http://organization/985942897> ;
+        skosxl:prefLabel   [ skosxl:literalForm  "justerbarhet"@nb , "adjustability"@en ] ;
+        skosno:definisjon  [ a           skosno:Definisjon ;
+                             rdfs:label  "lengste tidsrom hvor det er mulig å justere flisens stilling i limlaget\n                        uten vesentlig tap av adhesjonsfasthet\n                    "@nb , "maximum time interval during which the tile’s position in the adhesive\n                        layer is able to be adjusted without significant loss of adhesion strength\n                    "@en
+                           ] .
+
+<https://sd-tl-dev-search-app.azurewebsites.net/term/163589244903997/deu>
+        a                  skos:Concept ;
+        dct:identifier     "aac21c9a-de2a-41cc-a6e3-0dfa47d5dbbc" ;
+        dct:publisher      <http://organization/985942897> ;
+        skosxl:prefLabel   [ skosxl:literalForm  "operatør"@nb , "operator"@en ] ;
+        skosno:definisjon  [ a           skosno:Definisjon ;
+                             rdfs:label  "person som bruker en maskin eller et verktøy som er håndmatet, håndstyrt\n                        eller håndholdt\n                    "@nb , "person using a hand-fed, hand-guided or hand-held machine or power tool\n                    "@en
+                           ] .
+
+<https://sd-tl-dev-search-app.azurewebsites.net/term/163589244903986/deu>
+        a                  skos:Concept ;
+        dct:identifier     "c1a47a19-33d4-430c-8dac-fb8813f95f45" ;
+        dct:publisher      <http://organization/985942897> ;
+        skosxl:prefLabel   [ skosxl:literalForm  "arbeidsoperasjon"@nb , "operation"@en ] ;
+        skosno:definisjon  [ a           skosno:Definisjon ;
+                             rdfs:label  "identifiserbar oppgave der det foretas en representativ måling av\n                        størrelsesordenen av vibrasjoner. Denne målingen kan gjelde bruken av et enkelt kraftdrevet\n                        verktøy eller av et bestemt håndholdt arbeidsstykke, eller det kan være en fase i\n                        arbeidsoppgaven\n                    "@nb , "identifiable task for which a representative vibration magnitude\n                        measurement is made, this may be for the use of a single power tool, or hand-held workpiece type\n                        or for a single phase of a task\n                    "@en
+                           ] .
+
+<https://sd-tl-dev-search-app.azurewebsites.net/term/163589244903975/deu>
+        a                  skos:Concept ;
+        dct:identifier     "29ec33a0-c0b4-4337-83ea-b8863d1d8fc5" ;
+        dct:publisher      <http://organization/985942897> ;
+        skosxl:prefLabel   [ skosxl:literalForm  "tilleggsutstyr"@nb , "inserted tool"@en ] ;
+        skosno:definisjon  [ a           skosno:Definisjon ;
+                             rdfs:label  "utskiftbart eller erstattbart tilbehør som passer i eller på et\n                        kraftdrevet verktøy eller en maskin\n                    "@nb , "interchangeable or replaceable attachment which fits into or onto a power\n                        tool or machine\n                    "@en
+                           ] .
