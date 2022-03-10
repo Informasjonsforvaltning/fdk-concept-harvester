@@ -2,7 +2,7 @@ package no.fdk.fdk_concept_harvester.harvester
 
 import com.nhaarman.mockitokotlin2.*
 import no.fdk.fdk_concept_harvester.adapter.ConceptsAdapter
-import no.fdk.fdk_concept_harvester.adapter.OrganizationsAdapter
+import no.fdk.fdk_concept_harvester.adapter.DefaultOrganizationsAdapter
 import no.fdk.fdk_concept_harvester.configuration.ApplicationProperties
 import no.fdk.fdk_concept_harvester.model.CollectionMeta
 import no.fdk.fdk_concept_harvester.model.ConceptMeta
@@ -25,7 +25,7 @@ class HarvesterTest {
     private val turtleService: TurtleService = mock()
     private val valuesMock: ApplicationProperties = mock()
     private val adapter: ConceptsAdapter = mock()
-    private val orgAdapter: OrganizationsAdapter = mock()
+    private val orgAdapter: DefaultOrganizationsAdapter = mock()
 
     private val harvester = ConceptHarvester(adapter, orgAdapter, collectionRepository, conceptRepository, turtleService, valuesMock)
     private val responseReader = TestResponseReader()
