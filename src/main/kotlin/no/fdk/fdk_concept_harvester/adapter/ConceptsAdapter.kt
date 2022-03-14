@@ -20,6 +20,7 @@ class ConceptsAdapter {
         val connection = URL(source.url).openConnection() as HttpURLConnection
         try {
             connection.setRequestProperty(HttpHeaders.ACCEPT, source.acceptHeaderValue)
+            source.authHeader?.run { connection.setRequestProperty(name, value) }
 
             return if (connection.responseCode != HttpStatus.OK.value()) {
                 LOGGER.error("${source.url} responded with ${connection.responseCode}, harvest will be aborted", HarvestException(source.url ?: "undefined"))

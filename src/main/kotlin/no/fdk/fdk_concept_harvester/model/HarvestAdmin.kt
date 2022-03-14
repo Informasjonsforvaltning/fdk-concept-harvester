@@ -8,7 +8,8 @@ data class HarvestDataSource(
     val dataType: String? = null,
     val url: String? = null,
     val acceptHeaderValue: String? = null,
-    val publisherId: String? = null
+    val publisherId: String? = null,
+    val authHeader: AuthHeader? = null
 )
 
 @JsonIgnoreProperties(ignoreUnknown=true)
