@@ -10,3 +10,11 @@ data class HarvestDataSource(
     val acceptHeaderValue: String? = null,
     val publisherId: String? = null
 )
+
+@JsonIgnoreProperties(ignoreUnknown=true)
+data class HarvestAdminParameters(
+    val dataSourceId: String? = null,
+    val publisherId: String? = null,
+    val dataSourceType: String? = null,
+    val dataType: String? = "concept"
+)
