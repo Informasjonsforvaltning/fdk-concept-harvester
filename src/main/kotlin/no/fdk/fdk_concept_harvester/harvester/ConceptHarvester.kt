@@ -3,10 +3,7 @@ package no.fdk.fdk_concept_harvester.harvester
 import no.fdk.fdk_concept_harvester.adapter.ConceptsAdapter
 import no.fdk.fdk_concept_harvester.adapter.DefaultOrganizationsAdapter
 import no.fdk.fdk_concept_harvester.configuration.ApplicationProperties
-import no.fdk.fdk_concept_harvester.model.CollectionMeta
-import no.fdk.fdk_concept_harvester.model.ConceptMeta
-import no.fdk.fdk_concept_harvester.model.ContentType
-import no.fdk.fdk_concept_harvester.model.HarvestDataSource
+import no.fdk.fdk_concept_harvester.model.*
 import no.fdk.fdk_concept_harvester.rdf.createIdFromUri
 import no.fdk.fdk_concept_harvester.rdf.jenaTypeFromAcceptHeader
 import no.fdk.fdk_concept_harvester.rdf.parseRDFResponse
@@ -19,9 +16,14 @@ import org.apache.jena.riot.Lang
 import org.slf4j.LoggerFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import java.text.SimpleDateFormat
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 private val LOGGER = LoggerFactory.getLogger(ConceptHarvester::class.java)
+private const val dateFormat: String = "yyyy-MM-dd HH:mm:ss Z"
 
 @Service
 class ConceptHarvester(
@@ -33,104 +35,172 @@ class ConceptHarvester(
     private val applicationProperties: ApplicationProperties
 ) {
 
-    fun harvestConceptCollection(source: HarvestDataSource, harvestDate: Calendar) =
-        if (source.url != null) {
-            LOGGER.debug("Starting harvest of ${source.url}")
-            val contentType = ContentType.fromValue(source.acceptHeaderValue)
-            if (contentType != null) {
-                if(contentType.isRDF()) {
-                    harvestConceptCollectionFromRDF(source, harvestDate)
-                } else if(contentType.isTBX()) {
-                    harvestConceptCollectionFromTBX(source, harvestDate)
-                } else {
-                    LOGGER.error("Harvest source contains an unsupported content-type", HarvestException("undefined"))
+    fun harvestConceptCollection(source: HarvestDataSource, harvestDate: Calendar): HarvestReport? =
+        if (source.id != null && source.url != null) {
+            try {
+                LOGGER.debug("Starting harvest of ${source.url}")
+                val contentType = ContentType.fromValue(source.acceptHeaderValue)
+                when {
+                    contentType == null -> {
+                        LOGGER.error("Unable to harvest ${source.url}, source contains an unsupported accept header", HarvestException("unsupported accept header"))
+                        HarvestReport(
+                            id = source.id,
+                            url = source.url,
+                            harvestError = true,
+                            errorMessage = "Not able to harvest, unsupported accept header",
+                            startTime = harvestDate.formatWithOsloTimeZone(),
+                            endTime = formatNowWithOsloTimeZone()
+                        )
+                    }
+                    contentType.isRDF() -> harvestConceptCollectionFromRDF(source, harvestDate)
+                    contentType.isTBX() -> harvestConceptCollectionFromTBX(source, harvestDate)
+                    else -> {
+                        LOGGER.error("Harvest source contains an unsupported content-type", HarvestException("unsupported content-type"))
+                        HarvestReport(
+                            id = source.id,
+                            url = source.url,
+                            harvestError = true,
+                            errorMessage = "Not able to harvest, unsupported accept header",
+                            startTime = harvestDate.formatWithOsloTimeZone(),
+                            endTime = formatNowWithOsloTimeZone()
+                        )
+                    }
                 }
-
-            } else {
-                LOGGER.error("Harvest source contains an unsupported accept header", HarvestException("undefined"))
+            } catch (ex: Exception) {
+                LOGGER.error("Harvest of ${source.url} failed", ex)
+                HarvestReport(
+                    id = source.id,
+                    url = source.url,
+                    harvestError = true,
+                    errorMessage = ex.message,
+                    startTime = harvestDate.formatWithOsloTimeZone(),
+                    endTime = formatNowWithOsloTimeZone()
+                )
             }
 
-        } else LOGGER.error("Harvest source is not defined", HarvestException("undefined"))
-
-    private fun harvestConceptCollectionFromRDF(source: HarvestDataSource, harvestDate: Calendar) {
-        val jenaWriterType = jenaTypeFromAcceptHeader(source.acceptHeaderValue)
-
-        val harvested = when (jenaWriterType) {
-            null -> null
-            Lang.RDFNULL -> null
-            else -> adapter.getConcepts(source)?.let {
-                parseRDFResponse(it, jenaWriterType, source.url) }
+        } else {
+            LOGGER.error("Harvest source is not valid", HarvestException("undefined"))
+            null
         }
 
-        when {
-            jenaWriterType == null -> LOGGER.error("Not able to harvest from ${source.url}, no accept header supplied", HarvestException(source.url!!))
-            jenaWriterType == Lang.RDFNULL -> LOGGER.error("Not able to harvest from ${source.url}, header ${source.acceptHeaderValue} is not acceptable", HarvestException(source.url!!))
-            harvested == null -> LOGGER.info("Not able to harvest ${source.url}")
-            else -> saveIfHarvestedContainsChanges(harvested, source.url!!, harvestDate, source.publisherId)
+    private fun harvestConceptCollectionFromRDF(source: HarvestDataSource, harvestDate: Calendar): HarvestReport {
+        val jenaWriterType = jenaTypeFromAcceptHeader(source.acceptHeaderValue)
+
+        return if (jenaWriterType == null || jenaWriterType == Lang.RDFNULL) {
+            LOGGER.error("Unable to harvest ${source.url}, source contains an unsupported accept header", HarvestException("unsupported accept header"))
+            HarvestReport(
+                id = source.id ?: "unknown-id",
+                url = source.url ?: "https://example.com",
+                harvestError = true,
+                errorMessage = "Not able to harvest, unsupported accept header",
+                startTime = harvestDate.formatWithOsloTimeZone(),
+                endTime = formatNowWithOsloTimeZone()
+            )
+        } else {
+            saveIfHarvestedContainsChanges(
+                parseRDFResponse(adapter.getConcepts(source), jenaWriterType, source.url),
+                source.id!!,
+                source.url!!,
+                harvestDate,
+                source.publisherId
+            )
         }
     }
 
-    private fun harvestConceptCollectionFromTBX(source: HarvestDataSource, harvestDate: Calendar) {
-        val harvested = adapter.getConcepts(source)?.let { parseTBXResponse(it, source.url, orgAdapter) }
-
-        when {
-            harvested == null -> LOGGER.info("Not able to harvest ${source.url}")
-            else -> saveIfHarvestedContainsChanges(harvested, source.url!!, harvestDate, source.publisherId)
-        }
+    private fun harvestConceptCollectionFromTBX(source: HarvestDataSource, harvestDate: Calendar): HarvestReport {
+        val harvested = parseTBXResponse(adapter.getConcepts(source), source.url, orgAdapter)
+        return saveIfHarvestedContainsChanges(harvested, source.id!!, source.url!!, harvestDate, source.publisherId)
     }
 
     private fun saveIfHarvestedContainsChanges(
         harvested: Model,
+        sourceId: String,
         sourceURL: String,
         harvestDate: Calendar,
         publisherId: String?
-    ) {
+    ): HarvestReport {
         val dbData = turtleService.getHarvestSource(sourceURL)
             ?.let { parseRDFResponse(it, Lang.TURTLE, null) }
 
-        if (dbData != null && harvested.isIsomorphicWith(dbData)) {
+        return if (dbData != null && harvested.isIsomorphicWith(dbData)) {
             LOGGER.info("No changes from last harvest of $sourceURL")
+            HarvestReport(
+                id = sourceId,
+                url = sourceURL,
+                harvestError = false,
+                startTime = harvestDate.formatWithOsloTimeZone(),
+                endTime = formatNowWithOsloTimeZone()
+            )
         } else {
             LOGGER.info("Changes detected, saving data from $sourceURL and updating FDK meta data")
             turtleService.saveAsHarvestSource(harvested, sourceURL)
 
-            val concepts = splitConceptsFromRDF(harvested, sourceURL)
-
-            if (concepts.isEmpty()) LOGGER.error("No collection with concepts found in data harvested from $sourceURL", HarvestException(sourceURL))
-            else {
-                updateConcepts(concepts, harvestDate)
-
-                val organization = if (publisherId != null && concepts.containsFreeConcepts()) {
-                    orgAdapter.getOrganization(publisherId)
-                } else null
-
-                val collections = splitCollectionsFromRDF(harvested, concepts, sourceURL, organization)
-                updateCollections(collections, harvestDate)
-            }
+            updateDB(harvested, sourceId, sourceURL, harvestDate, publisherId)
         }
     }
 
-    private fun updateConcepts(concepts: List<ConceptRDFModel>, harvestDate: Calendar) {
-        concepts.forEach { concept ->
-            val dbMeta = conceptMetaRepository.findByIdOrNull(concept.resourceURI)
-            if (concept.conceptHasChanges(dbMeta?.fdkId)) {
-                val modelMeta = concept.mapToDBOMeta(harvestDate, dbMeta)
+    private fun updateDB(
+        harvested: Model,
+        sourceId: String,
+        sourceURL: String,
+        harvestDate: Calendar,
+        publisherId: String?
+    ): HarvestReport {
+        val concepts = splitConceptsFromRDF(harvested, sourceURL)
+
+        return if (concepts.isEmpty()) {
+            LOGGER.error("No collection with concepts found in data harvested from $sourceURL", HarvestException(sourceURL))
+            HarvestReport(
+                id = sourceId,
+                url = sourceURL,
+                harvestError = true,
+                errorMessage = "No collection with concepts found in data harvested from $sourceURL",
+                startTime = harvestDate.formatWithOsloTimeZone(),
+                endTime = formatNowWithOsloTimeZone()
+            )
+        } else {
+            val updatedConcepts = updateConcepts(concepts, harvestDate)
+
+            val organization = if (publisherId != null && concepts.containsFreeConcepts()) {
+                orgAdapter.getOrganization(publisherId)
+            } else null
+
+            val collections = splitCollectionsFromRDF(harvested, concepts, sourceURL, organization)
+
+            HarvestReport(
+                id = sourceId,
+                url = sourceURL,
+                harvestError = false,
+                startTime = harvestDate.formatWithOsloTimeZone(),
+                endTime = formatNowWithOsloTimeZone(),
+                changedCatalogs = updateCollections(collections, harvestDate),
+                changedResources = updatedConcepts
+            )
+        }
+    }
+
+    private fun updateConcepts(concepts: List<ConceptRDFModel>, harvestDate: Calendar): List<FdkIdAndUri> =
+        concepts
+            .map { Pair(it, conceptMetaRepository.findByIdOrNull(it.resourceURI)) }
+            .filter { it.first.conceptHasChanges(it.second?.fdkId) }
+            .map {
+                val modelMeta = it.first.mapToDBOMeta(harvestDate, it.second)
                 conceptMetaRepository.save(modelMeta)
 
                 turtleService.saveAsConcept(
-                    model = concept.harvested,
+                    model = it.first.harvested,
                     fdkId = modelMeta.fdkId,
                     withRecords = false
                 )
-            }
-        }
-    }
 
-    private fun updateCollections(collections: List<CollectionRDFModel>, harvestDate: Calendar) {
+                FdkIdAndUri(fdkId = modelMeta.fdkId, uri = it.first.resourceURI)
+            }
+
+    private fun updateCollections(collections: List<CollectionRDFModel>, harvestDate: Calendar): List<FdkIdAndUri> =
         collections
             .map { Pair(it, collectionMetaRepository.findByIdOrNull(it.resourceURI)) }
             .filter { it.first.collectionHasChanges(it.second?.fdkId) }
-            .forEach {
+            .map {
                 val updatedCollectionMeta = it.first.mapToCollectionMeta(harvestDate, it.second)
                 collectionMetaRepository.save(updatedCollectionMeta)
 
@@ -145,8 +215,9 @@ class ConceptHarvester(
                 it.first.concepts.forEach { conceptURI ->
                     addIsPartOfToConcept(conceptURI, fdkUri)
                 }
+
+                FdkIdAndUri(fdkId = updatedCollectionMeta.fdkId, uri = updatedCollectionMeta.uri)
             }
-    }
 
     private fun CollectionRDFModel.mapToCollectionMeta(
         harvestDate: Calendar,
@@ -195,4 +266,12 @@ class ConceptHarvester(
     private fun ConceptRDFModel.conceptHasChanges(fdkId: String?): Boolean =
         if (fdkId == null) true
         else harvestDiff(turtleService.getConcept(fdkId, withRecords = false))
+
+    private fun formatNowWithOsloTimeZone(): String =
+        ZonedDateTime.now(ZoneId.of("Europe/Oslo"))
+            .format(DateTimeFormatter.ofPattern(dateFormat))
+
+    private fun Calendar.formatWithOsloTimeZone(): String =
+        ZonedDateTime.from(toInstant().atZone(ZoneId.of("Europe/Oslo")))
+            .format(DateTimeFormatter.ofPattern(dateFormat))
 }

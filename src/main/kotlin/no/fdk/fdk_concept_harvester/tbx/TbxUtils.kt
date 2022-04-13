@@ -25,7 +25,7 @@ private val SKOSNO_NS = "https://data.norge.no/vocabulary/skosno#"
 private val SKOSNO_DEFINISJON = "Definisjon"
 private val SKOSNO_DEFINISJON_PROPERTY = "definisjon"
 
-fun parseTBXResponse(tbxContent: String, rdfSource: String?, orgAdapter: OrganizationsAdapter): Model? {
+fun parseTBXResponse(tbxContent: String, rdfSource: String?, orgAdapter: OrganizationsAdapter): Model {
     val model = ModelFactory.createDefaultModel()
         .setPrefixes()
 
@@ -54,7 +54,7 @@ fun parseTBXResponse(tbxContent: String, rdfSource: String?, orgAdapter: Organiz
 
     } catch (ex: Exception) {
         logger.error("Parse from $rdfSource has failed", ex)
-        return null
+        throw ex
     }
 
     return model
