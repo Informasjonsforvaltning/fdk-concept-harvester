@@ -16,15 +16,16 @@ private val LOGGER = LoggerFactory.getLogger(ConceptsAdapter::class.java)
 @Service
 class ConceptsAdapter {
 
-    fun getConcepts(source: HarvestDataSource): String? {
+    fun getConcepts(source: HarvestDataSource): String {
         val connection = URL(source.url).openConnection() as HttpURLConnection
         try {
             connection.setRequestProperty(HttpHeaders.ACCEPT, source.acceptHeaderValue)
             source.authHeader?.run { connection.setRequestProperty(name, value) }
 
             return if (connection.responseCode != HttpStatus.OK.value()) {
-                LOGGER.error("${source.url} responded with ${connection.responseCode}, harvest will be aborted", HarvestException(source.url ?: "undefined"))
-                null
+                val exception = HarvestException(source.url ?: "undefined")
+                LOGGER.error("${source.url} responded with ${connection.responseCode}, harvest will be aborted", exception)
+                throw exception
             } else {
                 val charset = if(connection.contentEncoding != null)
                     Charset.forName(connection.contentEncoding) else Charsets.UTF_8
@@ -36,7 +37,7 @@ class ConceptsAdapter {
 
         } catch (ex: Exception) {
             LOGGER.error("Error when harvesting from ${source.url}", ex)
-            return null
+            throw ex
         } finally {
             connection.disconnect()
         }

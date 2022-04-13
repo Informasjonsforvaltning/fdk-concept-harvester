@@ -23,6 +23,7 @@ val TEST_HARVEST_DATE: Calendar = Calendar.Builder().setTimeZone(TimeZone.getTim
 val NEW_TEST_HARVEST_DATE: Calendar = Calendar.Builder().setTimeZone(TimeZone.getTimeZone("UTC")).setDate(2021, 1, 15).setTimeOfDay(11, 52, 16, 122).build()
 
 val TEST_HARVEST_SOURCE_0 = HarvestDataSource(
+    id = "concept-harvest-source-0",
     url = "http://localhost:5000/concept-harvest-source-0",
     acceptHeaderValue = "text/turtle",
     dataType = "concept",
@@ -31,6 +32,7 @@ val TEST_HARVEST_SOURCE_0 = HarvestDataSource(
 )
 
 val TEST_HARVEST_SOURCE_1 = HarvestDataSource(
+    id = "concept-harvest-source-1",
     url = "http://localhost:5000/concept-harvest-source-1",
     acceptHeaderValue = "text/turtle",
     dataType = "concept",

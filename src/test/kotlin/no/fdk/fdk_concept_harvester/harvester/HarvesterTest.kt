@@ -6,6 +6,8 @@ import no.fdk.fdk_concept_harvester.adapter.DefaultOrganizationsAdapter
 import no.fdk.fdk_concept_harvester.configuration.ApplicationProperties
 import no.fdk.fdk_concept_harvester.model.CollectionMeta
 import no.fdk.fdk_concept_harvester.model.ConceptMeta
+import no.fdk.fdk_concept_harvester.model.FdkIdAndUri
+import no.fdk.fdk_concept_harvester.model.HarvestReport
 import no.fdk.fdk_concept_harvester.repository.CollectionMetaRepository
 import no.fdk.fdk_concept_harvester.repository.ConceptMetaRepository
 import no.fdk.fdk_concept_harvester.service.TurtleService
@@ -51,7 +53,20 @@ class HarvesterTest {
         whenever(valuesMock.conceptsUri)
             .thenReturn("http://localhost:5000/concepts")
 
-        harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE)
+        val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE)
+
+        val expectedReport = HarvestReport(
+            id = "concept-harvest-source-0",
+            url = "http://localhost:5000/concept-harvest-source-0",
+            harvestError = false,
+            startTime = "2021-01-05 14:15:39 +0100",
+            endTime = report!!.endTime,
+            changedResources = listOf(
+                FdkIdAndUri(fdkId="db1b701c-b4b9-3c20-bc23-236a91236754", uri="https://example.com/begrep/0"),
+                FdkIdAndUri(fdkId="7dbac738-4944-323a-a777-ad2f83bf75f8", uri="https://example.com/begrep/1")),
+            changedCatalogs = listOf(FdkIdAndUri(fdkId="9b8f1c42-1161-33b1-9d43-a733ee94ddfc", uri="https://www.example.com/begrepskatalog/0"))
+        )
+        assertEquals(expectedReport, report)
 
         argumentCaptor<Model, String>().apply {
             verify(turtleService, times(1)).saveAsHarvestSource(first.capture(), second.capture())
@@ -93,7 +108,16 @@ class HarvesterTest {
         whenever(turtleService.getHarvestSource(TEST_HARVEST_SOURCE_0.url!!))
             .thenReturn(harvested)
 
-        harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE)
+        val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE)
+
+        val expectedReport = HarvestReport(
+            id = "concept-harvest-source-0",
+            url = "http://localhost:5000/concept-harvest-source-0",
+            harvestError = false,
+            startTime = "2021-01-05 14:15:39 +0100",
+            endTime = report!!.endTime
+        )
+        assertEquals(expectedReport, report)
 
         argumentCaptor<Model, String>().apply {
             verify(turtleService, times(0)).saveAsHarvestSource(first.capture(), second.capture())
@@ -144,7 +168,18 @@ class HarvesterTest {
         whenever(turtleService.getConcept(CONCEPT_1_ID, false))
             .thenReturn(responseReader.readFile("no_meta_concept_1.ttl"))
 
-        harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, NEW_TEST_HARVEST_DATE)
+        val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, NEW_TEST_HARVEST_DATE)
+
+        val expectedReport = HarvestReport(
+            id = "concept-harvest-source-0",
+            url = "http://localhost:5000/concept-harvest-source-0",
+            harvestError = false,
+            startTime = "2021-02-15 12:52:16 +0100",
+            endTime = report!!.endTime,
+            changedCatalogs = listOf(FdkIdAndUri(fdkId="9b8f1c42-1161-33b1-9d43-a733ee94ddfc", uri="https://www.example.com/begrepskatalog/0")),
+            changedResources = listOf(FdkIdAndUri(fdkId="db1b701c-b4b9-3c20-bc23-236a91236754", uri="https://example.com/begrep/0"))
+        )
+        assertEquals(expectedReport, report)
 
         argumentCaptor<Model, String>().apply {
             verify(turtleService, times(1)).saveAsHarvestSource(first.capture(), second.capture())
@@ -185,7 +220,17 @@ class HarvesterTest {
         whenever(adapter.getConcepts(TEST_HARVEST_SOURCE_0))
             .thenReturn(responseReader.readFile("harvest_error_response.ttl"))
 
-        harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE)
+        val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE)
+
+        val expectedReport = HarvestReport(
+            id = "concept-harvest-source-0",
+            url = "http://localhost:5000/concept-harvest-source-0",
+            harvestError = true,
+            errorMessage = "[line: 11, col: 5 ] Undefined prefix: rdfs",
+            startTime = "2021-01-05 14:15:39 +0100",
+            endTime = report!!.endTime
+        )
+        assertEquals(expectedReport, report)
 
         argumentCaptor<Model, String>().apply {
             verify(turtleService, times(0)).saveAsHarvestSource(first.capture(), second.capture())
@@ -222,7 +267,18 @@ class HarvesterTest {
         whenever(valuesMock.conceptsUri)
             .thenReturn("http://localhost:5000/concepts")
 
-        harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE)
+        val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE)
+
+        val expectedReport = HarvestReport(
+            id = "concept-harvest-source-0",
+            url = "http://localhost:5000/concept-harvest-source-0",
+            harvestError = false,
+            startTime = "2021-01-05 14:15:39 +0100",
+            endTime = report!!.endTime,
+            changedCatalogs=listOf(FdkIdAndUri(fdkId="24a90ee1-bd80-390b-8cfc-983960909392", uri="http://localhost:5000/concept-harvest-source-0#GeneratedCollection")),
+            changedResources = listOf(FdkIdAndUri(fdkId="db1b701c-b4b9-3c20-bc23-236a91236754", uri="https://example.com/begrep/0"))
+        )
+        assertEquals(expectedReport, report)
 
         argumentCaptor<Model, String>().apply {
             verify(turtleService, times(1)).saveAsHarvestSource(first.capture(), second.capture())
