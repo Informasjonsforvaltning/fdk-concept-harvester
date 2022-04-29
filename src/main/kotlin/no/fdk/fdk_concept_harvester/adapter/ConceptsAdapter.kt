@@ -23,9 +23,7 @@ class ConceptsAdapter {
             source.authHeader?.run { connection.setRequestProperty(name, value) }
 
             return if (connection.responseCode != HttpStatus.OK.value()) {
-                val exception = HarvestException(source.url ?: "undefined")
-                LOGGER.error("${source.url} responded with ${connection.responseCode}, harvest will be aborted", exception)
-                throw exception
+                throw HarvestException("${source.url} responded with ${connection.responseCode}, harvest will be aborted")
             } else {
                 val charset = if(connection.contentEncoding != null)
                     Charset.forName(connection.contentEncoding) else Charsets.UTF_8
@@ -35,9 +33,6 @@ class ConceptsAdapter {
                     .use(BufferedReader::readText)
             }
 
-        } catch (ex: Exception) {
-            LOGGER.error("Error when harvesting from ${source.url}", ex)
-            throw ex
         } finally {
             connection.disconnect()
         }

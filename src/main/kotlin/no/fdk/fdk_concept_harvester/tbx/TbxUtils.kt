@@ -29,33 +29,27 @@ fun parseTBXResponse(tbxContent: String, rdfSource: String?, orgAdapter: Organiz
     val model = ModelFactory.createDefaultModel()
         .setPrefixes()
 
-    try {
-        // Parse TBX
-        val doc = DocumentBuilderFactory
-            .newInstance()
-            .newDocumentBuilder()
-            .parse(ByteArrayInputStream(tbxContent.toByteArray()))
+    // Parse TBX
+    val doc = DocumentBuilderFactory
+        .newInstance()
+        .newDocumentBuilder()
+        .parse(ByteArrayInputStream(tbxContent.toByteArray()))
 
-        val xpath = XPathFactory.newInstance().newXPath()
+    val xpath = XPathFactory.newInstance().newXPath()
 
-        // reading tbxHeader
-        val collectionResource = model.createResource(xpath.collectionUri(doc))
-        val publisherResource = xpath.publisherUri(doc, orgAdapter)?.let { model.createResource(it) }
+    // reading tbxHeader
+    val collectionResource = model.createResource(xpath.collectionUri(doc))
+    val publisherResource = xpath.publisherUri(doc, orgAdapter)?.let { model.createResource(it) }
 
-        model.add(model.createStatement(collectionResource, RDF.type, SKOS.Collection))
-        model.add(
-            model.createStatement(collectionResource, RDFS.label,
-            model.createLiteral(xpath.collectionName(doc), "en")))
-        model.addPublisher(collectionResource, publisherResource)
+    model.add(model.createStatement(collectionResource, RDF.type, SKOS.Collection))
+    model.add(
+        model.createStatement(collectionResource, RDFS.label,
+        model.createLiteral(xpath.collectionName(doc), "en")))
+    model.addPublisher(collectionResource, publisherResource)
 
-        // reading conceptEntry
-        xpath.conceptEntries(doc)
-            .forEach { addConceptEntryNodeToModel(it as Element, doc, collectionResource, publisherResource, model) }
-
-    } catch (ex: Exception) {
-        logger.error("Parse from $rdfSource has failed", ex)
-        throw ex
-    }
+    // reading conceptEntry
+    xpath.conceptEntries(doc)
+        .forEach { addConceptEntryNodeToModel(it as Element, doc, collectionResource, publisherResource, model) }
 
     return model
 }
