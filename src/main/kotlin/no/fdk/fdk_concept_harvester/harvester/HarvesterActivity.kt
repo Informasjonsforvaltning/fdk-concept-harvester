@@ -26,24 +26,24 @@ class HarvesterActivity(
     private val activitySemaphore = Semaphore(1)
 
     @EventListener
-    fun fullHarvestOnStartup(event: ApplicationReadyEvent) = initiateHarvest(null)
+    fun fullHarvestOnStartup(event: ApplicationReadyEvent) = initiateHarvest(HarvestAdminParameters(null, null, null), false)
 
-    fun initiateHarvest(params: HarvestAdminParameters?) {
-        if (params == null) LOGGER.debug("starting harvest of all concept collections")
-        else LOGGER.debug("starting harvest with parameters $params")
+    fun initiateHarvest(params: HarvestAdminParameters, forceUpdate: Boolean) {
+        if (params.harvestAllConcepts()) LOGGER.debug("starting harvest of all concept collections, force update: $forceUpdate")
+        else LOGGER.debug("starting harvest with parameters $params, force update: $forceUpdate")
 
         launch {
             activitySemaphore.withPermit {
-                harvestAdminAdapter.getDataSources(params?: HarvestAdminParameters())
+                harvestAdminAdapter.getDataSources(params)
                     .filter { it.dataType == "concept" }
                     .filter { it.url != null }
-                    .map { async { harvester.harvestConceptCollection(it, Calendar.getInstance()) } }
+                    .map { async { harvester.harvestConceptCollection(it, Calendar.getInstance(), forceUpdate) } }
                     .awaitAll()
                     .filterNotNull()
                     .also { updateService.updateMetaData() }
                     .also {
-                        if (params != null) LOGGER.debug("completed harvest with parameters $params")
-                        else LOGGER.debug("completed harvest of all collections") }
+                        if (params.harvestAllConcepts()) LOGGER.debug("completed harvest with parameters $params, force update: $forceUpdate")
+                        else LOGGER.debug("completed harvest of all collections, force update: $forceUpdate") }
                     .run { publisher.send(this) }
             }
         }
