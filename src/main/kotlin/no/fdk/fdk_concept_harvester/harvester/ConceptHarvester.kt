@@ -16,7 +16,6 @@ import org.apache.jena.riot.Lang
 import org.slf4j.LoggerFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import java.text.SimpleDateFormat
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -35,7 +34,7 @@ class ConceptHarvester(
     private val applicationProperties: ApplicationProperties
 ) {
 
-    fun harvestConceptCollection(source: HarvestDataSource, harvestDate: Calendar): HarvestReport? =
+    fun harvestConceptCollection(source: HarvestDataSource, harvestDate: Calendar, forceUpdate: Boolean): HarvestReport? =
         if (source.id != null && source.url != null) {
             try {
                 LOGGER.debug("Starting harvest of ${source.url}")
@@ -52,8 +51,8 @@ class ConceptHarvester(
                             endTime = formatNowWithOsloTimeZone()
                         )
                     }
-                    contentType.isRDF() -> harvestConceptCollectionFromRDF(source, harvestDate)
-                    contentType.isTBX() -> harvestConceptCollectionFromTBX(source, harvestDate)
+                    contentType.isRDF() -> harvestConceptCollectionFromRDF(source, harvestDate, forceUpdate)
+                    contentType.isTBX() -> harvestConceptCollectionFromTBX(source, harvestDate, forceUpdate)
                     else -> {
                         LOGGER.error("Harvest source contains an unsupported content-type", HarvestException("unsupported content-type"))
                         HarvestReport(
@@ -83,7 +82,7 @@ class ConceptHarvester(
             null
         }
 
-    private fun harvestConceptCollectionFromRDF(source: HarvestDataSource, harvestDate: Calendar): HarvestReport {
+    private fun harvestConceptCollectionFromRDF(source: HarvestDataSource, harvestDate: Calendar, forceUpdate: Boolean): HarvestReport {
         val jenaWriterType = jenaTypeFromAcceptHeader(source.acceptHeaderValue)
 
         return if (jenaWriterType == null || jenaWriterType == Lang.RDFNULL) {
@@ -102,14 +101,15 @@ class ConceptHarvester(
                 source.id!!,
                 source.url!!,
                 harvestDate,
-                source.publisherId
+                source.publisherId,
+                forceUpdate
             )
         }
     }
 
-    private fun harvestConceptCollectionFromTBX(source: HarvestDataSource, harvestDate: Calendar): HarvestReport {
+    private fun harvestConceptCollectionFromTBX(source: HarvestDataSource, harvestDate: Calendar, forceUpdate: Boolean): HarvestReport {
         val harvested = parseTBXResponse(adapter.getConcepts(source), source.url, orgAdapter)
-        return saveIfHarvestedContainsChanges(harvested, source.id!!, source.url!!, harvestDate, source.publisherId)
+        return saveIfHarvestedContainsChanges(harvested, source.id!!, source.url!!, harvestDate, source.publisherId, forceUpdate)
     }
 
     private fun saveIfHarvestedContainsChanges(
@@ -117,12 +117,13 @@ class ConceptHarvester(
         sourceId: String,
         sourceURL: String,
         harvestDate: Calendar,
-        publisherId: String?
+        publisherId: String?,
+        forceUpdate: Boolean
     ): HarvestReport {
         val dbData = turtleService.getHarvestSource(sourceURL)
             ?.let { parseRDFResponse(it, Lang.TURTLE, null) }
 
-        return if (dbData != null && harvested.isIsomorphicWith(dbData)) {
+        return if (!forceUpdate && dbData != null && harvested.isIsomorphicWith(dbData)) {
             LOGGER.info("No changes from last harvest of $sourceURL")
             HarvestReport(
                 id = sourceId,
@@ -132,10 +133,10 @@ class ConceptHarvester(
                 endTime = formatNowWithOsloTimeZone()
             )
         } else {
-            LOGGER.info("Changes detected, saving data from $sourceURL and updating FDK meta data")
+            LOGGER.info("Saving data from $sourceURL and updating FDK meta data")
             turtleService.saveAsHarvestSource(harvested, sourceURL)
 
-            updateDB(harvested, sourceId, sourceURL, harvestDate, publisherId)
+            updateDB(harvested, sourceId, sourceURL, harvestDate, publisherId, forceUpdate)
         }
     }
 
@@ -144,7 +145,8 @@ class ConceptHarvester(
         sourceId: String,
         sourceURL: String,
         harvestDate: Calendar,
-        publisherId: String?
+        publisherId: String?,
+        forceUpdate: Boolean
     ): HarvestReport {
         val concepts = splitConceptsFromRDF(harvested, sourceURL)
 
@@ -159,7 +161,7 @@ class ConceptHarvester(
                 endTime = formatNowWithOsloTimeZone()
             )
         } else {
-            val updatedConcepts = updateConcepts(concepts, harvestDate)
+            val updatedConcepts = updateConcepts(concepts, harvestDate, forceUpdate)
 
             val organization = if (publisherId != null && concepts.containsFreeConcepts()) {
                 orgAdapter.getOrganization(publisherId)
@@ -173,16 +175,16 @@ class ConceptHarvester(
                 harvestError = false,
                 startTime = harvestDate.formatWithOsloTimeZone(),
                 endTime = formatNowWithOsloTimeZone(),
-                changedCatalogs = updateCollections(collections, harvestDate),
+                changedCatalogs = updateCollections(collections, harvestDate, forceUpdate),
                 changedResources = updatedConcepts
             )
         }
     }
 
-    private fun updateConcepts(concepts: List<ConceptRDFModel>, harvestDate: Calendar): List<FdkIdAndUri> =
+    private fun updateConcepts(concepts: List<ConceptRDFModel>, harvestDate: Calendar, forceUpdate: Boolean): List<FdkIdAndUri> =
         concepts
             .map { Pair(it, conceptMetaRepository.findByIdOrNull(it.resourceURI)) }
-            .filter { it.first.conceptHasChanges(it.second?.fdkId) }
+            .filter { forceUpdate || it.first.conceptHasChanges(it.second?.fdkId) }
             .map {
                 val modelMeta = it.first.mapToDBOMeta(harvestDate, it.second)
                 conceptMetaRepository.save(modelMeta)
@@ -196,10 +198,10 @@ class ConceptHarvester(
                 FdkIdAndUri(fdkId = modelMeta.fdkId, uri = it.first.resourceURI)
             }
 
-    private fun updateCollections(collections: List<CollectionRDFModel>, harvestDate: Calendar): List<FdkIdAndUri> =
+    private fun updateCollections(collections: List<CollectionRDFModel>, harvestDate: Calendar, forceUpdate: Boolean): List<FdkIdAndUri> =
         collections
             .map { Pair(it, collectionMetaRepository.findByIdOrNull(it.resourceURI)) }
-            .filter { it.first.collectionHasChanges(it.second?.fdkId) }
+            .filter { forceUpdate || it.first.collectionHasChanges(it.second?.fdkId) }
             .map {
                 val updatedCollectionMeta = it.first.mapToCollectionMeta(harvestDate, it.second)
                 collectionMetaRepository.save(updatedCollectionMeta)

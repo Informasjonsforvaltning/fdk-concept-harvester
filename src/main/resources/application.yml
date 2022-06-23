@@ -48,7 +48,7 @@ application:
   conceptsUri: https://concepts.staging.fellesdatakatalog.digdir.no/concepts
   collectionsUri: https://concepts.staging.fellesdatakatalog.digdir.no/collections
   organizationsUri: https://organization-catalogue.staging.fellesdatakatalog.digdir.no/organizations
-  harvestAdminRootUrl: https://new-admin.staging.fellesdatakatalog.digdir.no
+  harvestAdminRootUrl: https://admin-api.staging.fellesdatakatalog.digdir.no
 
 ---
 spring:
