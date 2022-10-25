@@ -319,4 +319,44 @@ class HarvesterTest {
         }
     }
 
+    @Test
+    fun harvestReportContainsRemovedConcepts() {
+        val prev = responseReader.readFile("harvest_response_0.ttl")
+        val harvested = responseReader.readFile("harvest_response_0_missing_concept1.ttl")
+        whenever(adapter.getConcepts(TEST_HARVEST_SOURCE_0))
+            .thenReturn(harvested)
+        whenever(turtleService.getHarvestSource(TEST_HARVEST_SOURCE_0.url!!))
+            .thenReturn(prev)
+        whenever(conceptRepository.findAllByIsPartOf("http://localhost:5000/collections/$COLLECTION_0_ID"))
+            .thenReturn(listOf(CONCEPT_0, CONCEPT_1))
+        whenever(conceptRepository.findById(CONCEPT_0.uri))
+            .thenReturn(Optional.of(CONCEPT_0))
+        whenever(turtleService.getConcept(CONCEPT_0_ID, false))
+            .thenReturn(responseReader.readFile("no_meta_concept_0.ttl"))
+
+        whenever(valuesMock.collectionsUri)
+            .thenReturn("http://localhost:5000/collections")
+        whenever(valuesMock.conceptsUri)
+            .thenReturn("http://localhost:5000/concepts")
+
+        val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE, false)
+
+        val expectedReport = HarvestReport(
+            id = "concept-harvest-source-0",
+            url = TEST_HARVEST_SOURCE_0.url!!,
+            harvestError = false,
+            startTime = "2021-01-05 14:15:39 +0100",
+            endTime = report!!.endTime,
+            changedCatalogs=listOf(FdkIdAndUri(fdkId=COLLECTION_0_ID, uri="https://www.example.com/begrepskatalog/0")),
+            removedResources = listOf(FdkIdAndUri(fdkId=CONCEPT_1.fdkId, uri=CONCEPT_1.uri))
+        )
+        assertEquals(expectedReport, report)
+
+        verify(turtleService, times(1)).saveAsHarvestSource(any(), any())
+        verify(turtleService, times(1)).saveAsCollection(any(), any(), any())
+        verify(turtleService, times(0)).saveAsConcept(any(), any(), any())
+        verify(collectionRepository, times(1)).save(any())
+        verify(conceptRepository, times(1)).save(any())
+    }
+
 }

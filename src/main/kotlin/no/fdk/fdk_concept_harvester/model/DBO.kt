@@ -16,6 +16,7 @@ data class ConceptMeta(
     val fdkId: String,
 
     val isPartOf: String? = null,
+    val removed: Boolean = false,
     val issued: Long,
     val modified: Long
 )
