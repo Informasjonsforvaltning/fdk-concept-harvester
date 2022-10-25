@@ -168,6 +168,14 @@ class ConceptHarvester(
             } else null
 
             val collections = splitCollectionsFromRDF(harvested, concepts, sourceURL, organization)
+            val updatedCollections = updateCollections(collections, harvestDate, forceUpdate)
+
+            val removedConcepts = getConceptsRemovedThisHarvest(
+                updatedCollections.map { collectionFdkUri(it.fdkId) },
+                concepts.map { it.resourceURI }
+            )
+            removedConcepts.map { it.copy(removed = true) }
+                .run { conceptMetaRepository.saveAll(this) }
 
             HarvestReport(
                 id = sourceId,
@@ -175,8 +183,9 @@ class ConceptHarvester(
                 harvestError = false,
                 startTime = harvestDate.formatWithOsloTimeZone(),
                 endTime = formatNowWithOsloTimeZone(),
-                changedCatalogs = updateCollections(collections, harvestDate, forceUpdate),
-                changedResources = updatedConcepts
+                changedCatalogs = updatedCollections,
+                changedResources = updatedConcepts,
+                removedResources = removedConcepts.map { FdkIdAndUri(fdkId = it.fdkId, uri = it.uri) }
             )
         }
     }
@@ -212,7 +221,7 @@ class ConceptHarvester(
                     withRecords = false
                 )
 
-                val fdkUri = "${applicationProperties.collectionsUri}/${updatedCollectionMeta.fdkId}"
+                val fdkUri = collectionFdkUri(updatedCollectionMeta.fdkId)
 
                 it.first.concepts.forEach { conceptURI ->
                     addIsPartOfToConcept(conceptURI, fdkUri)
@@ -276,4 +285,11 @@ class ConceptHarvester(
     private fun Calendar.formatWithOsloTimeZone(): String =
         ZonedDateTime.from(toInstant().atZone(ZoneId.of("Europe/Oslo")))
             .format(DateTimeFormatter.ofPattern(dateFormat))
+
+    private fun collectionFdkUri(fdkId: String): String =
+        "${applicationProperties.collectionsUri}/$fdkId"
+
+    private fun getConceptsRemovedThisHarvest(collections: List<String>, concepts: List<String>): List<ConceptMeta> =
+        collections.flatMap { conceptMetaRepository.findAllByIsPartOf(it) }
+            .filter { !it.removed && !concepts.contains(it.uri) }
 }
