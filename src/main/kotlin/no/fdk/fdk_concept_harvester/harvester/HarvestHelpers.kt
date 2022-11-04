@@ -53,10 +53,11 @@ fun splitCollectionsFromRDF(
             )
         }
 
-    val conceptsNotMemberOfCollection = allConcepts.filterNot { it.isMemberOfAnyCollection }
-
-    return if (conceptsNotMemberOfCollection.isEmpty()) harvestedCollections
-    else harvestedCollections.plus(generatedCollection(conceptsNotMemberOfCollection, sourceURL, organization))
+    return harvestedCollections.plus(generatedCollection(
+        allConcepts.filterNot { it.isMemberOfAnyCollection },
+        sourceURL,
+        organization)
+    )
 }
 
 private fun List<Resource>.excludeBlankNodeCollectionsAndConcepts(sourceURL: String): List<Resource> =
