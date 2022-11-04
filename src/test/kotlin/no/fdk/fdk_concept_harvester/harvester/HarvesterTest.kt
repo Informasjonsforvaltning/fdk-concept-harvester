@@ -64,7 +64,9 @@ class HarvesterTest {
             changedResources = listOf(
                 FdkIdAndUri(fdkId="db1b701c-b4b9-3c20-bc23-236a91236754", uri="https://example.com/begrep/0"),
                 FdkIdAndUri(fdkId="7dbac738-4944-323a-a777-ad2f83bf75f8", uri="https://example.com/begrep/1")),
-            changedCatalogs = listOf(FdkIdAndUri(fdkId="9b8f1c42-1161-33b1-9d43-a733ee94ddfc", uri="https://www.example.com/begrepskatalog/0"))
+            changedCatalogs = listOf(
+                FdkIdAndUri(fdkId="9b8f1c42-1161-33b1-9d43-a733ee94ddfc", uri="https://www.example.com/begrepskatalog/0"),
+                FdkIdAndUri(fdkId= GENERATED_COLLECTION_ID, uri= GENERATED_COLLECTION.uri))
         )
         assertEquals(expectedReport, report)
 
@@ -75,15 +77,16 @@ class HarvesterTest {
         }
 
         argumentCaptor<Model, String, Boolean>().apply {
-            verify(turtleService, times(1)).saveAsCollection(first.capture(), second.capture(), third.capture())
-            assertTrue(checkIfIsomorphicAndPrintDiff(first.allValues[0], responseReader.parseFile("no_meta_collection_0.ttl", "TURTLE"), "harvestDataSourceSavedWhenDBIsEmpty-norecords-collection0"))
-            assertEquals(listOf(COLLECTION_0_ID), second.allValues)
-            Assertions.assertEquals(listOf(false), third.allValues)
+            verify(turtleService, times(2)).saveAsCollection(first.capture(), second.capture(), third.capture())
+            assertTrue(checkIfIsomorphicAndPrintDiff(first.firstValue, responseReader.parseFile("no_meta_collection_0.ttl", "TURTLE"), "harvestDataSourceSavedWhenDBIsEmpty-norecords-collection0"))
+            assertEquals(listOf(COLLECTION_0_ID, GENERATED_COLLECTION_ID), second.allValues)
+            Assertions.assertEquals(listOf(false, false), third.allValues)
         }
 
         argumentCaptor<CollectionMeta>().apply {
-            verify(collectionRepository, times(1)).save(capture())
+            verify(collectionRepository, times(2)).save(capture())
             assertEquals(COLLECTION_0, firstValue)
+            assertEquals(GENERATED_COLLECTION.copy(concepts = emptySet()), secondValue)
         }
 
         argumentCaptor<Model, String, Boolean>().apply {
@@ -145,14 +148,16 @@ class HarvesterTest {
             changedResources = listOf(
                 FdkIdAndUri(fdkId="db1b701c-b4b9-3c20-bc23-236a91236754", uri="https://example.com/begrep/0"),
                 FdkIdAndUri(fdkId="7dbac738-4944-323a-a777-ad2f83bf75f8", uri="https://example.com/begrep/1")),
-            changedCatalogs = listOf(FdkIdAndUri(fdkId="9b8f1c42-1161-33b1-9d43-a733ee94ddfc", uri="https://www.example.com/begrepskatalog/0"))
+            changedCatalogs = listOf(
+                FdkIdAndUri(fdkId="9b8f1c42-1161-33b1-9d43-a733ee94ddfc", uri="https://www.example.com/begrepskatalog/0"),
+                FdkIdAndUri(fdkId= GENERATED_COLLECTION_ID, uri= GENERATED_COLLECTION.uri))
         )
         assertEquals(expectedReport, report)
 
         verify(turtleService, times(1)).saveAsHarvestSource(any(), any())
-        verify(turtleService, times(1)).saveAsCollection(any(), any(), any())
+        verify(turtleService, times(2)).saveAsCollection(any(), any(), any())
         verify(turtleService, times(2)).saveAsConcept(any(), any(), any())
-        verify(collectionRepository, times(1)).save(any())
+        verify(collectionRepository, times(2)).save(any())
         verify(conceptRepository, times(2)).save(any())
     }
 
@@ -170,6 +175,8 @@ class HarvesterTest {
 
         whenever(collectionRepository.findById(COLLECTION_0.uri))
             .thenReturn(Optional.of(COLLECTION_0))
+        whenever(collectionRepository.findById(GENERATED_COLLECTION.uri))
+            .thenReturn(Optional.of(GENERATED_COLLECTION.copy(concepts = emptySet())))
         whenever(conceptRepository.findById(CONCEPT_0.uri))
             .thenReturn(Optional.of(CONCEPT_0.copy(modified = NEW_TEST_HARVEST_DATE.timeInMillis, isPartOf = null)))
         whenever(conceptRepository.findById(CONCEPT_1.uri))
@@ -182,6 +189,8 @@ class HarvesterTest {
 
         whenever(turtleService.getCollection(COLLECTION_0_ID, false))
             .thenReturn(responseReader.readFile("harvest_response_0_diff.ttl"))
+        whenever(turtleService.getCollection(GENERATED_COLLECTION_ID, false))
+            .thenReturn(responseReader.readFile("empty_generated_collection.ttl"))
         whenever(turtleService.getConcept(CONCEPT_0_ID, false))
             .thenReturn(responseReader.readFile("no_meta_concept_0_diff.ttl"))
         whenever(turtleService.getConcept(CONCEPT_1_ID, false))
@@ -327,6 +336,10 @@ class HarvesterTest {
             .thenReturn(harvested)
         whenever(turtleService.getHarvestSource(TEST_HARVEST_SOURCE_0.url!!))
             .thenReturn(prev)
+        whenever(collectionRepository.findById(GENERATED_COLLECTION.uri))
+            .thenReturn(Optional.of(GENERATED_COLLECTION.copy(concepts = emptySet())))
+        whenever(turtleService.getCollection(GENERATED_COLLECTION_ID, false))
+            .thenReturn(responseReader.readFile("empty_generated_collection.ttl"))
         whenever(conceptRepository.findAllByIsPartOf("http://localhost:5000/collections/$COLLECTION_0_ID"))
             .thenReturn(listOf(CONCEPT_0, CONCEPT_1))
         whenever(conceptRepository.findById(CONCEPT_0.uri))

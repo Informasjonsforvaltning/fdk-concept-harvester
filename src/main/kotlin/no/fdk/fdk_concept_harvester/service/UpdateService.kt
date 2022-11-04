@@ -31,6 +31,7 @@ class UpdateService(
         var collectionUnionNoRecords = ModelFactory.createDefaultModel()
 
         collectionMetaRepository.findAll()
+            .filter { it.concepts.isNotEmpty() }
             .forEach {
                 turtleService.getCollection(it.fdkId, withRecords = true)
                     ?.let { turtle -> parseRDFResponse(turtle, Lang.TURTLE, null) }
