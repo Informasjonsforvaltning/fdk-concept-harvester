@@ -12,7 +12,6 @@ private val LOGGER = LoggerFactory.getLogger(RabbitMQPublisher::class.java)
 class RabbitMQPublisher(private val template: RabbitTemplate) {
     fun send(reports: List<HarvestReport>) {
         try {
-            template.convertAndSend("harvests","concepts.harvester.UpdateSearchTrigger", reports)
             template.convertAndSend("harvests","concepts.harvested", reports)
             LOGGER.debug("Successfully sent harvest completed message")
         } catch (e: AmqpException) {
