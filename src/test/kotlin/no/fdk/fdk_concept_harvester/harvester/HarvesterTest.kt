@@ -183,7 +183,7 @@ class HarvesterTest {
             .thenReturn(Optional.of(CONCEPT_1))
 
         whenever(turtleService.getConcept(CONCEPT_0_ID, true))
-            .thenReturn(responseReader.readFile("concept_0_updated.ttl"))
+            .thenReturn(responseReader.readFile("concept_0.ttl"))
         whenever(turtleService.getConcept(CONCEPT_1_ID, true))
             .thenReturn(responseReader.readFile("concept_1.ttl"))
 

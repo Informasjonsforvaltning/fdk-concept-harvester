@@ -4,7 +4,7 @@ import no.fdk.fdk_concept_harvester.adapter.ConceptsAdapter
 import no.fdk.fdk_concept_harvester.adapter.DefaultOrganizationsAdapter
 import no.fdk.fdk_concept_harvester.configuration.ApplicationProperties
 import no.fdk.fdk_concept_harvester.model.*
-import no.fdk.fdk_concept_harvester.rdf.createIdFromUri
+import no.fdk.fdk_concept_harvester.rdf.createIdFromString
 import no.fdk.fdk_concept_harvester.rdf.jenaTypeFromAcceptHeader
 import no.fdk.fdk_concept_harvester.rdf.parseRDFResponse
 import no.fdk.fdk_concept_harvester.repository.CollectionMetaRepository
@@ -235,7 +235,7 @@ class ConceptHarvester(
         dbMeta: CollectionMeta?
     ): CollectionMeta {
         val collectionURI = resourceURI
-        val fdkId = dbMeta?.fdkId ?: createIdFromUri(collectionURI)
+        val fdkId = dbMeta?.fdkId ?: createIdFromString(collectionURI)
         val issued = dbMeta?.issued
             ?.let { timestamp -> calendarFromTimestamp(timestamp) }
             ?: harvestDate
@@ -253,7 +253,7 @@ class ConceptHarvester(
         harvestDate: Calendar,
         dbMeta: ConceptMeta?
     ): ConceptMeta {
-        val fdkId = dbMeta?.fdkId ?: createIdFromUri(resourceURI)
+        val fdkId = dbMeta?.fdkId ?: createIdFromString(resourceURI)
         val issued: Calendar = dbMeta?.issued
             ?.let { timestamp -> calendarFromTimestamp(timestamp) }
             ?: harvestDate

@@ -8,6 +8,35 @@
 @prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
+<https://example.com/begrep/1/.well-known/skolem/d182d565-9128-3b3f-abd2-2cc856a0bcd5>
+        a                   vcard:Organization ;
+        vcard:hasEmail      <mailto:mail@post.no> ;
+        vcard:hasTelephone  <tel:342425667> .
+
+<https://example.com/begrep/1/.well-known/skolem/568dfaf0-db9a-3dab-b82f-46abef7cefb3>
+        a                   skosxl:Label ;
+        skosxl:literalForm  "luktsokkar"@nb .
+
+<https://example.com/begrep/1/.well-known/skolem/0277b389-5b21-3b4b-bd53-c7861eb4e932>
+        rdfs:label    "omfangtittel"@nb ;
+        rdfs:seeAlso  <https://Vg.no> .
+
+<https://example.com/begrep/1/.well-known/skolem/02e3cc2a-bd0f-3a69-a533-d9a47a637f69>
+        a                   skosxl:Label ;
+        skosxl:literalForm  "Sure sokker"@nb .
+
+<https://example.com/begrep/1/.well-known/skolem/3a185fd9-7a8b-381a-b25f-104368e32656>
+        a                   skosxl:Label ;
+        skosxl:literalForm  "søtsokk"@nb .
+
+<https://example.com/begrep/1/.well-known/skolem/6873223a-1c1b-36fe-8280-da9cc0d7d6f0>
+        a                       skosno:Definisjon ;
+        rdfs:label              "Sokker som burde ha vært vasket"@nb ;
+        skosno:forholdTilKilde  skosno:egendefinert ;
+        skosno:omfang           <https://example.com/begrep/1/.well-known/skolem/0277b389-5b21-3b4b-bd53-c7861eb4e932> ;
+        dct:source              []  ;
+        skos:scopeNote          "Lukt! xx"@nb .
+
 <https://example.com/begrep/1>
     a                   skos:Concept ;
     dct:identifier      "af277c65-3e96-4b2b-8a04-72781d390dc4" ;
@@ -15,20 +44,8 @@
     dct:publisher       <https://data.brreg.no/enhetsregisteret/api/enheter/910244132> ;
     dct:subject         "vaskeribransjen"@nb ;
     skos:example        "Sure sokker lukter ikke godt"@nb ;
-    skosxl:altLabel     [ a                   skosxl:Label ;
-                         skosxl:literalForm  "luktsokkar"@nb ] ;
-    skosxl:hiddenLabel  [ a                   skosxl:Label ;
-                         skosxl:literalForm  "søtsokk"@nb ] ;
-    skosxl:prefLabel    [ a                   skosxl:Label ;
-                         skosxl:literalForm  "Sure sokker"@nb ] ;
-    dcat:contactPoint   [ a                   vcard:Organization ;
-                         vcard:hasEmail      <mailto:mail@post.no> ;
-                         vcard:hasTelephone  <tel:342425667> ] ;
-    skosno:definisjon   [ a                       skosno:Definisjon ;
-                         rdfs:label              "Sokker som burde ha vært vasket"@nb ;
-                         dct:source              []  ;
-                         skos:scopeNote          "Lukt! xx"@nb ;
-                         skosno:forholdTilKilde  skosno:egendefinert ;
-                         skosno:omfang           [ rdfs:label    "omfangtittel"@nb ;
-                                                   rdfs:seeAlso  <https://Vg.no>
-                                                 ] ] .
+    skosxl:altLabel     <https://example.com/begrep/1/.well-known/skolem/568dfaf0-db9a-3dab-b82f-46abef7cefb3> ;
+    skosxl:hiddenLabel  <https://example.com/begrep/1/.well-known/skolem/3a185fd9-7a8b-381a-b25f-104368e32656> ;
+    skosxl:prefLabel    <https://example.com/begrep/1/.well-known/skolem/02e3cc2a-bd0f-3a69-a533-d9a47a637f69> ;
+    dcat:contactPoint   <https://example.com/begrep/1/.well-known/skolem/d182d565-9128-3b3f-abd2-2cc856a0bcd5> ;
+    skosno:definisjon   <https://example.com/begrep/1/.well-known/skolem/6873223a-1c1b-36fe-8280-da9cc0d7d6f0> .
