@@ -136,6 +136,24 @@ class HarvesterTest {
             .thenReturn(harvested)
         whenever(turtleService.getHarvestSource(TEST_HARVEST_SOURCE_0.url!!))
             .thenReturn(harvested)
+        whenever(conceptRepository.findById(CONCEPT_0.uri))
+            .thenReturn(Optional.of(CONCEPT_0))
+        whenever(conceptRepository.findById(CONCEPT_1.uri))
+            .thenReturn(Optional.of(CONCEPT_1))
+        whenever(collectionRepository.findById(COLLECTION_0.uri))
+            .thenReturn(Optional.of(COLLECTION_0))
+
+        whenever(turtleService.getConcept(CONCEPT_0_ID, false))
+            .thenReturn(responseReader.readFile("no_meta_concept_0.ttl"))
+        whenever(turtleService.getConcept(CONCEPT_1_ID, false))
+            .thenReturn(responseReader.readFile("no_meta_concept_1.ttl"))
+        whenever(turtleService.getCollection(COLLECTION_0_ID, false))
+            .thenReturn(responseReader.readFile("no_meta_collection_0.ttl"))
+
+        whenever(valuesMock.collectionsUri)
+            .thenReturn("http://localhost:5000/collections")
+        whenever(valuesMock.conceptsUri)
+            .thenReturn("http://localhost:5000/concepts")
 
         val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE, true)
 
@@ -157,8 +175,8 @@ class HarvesterTest {
         verify(turtleService, times(1)).saveAsHarvestSource(any(), any())
         verify(turtleService, times(2)).saveAsCollection(any(), any(), any())
         verify(turtleService, times(2)).saveAsConcept(any(), any(), any())
-        verify(collectionRepository, times(2)).save(any())
-        verify(conceptRepository, times(2)).save(any())
+        verify(collectionRepository, times(1)).save(any())
+        verify(conceptRepository, times(0)).save(any())
     }
 
     @Test
@@ -221,10 +239,9 @@ class HarvesterTest {
         }
 
         argumentCaptor<ConceptMeta>().apply {
-            verify(conceptRepository, times(3)).save(capture())
+            verify(conceptRepository, times(2)).save(capture())
             assertEquals(CONCEPT_0.copy(modified = NEW_TEST_HARVEST_DATE.timeInMillis, isPartOf = null), firstValue)
-            assertEquals(CONCEPT_0.copy(modified = NEW_TEST_HARVEST_DATE.timeInMillis), thirdValue)
-            assertEquals(CONCEPT_1, secondValue)
+            assertEquals(CONCEPT_0.copy(modified = NEW_TEST_HARVEST_DATE.timeInMillis), secondValue)
         }
 
         argumentCaptor<Model, String, Boolean>().apply {
@@ -369,7 +386,7 @@ class HarvesterTest {
         verify(turtleService, times(1)).saveAsCollection(any(), any(), any())
         verify(turtleService, times(0)).saveAsConcept(any(), any(), any())
         verify(collectionRepository, times(1)).save(any())
-        verify(conceptRepository, times(1)).save(any())
+        verify(conceptRepository, times(0)).save(any())
     }
 
 }

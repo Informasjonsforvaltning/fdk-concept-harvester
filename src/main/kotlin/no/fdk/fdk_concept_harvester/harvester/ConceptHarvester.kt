@@ -195,8 +195,11 @@ class ConceptHarvester(
             .map { Pair(it, conceptMetaRepository.findByIdOrNull(it.resourceURI)) }
             .filter { forceUpdate || it.first.conceptHasChanges(it.second?.fdkId) }
             .map {
-                val modelMeta = it.first.mapToDBOMeta(harvestDate, it.second)
-                conceptMetaRepository.save(modelMeta)
+                val dbMeta = it.second
+                val modelMeta = if (dbMeta == null || it.first.conceptHasChanges(dbMeta.fdkId)) {
+                    it.first.mapToDBOMeta(harvestDate, it.second)
+                        .also { updatedMeta -> conceptMetaRepository.save(updatedMeta) }
+                } else dbMeta
 
                 turtleService.saveAsConcept(
                     model = it.first.harvested,
@@ -212,22 +215,25 @@ class ConceptHarvester(
             .map { Pair(it, collectionMetaRepository.findByIdOrNull(it.resourceURI)) }
             .filter { forceUpdate || it.first.collectionHasChanges(it.second?.fdkId) }
             .map {
-                val updatedCollectionMeta = it.first.mapToCollectionMeta(harvestDate, it.second)
-                collectionMetaRepository.save(updatedCollectionMeta)
+                val dbMeta = it.second
+                val collectionMeta = if (dbMeta == null || it.first.collectionHasChanges(dbMeta.fdkId)) {
+                    it.first.mapToCollectionMeta(harvestDate, it.second)
+                        .also { updatedMeta -> collectionMetaRepository.save(updatedMeta) }
+                } else dbMeta
 
                 turtleService.saveAsCollection(
                     model = it.first.harvested,
-                    fdkId = updatedCollectionMeta.fdkId,
+                    fdkId = collectionMeta.fdkId,
                     withRecords = false
                 )
 
-                val fdkUri = collectionFdkUri(updatedCollectionMeta.fdkId)
+                val fdkUri = collectionFdkUri(collectionMeta.fdkId)
 
                 it.first.concepts.forEach { conceptURI ->
                     addIsPartOfToConcept(conceptURI, fdkUri)
                 }
 
-                FdkIdAndUri(fdkId = updatedCollectionMeta.fdkId, uri = updatedCollectionMeta.uri)
+                FdkIdAndUri(fdkId = collectionMeta.fdkId, uri = collectionMeta.uri)
             }
 
     private fun CollectionRDFModel.mapToCollectionMeta(
@@ -268,7 +274,9 @@ class ConceptHarvester(
 
     private fun addIsPartOfToConcept(conceptURI: String, collectionURI: String) =
         conceptMetaRepository.findByIdOrNull(conceptURI)
-            ?.run { conceptMetaRepository.save(copy(isPartOf = collectionURI)) }
+            ?.run {
+                if (isPartOf != collectionURI) conceptMetaRepository.save(copy(isPartOf = collectionURI))
+            }
 
     private fun CollectionRDFModel.collectionHasChanges(fdkId: String?): Boolean =
         if (fdkId == null) true
