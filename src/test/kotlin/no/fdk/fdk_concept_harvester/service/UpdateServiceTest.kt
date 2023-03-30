@@ -1,6 +1,5 @@
 package no.fdk.fdk_concept_harvester.service
 
-import com.nhaarman.mockitokotlin2.*
 import no.fdk.fdk_concept_harvester.configuration.ApplicationProperties
 import no.fdk.fdk_concept_harvester.repository.CollectionMetaRepository
 import no.fdk.fdk_concept_harvester.repository.ConceptMetaRepository
@@ -11,6 +10,11 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
+import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.times
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 
 @Tag("unit")
 class UpdateServiceTest {
