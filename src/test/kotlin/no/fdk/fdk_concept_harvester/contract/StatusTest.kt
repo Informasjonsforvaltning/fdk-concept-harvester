@@ -5,7 +5,6 @@ import no.fdk.fdk_concept_harvester.utils.apiGet
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.ContextConfiguration
 

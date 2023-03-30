@@ -1,6 +1,5 @@
 package no.fdk.fdk_concept_harvester.harvester
 
-import com.nhaarman.mockitokotlin2.*
 import no.fdk.fdk_concept_harvester.adapter.ConceptsAdapter
 import no.fdk.fdk_concept_harvester.adapter.DefaultOrganizationsAdapter
 import no.fdk.fdk_concept_harvester.configuration.ApplicationProperties
@@ -17,6 +16,12 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
+import org.mockito.kotlin.any
+import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.times
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import java.util.*
 import kotlin.test.assertEquals
 

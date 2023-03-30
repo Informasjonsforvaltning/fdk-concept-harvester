@@ -1,7 +1,5 @@
 package no.fdk.fdk_concept_harvester.service
 
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
 import no.fdk.fdk_concept_harvester.utils.*
 import org.apache.jena.riot.Lang
 import org.junit.jupiter.api.Assertions.assertNull
@@ -9,6 +7,8 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 
 @Tag("unit")
 class ConceptServiceTest {
