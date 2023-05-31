@@ -16,11 +16,11 @@ private val LOGGER = LoggerFactory.getLogger(Application::class.java)
 
 fun CollectionRDFModel.harvestDiff(dboNoRecords: String?): Boolean =
     if (dboNoRecords == null) true
-    else !harvested.isIsomorphicWith(parseRDFResponse(dboNoRecords, Lang.TURTLE))
+    else !harvested.isIsomorphicWith(safeParseRDF(dboNoRecords, Lang.TURTLE))
 
 fun ConceptRDFModel.harvestDiff(dboNoRecords: String?): Boolean =
     if (dboNoRecords == null) true
-    else !harvested.isIsomorphicWith(parseRDFResponse(dboNoRecords, Lang.TURTLE))
+    else !harvested.isIsomorphicWith(safeParseRDF(dboNoRecords, Lang.TURTLE))
 
 private fun Model.recursiveBlankNodeSkolem(baseURI: String): Model {
     val anonSubjects = listSubjects().toList().filter { it.isAnon }
