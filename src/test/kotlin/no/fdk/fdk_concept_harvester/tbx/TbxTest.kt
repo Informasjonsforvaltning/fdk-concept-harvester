@@ -16,14 +16,14 @@ class TbxTest {
     @Test
     fun tbxParse() {
             val tbxModel = parseTBXResponse(responseReader.readFile("tbx.xml"), "dummy", TestOrganizationsAdapter())
-            val ttlModel = parseRDFResponse(responseReader.readFile("tbx.ttl"), Lang.TTL, "dummy")
-            assertTrue(ttlModel?.isIsomorphicWith(tbxModel) ?: false)
+            val ttlModel = parseRDFResponse(responseReader.readFile("tbx.ttl"), Lang.TTL)
+            assertTrue(ttlModel.isIsomorphicWith(tbxModel) ?: false)
     }
 
     @Test
     fun tbxParseWithoutPublisher() {
         val tbxModel = parseTBXResponse(responseReader.readFile("tbx_no_publisher.xml"), "dummy", TestOrganizationsAdapter())
-        val ttlModel = parseRDFResponse(responseReader.readFile("tbx_no_publisher.ttl"), Lang.TTL, "dummy")
-        assertTrue(ttlModel?.isIsomorphicWith(tbxModel) ?: false)
+        val ttlModel = parseRDFResponse(responseReader.readFile("tbx_no_publisher.ttl"), Lang.TTL)
+        assertTrue(ttlModel.isIsomorphicWith(tbxModel) ?: false)
     }
 }
