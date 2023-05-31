@@ -34,11 +34,11 @@ class UpdateService(
             .filter { it.concepts.isNotEmpty() }
             .forEach {
                 turtleService.getCollection(it.fdkId, withRecords = true)
-                    ?.let { turtle -> parseRDFResponse(turtle, Lang.TURTLE, null) }
+                    ?.let { turtle -> parseRDFResponse(turtle, Lang.TURTLE) }
                     ?.run { collectionUnion = collectionUnion.union(this) }
 
                 turtleService.getCollection(it.fdkId, withRecords = false)
-                    ?.let { turtle -> parseRDFResponse(turtle, Lang.TURTLE, null) }
+                    ?.let { turtle -> parseRDFResponse(turtle, Lang.TURTLE) }
                     ?.run { collectionUnionNoRecords = collectionUnionNoRecords.union(this) }
             }
 
@@ -52,7 +52,7 @@ class UpdateService(
                 val conceptMeta = concept.createMetaModel()
 
                 turtleService.getConcept(concept.fdkId, withRecords = false)
-                    ?.let { conceptNoRecords -> parseRDFResponse(conceptNoRecords, Lang.TURTLE, null) }
+                    ?.let { conceptNoRecords -> parseRDFResponse(conceptNoRecords, Lang.TURTLE) }
                     ?.let { conceptModelNoRecords -> conceptMeta.union(conceptModelNoRecords) }
                     ?.run { turtleService.saveAsConcept(this, fdkId = concept.fdkId, withRecords = true) }
             }
@@ -60,7 +60,7 @@ class UpdateService(
         collectionMetaRepository.findAll()
             .forEach { collection ->
                 val collectionNoRecords = turtleService.getCollection(collection.fdkId, withRecords = false)
-                    ?.let { parseRDFResponse(it, Lang.TURTLE, null) }
+                    ?.let { parseRDFResponse(it, Lang.TURTLE) }
 
                 if (collectionNoRecords != null) {
                     val collectionURI = "${applicationProperties.collectionsUri}/${collection.fdkId}"

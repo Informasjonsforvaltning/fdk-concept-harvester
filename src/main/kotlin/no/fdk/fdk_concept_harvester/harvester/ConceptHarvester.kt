@@ -97,7 +97,7 @@ class ConceptHarvester(
             )
         } else {
             saveIfHarvestedContainsChanges(
-                parseRDFResponse(adapter.getConcepts(source), jenaWriterType, source.url),
+                parseRDFResponse(adapter.getConcepts(source), jenaWriterType),
                 source.id!!,
                 source.url!!,
                 harvestDate,
@@ -121,7 +121,7 @@ class ConceptHarvester(
         forceUpdate: Boolean
     ): HarvestReport {
         val dbData = turtleService.getHarvestSource(sourceURL)
-            ?.let { parseRDFResponse(it, Lang.TURTLE, null) }
+            ?.let { parseRDFResponse(it, Lang.TURTLE) }
 
         return if (!forceUpdate && dbData != null && harvested.isIsomorphicWith(dbData)) {
             LOGGER.info("No changes from last harvest of $sourceURL")
