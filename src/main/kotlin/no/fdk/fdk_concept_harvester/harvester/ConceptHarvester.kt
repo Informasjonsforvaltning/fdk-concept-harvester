@@ -7,6 +7,7 @@ import no.fdk.fdk_concept_harvester.model.*
 import no.fdk.fdk_concept_harvester.rdf.createIdFromString
 import no.fdk.fdk_concept_harvester.rdf.jenaTypeFromAcceptHeader
 import no.fdk.fdk_concept_harvester.rdf.parseRDFResponse
+import no.fdk.fdk_concept_harvester.rdf.safeParseRDF
 import no.fdk.fdk_concept_harvester.repository.CollectionMetaRepository
 import no.fdk.fdk_concept_harvester.repository.ConceptMetaRepository
 import no.fdk.fdk_concept_harvester.service.TurtleService
@@ -121,7 +122,7 @@ class ConceptHarvester(
         forceUpdate: Boolean
     ): HarvestReport {
         val dbData = turtleService.getHarvestSource(sourceURL)
-            ?.let { parseRDFResponse(it, Lang.TURTLE) }
+            ?.let { safeParseRDF(it, Lang.TURTLE) }
 
         return if (!forceUpdate && dbData != null && harvested.isIsomorphicWith(dbData)) {
             LOGGER.info("No changes from last harvest of $sourceURL")
