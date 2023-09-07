@@ -27,19 +27,19 @@ class UpdateService(
 ) {
 
     fun updateUnionModels() {
-        var collectionUnion = ModelFactory.createDefaultModel()
-        var collectionUnionNoRecords = ModelFactory.createDefaultModel()
+        val collectionUnion = ModelFactory.createDefaultModel()
+        val collectionUnionNoRecords = ModelFactory.createDefaultModel()
 
         collectionMetaRepository.findAll()
             .filter { it.concepts.isNotEmpty() }
             .forEach {
                 turtleService.getCollection(it.fdkId, withRecords = true)
                     ?.let { turtle -> safeParseRDF(turtle, Lang.TURTLE) }
-                    ?.run { collectionUnion = collectionUnion.union(this) }
+                    ?.run { collectionUnion.add(this) }
 
                 turtleService.getCollection(it.fdkId, withRecords = false)
                     ?.let { turtle -> safeParseRDF(turtle, Lang.TURTLE) }
-                    ?.run { collectionUnionNoRecords = collectionUnionNoRecords.union(this) }
+                    ?.run { collectionUnionNoRecords.add(this) }
             }
 
         turtleService.saveAsCollectionUnion(collectionUnion, true)
@@ -64,14 +64,11 @@ class UpdateService(
 
                 if (collectionNoRecords != null) {
                     val collectionURI = "${applicationProperties.collectionsUri}/${collection.fdkId}"
-                    var collectionMeta = collection.createMetaModel()
+                    val collectionMeta = collection.createMetaModel()
 
                     conceptMetaRepository.findAllByIsPartOf(collectionURI)
                         .filter { it.modelContainsConcept(collectionNoRecords) }
-                        .forEach { concept ->
-                            val conceptMeta = concept.createMetaModel()
-                            collectionMeta = collectionMeta.union(conceptMeta)
-                        }
+                        .forEach { concept -> collectionMeta.add(concept.createMetaModel()) }
 
                     turtleService.saveAsCollection(
                         collectionMeta.union(collectionNoRecords),

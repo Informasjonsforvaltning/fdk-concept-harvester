@@ -73,14 +73,14 @@ fun splitCollectionsFromRDF(
             val collectionModelWithoutConcepts = collectionResource.extractCollectionModel()
                 .recursiveBlankNodeSkolem(collectionResource.uri)
 
-            var collectionModel = collectionModelWithoutConcepts
+            val collectionModel = ModelFactory.createDefaultModel()
             allConcepts.filter { collectionConcepts.contains(it.resourceURI) }
-                .forEach { collectionModel = collectionModel.union(it.harvested) }
+                .forEach { collectionModel.add(it.harvested) }
 
             CollectionRDFModel(
                 resourceURI = collectionResource.uri,
                 harvestedWithoutConcepts = collectionModelWithoutConcepts,
-                harvested = collectionModel,
+                harvested = collectionModel.union(collectionModelWithoutConcepts),
                 concepts = collectionConcepts
             )
         }
@@ -131,12 +131,12 @@ private fun Model.addCatalogProperties(property: Statement): Model =
     }
 
 fun Resource.extractConcept(): ConceptRDFModel {
-    var conceptModel = listProperties().toModel()
-    conceptModel = conceptModel.setNsPrefixes(model.nsPrefixMap)
+    val conceptModel = listProperties().toModel()
+    conceptModel.setNsPrefixes(model.nsPrefixMap)
 
     listProperties().toList()
         .filter { it.isResourceProperty() }
-        .forEach { conceptModel = conceptModel.recursiveAddNonConceptResource(it.resource, 10) }
+        .forEach { conceptModel.recursiveAddNonConceptResource(it.resource, 10) }
 
     return ConceptRDFModel(
         resourceURI = uri,
@@ -170,13 +170,13 @@ private fun generatedCollection(
     val generatedCollectionURI = "$sourceURL#GeneratedCollection"
     val collectionModelWithoutConcepts = createModelForHarvestSourceCollection(generatedCollectionURI, conceptURIs, organization)
 
-    var collectionModel = collectionModelWithoutConcepts
-    concepts.forEach { collectionModel = collectionModel.union(it.harvested) }
+    val collectionModel = ModelFactory.createDefaultModel()
+    concepts.forEach { collectionModel.add(it.harvested) }
 
     return CollectionRDFModel(
         resourceURI = generatedCollectionURI,
         harvestedWithoutConcepts = collectionModelWithoutConcepts,
-        harvested = collectionModel,
+        harvested = collectionModel.union(collectionModelWithoutConcepts),
         concepts = conceptURIs
     )
 }
