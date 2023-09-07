@@ -124,7 +124,7 @@ fun Resource.extractCollectionModel(): Model {
 private fun Model.addCatalogProperties(property: Statement): Model =
     when {
         property.predicate != SKOS.member && property.isResourceProperty() ->
-            add(property).recursiveAddNonConceptResource(property.resource, 5)
+            add(property).recursiveAddNonConceptResource(property.resource)
         property.predicate != SKOS.member -> add(property)
         property.isResourceProperty() && property.resource.isURIResource -> add(property)
         else -> this
@@ -136,7 +136,7 @@ fun Resource.extractConcept(): ConceptRDFModel {
 
     listProperties().toList()
         .filter { it.isResourceProperty() }
-        .forEach { conceptModel.recursiveAddNonConceptResource(it.resource, 10) }
+        .forEach { conceptModel.recursiveAddNonConceptResource(it.resource) }
 
     return ConceptRDFModel(
         resourceURI = uri,
@@ -145,17 +145,13 @@ fun Resource.extractConcept(): ConceptRDFModel {
     )
 }
 
-private fun Model.recursiveAddNonConceptResource(resource: Resource, recursiveCount: Int): Model {
-    val newCount = recursiveCount - 1
-
+private fun Model.recursiveAddNonConceptResource(resource: Resource): Model {
     if (resourceShouldBeAdded(resource)) {
         add(resource.listProperties())
 
-        if (newCount > 0) {
-            resource.listProperties().toList()
-                .filter { it.isResourceProperty() }
-                .forEach { recursiveAddNonConceptResource(it.resource, newCount) }
-        }
+        resource.listProperties().toList()
+            .filter { it.isResourceProperty() }
+            .forEach { recursiveAddNonConceptResource(it.resource) }
     }
 
     return this
