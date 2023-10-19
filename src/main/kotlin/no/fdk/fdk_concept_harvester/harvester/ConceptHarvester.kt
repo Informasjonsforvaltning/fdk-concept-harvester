@@ -150,45 +150,32 @@ class ConceptHarvester(
         forceUpdate: Boolean
     ): HarvestReport {
         val concepts = splitConceptsFromRDF(harvested, sourceURL)
+        val updatedConcepts = updateConcepts(concepts, harvestDate, forceUpdate)
 
-        return if (concepts.isEmpty()) {
-            LOGGER.error("No collection with concepts found in data harvested from $sourceURL", HarvestException(sourceURL))
-            HarvestReport(
-                id = sourceId,
-                url = sourceURL,
-                harvestError = true,
-                errorMessage = "No collection with concepts found in data harvested from $sourceURL",
-                startTime = harvestDate.formatWithOsloTimeZone(),
-                endTime = formatNowWithOsloTimeZone()
-            )
-        } else {
-            val updatedConcepts = updateConcepts(concepts, harvestDate, forceUpdate)
+        val organization = if (publisherId != null && concepts.containsFreeConcepts()) {
+            orgAdapter.getOrganization(publisherId)
+        } else null
 
-            val organization = if (publisherId != null && concepts.containsFreeConcepts()) {
-                orgAdapter.getOrganization(publisherId)
-            } else null
+        val collections = splitCollectionsFromRDF(harvested, concepts, sourceURL, organization)
+        val updatedCollections = updateCollections(collections, harvestDate, forceUpdate)
 
-            val collections = splitCollectionsFromRDF(harvested, concepts, sourceURL, organization)
-            val updatedCollections = updateCollections(collections, harvestDate, forceUpdate)
+        val removedConcepts = getConceptsRemovedThisHarvest(
+            updatedCollections.map { collectionFdkUri(it.fdkId) },
+            concepts.map { it.resourceURI }
+        )
+        removedConcepts.map { it.copy(removed = true) }
+            .run { conceptMetaRepository.saveAll(this) }
 
-            val removedConcepts = getConceptsRemovedThisHarvest(
-                updatedCollections.map { collectionFdkUri(it.fdkId) },
-                concepts.map { it.resourceURI }
-            )
-            removedConcepts.map { it.copy(removed = true) }
-                .run { conceptMetaRepository.saveAll(this) }
-
-            HarvestReport(
-                id = sourceId,
-                url = sourceURL,
-                harvestError = false,
-                startTime = harvestDate.formatWithOsloTimeZone(),
-                endTime = formatNowWithOsloTimeZone(),
-                changedCatalogs = updatedCollections,
-                changedResources = updatedConcepts,
-                removedResources = removedConcepts.map { FdkIdAndUri(fdkId = it.fdkId, uri = it.uri) }
-            )
-        }
+        return HarvestReport(
+            id = sourceId,
+            url = sourceURL,
+            harvestError = false,
+            startTime = harvestDate.formatWithOsloTimeZone(),
+            endTime = formatNowWithOsloTimeZone(),
+            changedCatalogs = updatedCollections,
+            changedResources = updatedConcepts,
+            removedResources = removedConcepts.map { FdkIdAndUri(fdkId = it.fdkId, uri = it.uri) }
+        )
     }
 
     private fun updateConcepts(concepts: List<ConceptRDFModel>, harvestDate: Calendar, forceUpdate: Boolean): List<FdkIdAndUri> =
