@@ -61,7 +61,6 @@ fun splitCollectionsFromRDF(
     val harvestedCollections = harvested.listResourcesWithProperty(RDF.type, SKOS.Collection)
         .toList()
         .excludeBlankNodeCollectionsAndConcepts(sourceURL)
-        .filter { it.hasProperty(SKOS.member) }
         .map { collectionResource ->
             val collectionConcepts: Set<String> = collectionResource.listProperties(SKOS.member)
                 .toList()
