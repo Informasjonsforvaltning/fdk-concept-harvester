@@ -1,5 +1,6 @@
 package no.fdk.fdk_concept_harvester.harvester
 
+import io.micrometer.core.instrument.Metrics
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -16,6 +17,8 @@ import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
 import java.util.Calendar
+import kotlin.time.measureTimedValue
+import kotlin.time.toJavaDuration
 
 private val LOGGER = LoggerFactory.getLogger(HarvesterActivity::class.java)
 
@@ -42,7 +45,34 @@ class HarvesterActivity(
                     harvestAdminAdapter.getDataSources(params)
                         .filter { it.dataType == "concept" }
                         .filter { it.url != null }
-                        .map { async { harvester.harvestConceptCollection(it, Calendar.getInstance(), forceUpdate) } }
+                        .map { async {
+                            val (report, timeElapsed) = measureTimedValue {
+                                harvester.harvestConceptCollection(it, Calendar.getInstance(), forceUpdate)
+                            }
+                            Metrics.counter("harvest_count",
+                                    "status", if (report?.harvestError == false) { "success" }  else { "error" },
+                                    "type", "concept",
+                                    "force_update", "$forceUpdate",
+                                    "datasource_id", it.id
+                            ).increment()
+                            if (report?.harvestError == false) {
+                                Metrics.counter("harvest_changed_resources_count",
+                                        "type", "concept",
+                                        "force_update", "$forceUpdate",
+                                        "datasource_id", it.id
+                                ).increment(report.changedResources.size.toDouble())
+                                Metrics.counter("harvest_removed_resources_count",
+                                        "type", "concept",
+                                        "force_update", "$forceUpdate",
+                                        "datasource_id", it.id
+                                ).increment(report.removedResources.size.toDouble())
+                                Metrics.timer("harvest_time",
+                                        "type", "concept",
+                                        "force_update", "$forceUpdate",
+                                        "datasource_id", it.id).record(timeElapsed.toJavaDuration())
+                            }
+                            report
+                        } }
                         .awaitAll()
                         .filterNotNull()
                         .also { updateService.updateMetaData() }
