@@ -1,2 +1,2 @@
-<http://localhost:5000/concept-harvest-source-0#GeneratedCollection>
+<http://localhost:5050/concept-harvest-source-0#GeneratedCollection>
         a       <http://www.w3.org/2004/02/skos/core#Collection> .

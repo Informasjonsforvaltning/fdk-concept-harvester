@@ -17,13 +17,13 @@ val COLLECTION_0 = CollectionMeta(
 
 val CONCEPT_0 = ConceptMeta(
     uri = "https://example.com/begrep/0", fdkId = "db1b701c-b4b9-3c20-bc23-236a91236754",
-    isPartOf = "http://localhost:5000/collections/9b8f1c42-1161-33b1-9d43-a733ee94ddfc",
+    isPartOf = "http://localhost:5050/collections/9b8f1c42-1161-33b1-9d43-a733ee94ddfc",
     issued = 1609852539831, modified = 1609852539831
 )
 
 val CONCEPT_1 = ConceptMeta(
     uri = "https://example.com/begrep/1", fdkId = "7dbac738-4944-323a-a777-ad2f83bf75f8",
-    isPartOf = "http://localhost:5000/collections/9b8f1c42-1161-33b1-9d43-a733ee94ddfc",
+    isPartOf = "http://localhost:5050/collections/9b8f1c42-1161-33b1-9d43-a733ee94ddfc",
     issued = 1609852539831, modified = 1609852539831
 )
 

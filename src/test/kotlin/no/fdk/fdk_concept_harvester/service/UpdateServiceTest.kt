@@ -36,7 +36,7 @@ class UpdateServiceTest {
                 .thenReturn(listOf(COLLECTION_0))
             whenever(conceptMetaRepository.findAll())
                 .thenReturn(listOf(CONCEPT_0, CONCEPT_1))
-            whenever(conceptMetaRepository.findAllByIsPartOf("http://localhost:5000/collections/${COLLECTION_0_ID}"))
+            whenever(conceptMetaRepository.findAllByIsPartOf("http://localhost:5050/collections/${COLLECTION_0_ID}"))
                 .thenReturn(listOf(CONCEPT_0, CONCEPT_1))
             whenever(turtleService.getCollection(COLLECTION_0_ID, false))
                 .thenReturn(responseReader.readFile("no_meta_collection_0.ttl"))
@@ -46,9 +46,9 @@ class UpdateServiceTest {
                 .thenReturn(responseReader.readFile("no_meta_concept_1.ttl"))
 
             whenever(valuesMock.collectionsUri)
-                .thenReturn("http://localhost:5000/collections")
+                .thenReturn("http://localhost:5050/collections")
             whenever(valuesMock.conceptsUri)
-                .thenReturn("http://localhost:5000/concepts")
+                .thenReturn("http://localhost:5050/concepts")
 
             updateService.updateMetaData()
 
@@ -76,7 +76,7 @@ class UpdateServiceTest {
         fun conceptIsSkippedIfNotActuallyPresentInCollection() {
             whenever(collectionMetaRepository.findAll())
                 .thenReturn(listOf(COLLECTION_0))
-            whenever(conceptMetaRepository.findAllByIsPartOf("http://localhost:5000/collections/${COLLECTION_0_ID}"))
+            whenever(conceptMetaRepository.findAllByIsPartOf("http://localhost:5050/collections/${COLLECTION_0_ID}"))
                 .thenReturn(listOf(CONCEPT_0, CONCEPT_1))
             whenever(turtleService.getCollection(COLLECTION_0_ID, false))
                 .thenReturn(responseReader.readFile("harvest_response_0_no_concepts.ttl"))
@@ -86,9 +86,9 @@ class UpdateServiceTest {
                 .thenReturn(responseReader.readFile("no_meta_concept_1.ttl"))
 
             whenever(valuesMock.collectionsUri)
-                .thenReturn("http://localhost:5000/collections")
+                .thenReturn("http://localhost:5050/collections")
             whenever(valuesMock.conceptsUri)
-                .thenReturn("http://localhost:5000/concepts")
+                .thenReturn("http://localhost:5050/concepts")
 
             updateService.updateMetaData()
 
