@@ -2,6 +2,7 @@ package no.fdk.fdk_concept_harvester.service
 
 import no.fdk.fdk_concept_harvester.configuration.ApplicationProperties
 import no.fdk.fdk_concept_harvester.harvester.calendarFromTimestamp
+import no.fdk.fdk_concept_harvester.harvester.extractCollectionModel
 import no.fdk.fdk_concept_harvester.model.CollectionMeta
 import no.fdk.fdk_concept_harvester.model.ConceptMeta
 import no.fdk.fdk_concept_harvester.rdf.containsTriple
@@ -47,16 +48,6 @@ class UpdateService(
     }
 
     fun updateMetaData() {
-        conceptMetaRepository.findAll()
-            .forEach { concept ->
-                val conceptMeta = concept.createMetaModel()
-
-                turtleService.getConcept(concept.fdkId, withRecords = false)
-                    ?.let { conceptNoRecords -> safeParseRDF(conceptNoRecords, Lang.TURTLE) }
-                    ?.let { conceptModelNoRecords -> conceptMeta.union(conceptModelNoRecords) }
-                    ?.run { turtleService.saveAsConcept(this, fdkId = concept.fdkId, withRecords = true) }
-            }
-
         collectionMetaRepository.findAll()
             .forEach { collection ->
                 val collectionNoRecords = turtleService.getCollection(collection.fdkId, withRecords = false)
@@ -65,13 +56,28 @@ class UpdateService(
                 if (collectionNoRecords != null) {
                     val collectionURI = "${applicationProperties.collectionsUri}/${collection.fdkId}"
                     val collectionMeta = collection.createMetaModel()
+                    val completeMetaModel = ModelFactory.createDefaultModel()
+                    completeMetaModel.add(collectionMeta)
+
+                    val collectionTriples = collectionNoRecords.getResource(collection.uri)
+                        .extractCollectionModel()
+                    collectionTriples.add(collectionMeta)
 
                     conceptMetaRepository.findAllByIsPartOf(collectionURI)
                         .filter { it.modelContainsConcept(collectionNoRecords) }
-                        .forEach { concept -> collectionMeta.add(concept.createMetaModel()) }
+                        .forEach { concept ->
+                            val conceptMeta = concept.createMetaModel()
+                            completeMetaModel.add(conceptMeta)
+
+                            turtleService.getConcept(concept.fdkId, withRecords = false)
+                                ?.let { conceptNoRecords -> safeParseRDF(conceptNoRecords, Lang.TURTLE) }
+                                ?.let { conceptModelNoRecords -> conceptMeta.union(conceptModelNoRecords) }
+                                ?.let { conceptModel -> collectionTriples.union(conceptModel) }
+                                ?.run { turtleService.saveAsConcept(this, fdkId = concept.fdkId, withRecords = true) }
+                        }
 
                     turtleService.saveAsCollection(
-                        collectionMeta.union(collectionNoRecords),
+                        completeMetaModel.union(collectionNoRecords),
                         fdkId = collection.fdkId,
                         withRecords = true
                     )

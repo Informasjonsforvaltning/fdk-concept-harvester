@@ -62,3 +62,25 @@
         dct:modified    "2021-01-05T13:15:39.831Z"^^xsd:dateTime ;
         <http://xmlns.com/foaf/0.1/primaryTopic>
                 <https://example.com/begrep/0> .
+
+<https://www.example.com/begrepskatalog/0> a skos:Collection ;
+    rdfs:label "Begrepskatalog 0"@nb ;
+    dct:description "Testbegreper" ;
+    dct:identifier "0" ;
+    dct:publisher <https://data.brreg.no/enhetsregisteret/api/enheter/974760673> ;
+    skos:member <https://example.com/begrep/0>,
+        <https://example.com/begrep/1>;
+    dcat:contactPoint <https://www.example.com/begrepskatalog/0/.well-known/skolem/9ea8298d-7c5f-3613-9f56-90569b0c33f4> .
+
+<https://www.example.com/begrepskatalog/0/.well-known/skolem/9ea8298d-7c5f-3613-9f56-90569b0c33f4>
+        a                   vcard:Organization ;
+        vcard:hasEmail      <mailto:test@example.com> ;
+        vcard:hasTelephone  <tel:12345678> .
+
+<http://localhost:5050/collections/9b8f1c42-1161-33b1-9d43-a733ee94ddfc>
+        a               dcat:CatalogRecord ;
+        dct:identifier  "9b8f1c42-1161-33b1-9d43-a733ee94ddfc" ;
+        dct:issued      "2021-01-05T13:15:39.831Z"^^xsd:dateTime ;
+        dct:modified    "2021-01-05T13:15:39.831Z"^^xsd:dateTime ;
+        <http://xmlns.com/foaf/0.1/primaryTopic>
+                <https://www.example.com/begrepskatalog/0> .
