@@ -41,7 +41,7 @@ class HarvesterTest {
     fun harvestDataSourceSavedWhenDBIsEmpty() {
         whenever(adapter.getConcepts(TEST_HARVEST_SOURCE_0))
             .thenReturn(responseReader.readFile("harvest_response_0.ttl"))
-        whenever(conceptRepository.findAllByIsPartOf("http://localhost:5000/collections/$COLLECTION_0_ID"))
+        whenever(conceptRepository.findAllByIsPartOf("http://localhost:5050/collections/$COLLECTION_0_ID"))
             .thenReturn(listOf(CONCEPT_0, CONCEPT_1))
         whenever(conceptRepository.findById(CONCEPT_0.uri))
             .thenReturn(Optional.of(CONCEPT_0.copy(isPartOf = null)))
@@ -54,15 +54,15 @@ class HarvesterTest {
             .thenReturn(responseReader.readFile("concept_1.ttl"))
 
         whenever(valuesMock.collectionsUri)
-            .thenReturn("http://localhost:5000/collections")
+            .thenReturn("http://localhost:5050/collections")
         whenever(valuesMock.conceptsUri)
-            .thenReturn("http://localhost:5000/concepts")
+            .thenReturn("http://localhost:5050/concepts")
 
         val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE, false)
 
         val expectedReport = HarvestReport(
             id = "concept-harvest-source-0",
-            url = "http://localhost:5000/concept-harvest-source-0",
+            url = "http://localhost:5050/concept-harvest-source-0",
             harvestError = false,
             startTime = "2021-01-05 14:15:39 +0100",
             endTime = report!!.endTime,
@@ -120,7 +120,7 @@ class HarvesterTest {
 
         val expectedReport = HarvestReport(
             id = "concept-harvest-source-0",
-            url = "http://localhost:5000/concept-harvest-source-0",
+            url = "http://localhost:5050/concept-harvest-source-0",
             harvestError = false,
             startTime = "2021-01-05 14:15:39 +0100",
             endTime = report!!.endTime
@@ -156,15 +156,15 @@ class HarvesterTest {
             .thenReturn(responseReader.readFile("no_meta_collection_0.ttl"))
 
         whenever(valuesMock.collectionsUri)
-            .thenReturn("http://localhost:5000/collections")
+            .thenReturn("http://localhost:5050/collections")
         whenever(valuesMock.conceptsUri)
-            .thenReturn("http://localhost:5000/concepts")
+            .thenReturn("http://localhost:5050/concepts")
 
         val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE, true)
 
         val expectedReport = HarvestReport(
             id = "concept-harvest-source-0",
-            url = "http://localhost:5000/concept-harvest-source-0",
+            url = "http://localhost:5050/concept-harvest-source-0",
             harvestError = false,
             startTime = "2021-01-05 14:15:39 +0100",
             endTime = report!!.endTime,
@@ -192,9 +192,9 @@ class HarvesterTest {
             .thenReturn(responseReader.readFile("harvest_response_0_diff.ttl"))
 
         whenever(valuesMock.collectionsUri)
-            .thenReturn("http://localhost:5000/collections")
+            .thenReturn("http://localhost:5050/collections")
         whenever(valuesMock.conceptsUri)
-            .thenReturn("http://localhost:5000/concepts")
+            .thenReturn("http://localhost:5050/concepts")
 
         whenever(collectionRepository.findById(COLLECTION_0.uri))
             .thenReturn(Optional.of(COLLECTION_0))
@@ -223,7 +223,7 @@ class HarvesterTest {
 
         val expectedReport = HarvestReport(
             id = "concept-harvest-source-0",
-            url = "http://localhost:5000/concept-harvest-source-0",
+            url = "http://localhost:5050/concept-harvest-source-0",
             harvestError = false,
             startTime = "2021-02-15 12:52:16 +0100",
             endTime = report!!.endTime,
@@ -274,7 +274,7 @@ class HarvesterTest {
 
         val expectedReport = HarvestReport(
             id = "concept-harvest-source-0",
-            url = "http://localhost:5000/concept-harvest-source-0",
+            url = "http://localhost:5050/concept-harvest-source-0",
             harvestError = true,
             errorMessage = "[line: 11, col: 5 ] Undefined prefix: rdfs",
             startTime = "2021-01-05 14:15:39 +0100",
@@ -302,19 +302,19 @@ class HarvesterTest {
         whenever(orgAdapter.getOrganization("123456789")).thenReturn(ORGANIZATION_0)
 
         whenever(valuesMock.collectionsUri)
-            .thenReturn("http://localhost:5000/collections")
+            .thenReturn("http://localhost:5050/collections")
         whenever(valuesMock.conceptsUri)
-            .thenReturn("http://localhost:5000/concepts")
+            .thenReturn("http://localhost:5050/concepts")
 
         val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE, false)
 
         val expectedReport = HarvestReport(
             id = "concept-harvest-source-0",
-            url = "http://localhost:5000/concept-harvest-source-0",
+            url = "http://localhost:5050/concept-harvest-source-0",
             harvestError = false,
             startTime = "2021-01-05 14:15:39 +0100",
             endTime = report!!.endTime,
-            changedCatalogs=listOf(FdkIdAndUri(fdkId="24a90ee1-bd80-390b-8cfc-983960909392", uri="http://localhost:5000/concept-harvest-source-0#GeneratedCollection")),
+            changedCatalogs=listOf(FdkIdAndUri(fdkId="03a39fae-1d78-337c-b573-e523d5e7097f", uri="http://localhost:5050/concept-harvest-source-0#GeneratedCollection")),
             changedResources = listOf(FdkIdAndUri(fdkId="db1b701c-b4b9-3c20-bc23-236a91236754", uri="https://example.com/begrep/0"))
         )
         assertEquals(expectedReport, report)
@@ -346,7 +346,7 @@ class HarvesterTest {
 
         argumentCaptor<ConceptMeta>().apply {
             verify(conceptRepository, times(2)).save(capture())
-            assertEquals(listOf(CONCEPT_0.copy(isPartOf = null), CONCEPT_0.copy(isPartOf = "http://localhost:5000/collections/$GENERATED_COLLECTION_ID")), allValues)
+            assertEquals(listOf(CONCEPT_0.copy(isPartOf = null), CONCEPT_0.copy(isPartOf = "http://localhost:5050/collections/$GENERATED_COLLECTION_ID")), allValues)
         }
     }
 
@@ -362,7 +362,7 @@ class HarvesterTest {
             .thenReturn(Optional.of(GENERATED_COLLECTION.copy(concepts = emptySet())))
         whenever(turtleService.getCollection(GENERATED_COLLECTION_ID, false))
             .thenReturn(responseReader.readFile("empty_generated_collection.ttl"))
-        whenever(conceptRepository.findAllByIsPartOf("http://localhost:5000/collections/$COLLECTION_0_ID"))
+        whenever(conceptRepository.findAllByIsPartOf("http://localhost:5050/collections/$COLLECTION_0_ID"))
             .thenReturn(listOf(CONCEPT_0, CONCEPT_1))
         whenever(conceptRepository.findById(CONCEPT_0.uri))
             .thenReturn(Optional.of(CONCEPT_0))
@@ -370,9 +370,9 @@ class HarvesterTest {
             .thenReturn(responseReader.readFile("no_meta_concept_0.ttl"))
 
         whenever(valuesMock.collectionsUri)
-            .thenReturn("http://localhost:5000/collections")
+            .thenReturn("http://localhost:5050/collections")
         whenever(valuesMock.conceptsUri)
-            .thenReturn("http://localhost:5000/concepts")
+            .thenReturn("http://localhost:5050/concepts")
 
         val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE, false)
 
@@ -406,7 +406,7 @@ class HarvesterTest {
             .thenReturn(Optional.of(GENERATED_COLLECTION.copy(concepts = emptySet())))
         whenever(turtleService.getCollection(GENERATED_COLLECTION_ID, false))
             .thenReturn(responseReader.readFile("empty_generated_collection.ttl"))
-        whenever(conceptRepository.findAllByIsPartOf("http://localhost:5000/collections/$COLLECTION_0_ID"))
+        whenever(conceptRepository.findAllByIsPartOf("http://localhost:5050/collections/$COLLECTION_0_ID"))
             .thenReturn(listOf(CONCEPT_0, CONCEPT_1))
         whenever(conceptRepository.findById(CONCEPT_0.uri))
             .thenReturn(Optional.of(CONCEPT_0))
@@ -414,9 +414,9 @@ class HarvesterTest {
             .thenReturn(responseReader.readFile("no_meta_concept_0.ttl"))
 
         whenever(valuesMock.collectionsUri)
-            .thenReturn("http://localhost:5000/collections")
+            .thenReturn("http://localhost:5050/collections")
         whenever(valuesMock.conceptsUri)
-            .thenReturn("http://localhost:5000/concepts")
+            .thenReturn("http://localhost:5050/concepts")
 
         val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE, false)
 

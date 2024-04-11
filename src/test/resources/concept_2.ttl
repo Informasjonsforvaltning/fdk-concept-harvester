@@ -14,7 +14,7 @@
     dct:modified        "2019-11-19"^^xsd:date ;
     dct:publisher       <https://data.brreg.no/enhetsregisteret/api/enheter/910244132> .
 
-<http://localhost:5000/concepts/no-collection>
+<http://localhost:5050/concepts/no-collection>
         a               dcat:CatalogRecord ;
         dct:identifier  "no-collection" ;
         dct:issued      "2021-01-05T13:15:39.831Z"^^xsd:dateTime ;

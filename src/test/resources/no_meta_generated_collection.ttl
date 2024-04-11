@@ -12,10 +12,10 @@
         a                   skosxl:Label ;
         skosxl:literalForm  "Felles Norge "@nb .
 
-<http://localhost:5000/concept-harvest-source-0#GeneratedCollection>
+<http://localhost:5050/concept-harvest-source-0#GeneratedCollection>
         a              skos:Collection ;
         rdfs:label     "Testdirektoratet - Begrepssamling"@nb , "TESTDIREKTORATET - Begrepssamling"@nn , "TESTDIREKTORATET - Concept collection"@en ;
-        dct:publisher  <http://localhost:5000/organizations/123456789> ;
+        dct:publisher  <http://localhost:5050/organizations/123456789> ;
         skos:member    <https://example.com/begrep/0> .
 
 <https://example.com/begrep/0>
