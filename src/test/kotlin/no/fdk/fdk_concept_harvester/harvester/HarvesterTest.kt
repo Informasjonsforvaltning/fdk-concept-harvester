@@ -67,8 +67,8 @@ class HarvesterTest {
             startTime = "2021-01-05 14:15:39 +0100",
             endTime = report!!.endTime,
             changedResources = listOf(
-                FdkIdAndUri(fdkId="db1b701c-b4b9-3c20-bc23-236a91236754", uri="https://example.com/begrep/0"),
-                FdkIdAndUri(fdkId="7dbac738-4944-323a-a777-ad2f83bf75f8", uri="https://example.com/begrep/1")),
+                FdkIdAndUri(fdkId="7dbac738-4944-323a-a777-ad2f83bf75f8", uri="https://example.com/begrep/1"),
+                FdkIdAndUri(fdkId="db1b701c-b4b9-3c20-bc23-236a91236754", uri="https://example.com/begrep/0")),
             changedCatalogs = listOf(
                 FdkIdAndUri(fdkId="9b8f1c42-1161-33b1-9d43-a733ee94ddfc", uri="https://www.example.com/begrepskatalog/0"),
                 FdkIdAndUri(fdkId= GENERATED_COLLECTION_ID, uri= GENERATED_COLLECTION.uri))
@@ -96,15 +96,19 @@ class HarvesterTest {
 
         argumentCaptor<Model, String, Boolean>().apply {
             verify(turtleService, times(2)).saveAsConcept(first.capture(), second.capture(), third.capture())
-            assertTrue(checkIfIsomorphicAndPrintDiff(first.allValues[0], responseReader.parseFile("no_meta_concept_0.ttl", "TURTLE"), "harvestDataSourceSavedWhenDBIsEmpty-norecords-concept0"))
-            assertTrue(checkIfIsomorphicAndPrintDiff(first.allValues[1], responseReader.parseFile("no_meta_concept_1.ttl", "TURTLE"), "harvestDataSourceSavedWhenDBIsEmpty-norecords-concept1"))
-            assertEquals(listOf(CONCEPT_0_ID, CONCEPT_1_ID), second.allValues)
+            assertTrue(checkIfIsomorphicAndPrintDiff(first.allValues[0], responseReader.parseFile("no_meta_concept_1.ttl", "TURTLE"), "harvestDataSourceSavedWhenDBIsEmpty-norecords-concept1"))
+            assertTrue(checkIfIsomorphicAndPrintDiff(first.allValues[1], responseReader.parseFile("no_meta_concept_0.ttl", "TURTLE"), "harvestDataSourceSavedWhenDBIsEmpty-norecords-concept0"))
+            assertEquals(listOf(CONCEPT_1_ID, CONCEPT_0_ID), second.allValues)
             Assertions.assertEquals(listOf(false, false), third.allValues)
         }
 
         argumentCaptor<ConceptMeta>().apply {
             verify(conceptRepository, times(4)).save(capture())
-            assertEquals(listOf(CONCEPT_0.copy(isPartOf = null), CONCEPT_1.copy(isPartOf = null), CONCEPT_1, CONCEPT_0), allValues)
+            assertEquals(
+                listOf(CONCEPT_0.copy(isPartOf = null), CONCEPT_1.copy(isPartOf = null), CONCEPT_1, CONCEPT_0)
+                    .sortedBy { it.fdkId },
+                allValues.sortedBy { it.fdkId }
+            )
         }
     }
 
@@ -169,8 +173,8 @@ class HarvesterTest {
             startTime = "2021-01-05 14:15:39 +0100",
             endTime = report!!.endTime,
             changedResources = listOf(
-                FdkIdAndUri(fdkId="db1b701c-b4b9-3c20-bc23-236a91236754", uri="https://example.com/begrep/0"),
-                FdkIdAndUri(fdkId="7dbac738-4944-323a-a777-ad2f83bf75f8", uri="https://example.com/begrep/1")),
+                FdkIdAndUri(fdkId="7dbac738-4944-323a-a777-ad2f83bf75f8", uri="https://example.com/begrep/1"),
+                FdkIdAndUri(fdkId="db1b701c-b4b9-3c20-bc23-236a91236754", uri="https://example.com/begrep/0")),
             changedCatalogs = listOf(
                 FdkIdAndUri(fdkId="9b8f1c42-1161-33b1-9d43-a733ee94ddfc", uri="https://www.example.com/begrepskatalog/0"),
                 FdkIdAndUri(fdkId= GENERATED_COLLECTION_ID, uri= GENERATED_COLLECTION.uri))
