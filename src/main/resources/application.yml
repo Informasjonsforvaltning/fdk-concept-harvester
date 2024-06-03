@@ -21,6 +21,7 @@ application:
   collectionsUri: ${FDK_CONCEPT_HARVESTER_URI:https://concepts.staging.fellesdatakatalog.digdir.no}/collections
   organizationsUri: ${ORGANIZATION_CATALOG_URI:https://organization-catalog.staging.fellesdatakatalog.digdir.no}/organizations
   harvestAdminRootUrl: ${HARVEST_ADMIN_ROOT_URL:http://new-harvest-admin:8080}
+  harvestAdminApiKey: ${ADMIN_API_KEY}
 management:
   endpoints:
     web:
@@ -46,6 +47,7 @@ application:
   collectionsUri: https://concepts.staging.fellesdatakatalog.digdir.no/collections
   organizationsUri: https://organization-catalog.staging.fellesdatakatalog.digdir.no/organizations
   harvestAdminRootUrl: https://admin-api.staging.fellesdatakatalog.digdir.no
+  harvestAdminApiKey: test-key
 
 ---
 spring:
@@ -64,3 +66,4 @@ application:
   collectionsUri: http://localhost:5050/collections
   organizationsUri: http://localhost:5050/organizations
   harvestAdminRootUrl: http://localhost:5050
+  harvestAdminApiKey: test-key

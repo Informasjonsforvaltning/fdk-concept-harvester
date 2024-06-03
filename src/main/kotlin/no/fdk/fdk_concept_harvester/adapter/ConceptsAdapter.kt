@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import java.io.BufferedReader
 import java.net.HttpURLConnection
-import java.net.URL
+import java.net.URI
 import java.nio.charset.Charset
 
 private val LOGGER = LoggerFactory.getLogger(ConceptsAdapter::class.java)
@@ -17,7 +17,7 @@ private val LOGGER = LoggerFactory.getLogger(ConceptsAdapter::class.java)
 class ConceptsAdapter {
 
     fun getConcepts(source: HarvestDataSource): String {
-        val connection = URL(source.url).openConnection() as HttpURLConnection
+        val connection = URI(source.url).toURL().openConnection() as HttpURLConnection
         try {
             connection.setRequestProperty(HttpHeaders.ACCEPT, source.acceptHeaderValue)
             source.authHeader?.run { connection.setRequestProperty(name, value) }
