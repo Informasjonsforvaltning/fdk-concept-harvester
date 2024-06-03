@@ -7,5 +7,6 @@ data class ApplicationProperties(
     val conceptsUri: String,
     val collectionsUri: String,
     val organizationsUri: String,
-    val harvestAdminRootUrl: String
+    val harvestAdminRootUrl: String,
+    val harvestAdminApiKey: String
 )

@@ -9,7 +9,7 @@ import org.springframework.http.*
 import org.springframework.stereotype.Service
 import java.io.BufferedReader
 import java.net.HttpURLConnection
-import java.net.URL
+import java.net.URI
 
 private val logger = LoggerFactory.getLogger(HarvestAdminAdapter::class.java)
 
@@ -18,7 +18,7 @@ class DefaultOrganizationsAdapter(private val applicationProperties: Application
 
     override fun getOrganization(id: String): Organization? {
         val uri = "${applicationProperties.organizationsUri}/$id"
-        with(URL(uri).openConnection() as HttpURLConnection) {
+        with(URI(uri).toURL().openConnection() as HttpURLConnection) {
             try {
                 setRequestProperty(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON.toString())
 

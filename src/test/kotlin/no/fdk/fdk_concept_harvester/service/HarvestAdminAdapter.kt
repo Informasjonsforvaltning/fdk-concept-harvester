@@ -26,7 +26,7 @@ class HarvestAdminAdapterTest {
 
             val url = adapter.urlWithParameters(HarvestAdminParameters(null, null, null, null))
 
-            assertEquals(URL("http://www.example.com/datasources"), url)
+            assertEquals(URL("http://www.example.com/internal/datasources"), url)
         }
 
         @Test
@@ -36,7 +36,7 @@ class HarvestAdminAdapterTest {
 
             val url = adapter.urlWithParameters(HarvestAdminParameters("", "", "", ""))
 
-            assertEquals(URL("http://www.example.com/datasources"), url)
+            assertEquals(URL("http://www.example.com/internal/datasources"), url)
         }
 
         @Test
@@ -46,7 +46,7 @@ class HarvestAdminAdapterTest {
 
             val url = adapter.urlWithParameters(HarvestAdminParameters(null, null, null))
 
-            assertEquals(URL("http://www.example.com/datasources?dataType=concept"), url)
+            assertEquals(URL("http://www.example.com/internal/datasources?dataType=concept"), url)
         }
 
         @Test
@@ -63,7 +63,7 @@ class HarvestAdminAdapterTest {
                 )
             )
 
-            assertEquals(URL("http://www.example.com/organizations/123456789/datasources?dataType=concept&dataSourceType=DCAT-AP-NO"), url)
+            assertEquals(URL("http://www.example.com/internal/organizations/123456789/datasources?dataType=concept&dataSourceType=DCAT-AP-NO"), url)
         }
 
     }
