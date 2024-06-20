@@ -442,4 +442,51 @@ class HarvesterTest {
         verify(conceptRepository, times(0)).save(any())
     }
 
+    @Test
+    fun earlierRemovedConceptWithNoChangesAddedToReport() {
+        val harvested = responseReader.readFile("harvest_response_0.ttl")
+        whenever(adapter.getConcepts(TEST_HARVEST_SOURCE_0))
+            .thenReturn(harvested)
+        whenever(turtleService.getHarvestSource(TEST_HARVEST_SOURCE_0.url!!))
+            .thenReturn(responseReader.readFile("harvest_response_empty.ttl"))
+        whenever(collectionRepository.findById(GENERATED_COLLECTION.uri))
+            .thenReturn(Optional.of(GENERATED_COLLECTION.copy(concepts = emptySet())))
+        whenever(turtleService.getCollection(GENERATED_COLLECTION_ID, false))
+            .thenReturn(responseReader.readFile("empty_generated_collection.ttl"))
+        whenever(conceptRepository.findById(CONCEPT_0.uri))
+            .thenReturn(Optional.of(CONCEPT_0.copy(removed = true)))
+        whenever(conceptRepository.findById(CONCEPT_1.uri))
+            .thenReturn(Optional.of(CONCEPT_1))
+        whenever(conceptRepository.findAllByIsPartOf("http://localhost:5050/collections/$COLLECTION_0_ID"))
+            .thenReturn(listOf(CONCEPT_0.copy(removed = true), CONCEPT_1))
+        whenever(turtleService.getConcept(CONCEPT_0_ID, withRecords = false))
+            .thenReturn(responseReader.readFile("no_meta_concept_0.ttl"))
+        whenever(turtleService.getConcept(CONCEPT_1_ID, withRecords = false))
+            .thenReturn(responseReader.readFile("no_meta_concept_1.ttl"))
+
+        whenever(valuesMock.collectionsUri)
+            .thenReturn("http://localhost:5050/collections")
+        whenever(valuesMock.conceptsUri)
+            .thenReturn("http://localhost:5050/concepts")
+
+        val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE, false)
+
+        argumentCaptor<ConceptMeta>().apply {
+            verify(conceptRepository, times(1)).save(capture())
+            assertEquals(CONCEPT_0.fdkId, firstValue.fdkId)
+        }
+
+        val expectedReport = HarvestReport(
+            id = "concept-harvest-source-0",
+            url = TEST_HARVEST_SOURCE_0.url!!,
+            harvestError = false,
+            startTime = "2021-01-05 14:15:39 +0100",
+            endTime = report!!.endTime,
+            changedCatalogs=listOf(FdkIdAndUri(fdkId=COLLECTION_0_ID, uri="https://www.example.com/begrepskatalog/0")),
+            changedResources = listOf(FdkIdAndUri(fdkId=CONCEPT_0.fdkId, uri=CONCEPT_0.uri))
+        )
+
+        assertEquals(expectedReport, report)
+    }
+
 }

@@ -179,24 +179,35 @@ class ConceptHarvester(
     }
 
     private fun updateConcepts(concepts: List<ConceptRDFModel>, harvestDate: Calendar, forceUpdate: Boolean): List<FdkIdAndUri> =
-        concepts
-            .map { Pair(it, conceptMetaRepository.findByIdOrNull(it.resourceURI)) }
-            .filter { forceUpdate || it.first.conceptHasChanges(it.second?.fdkId) }
-            .map {
-                val dbMeta = it.second
-                val modelMeta = if (dbMeta == null || it.first.conceptHasChanges(dbMeta.fdkId)) {
-                    it.first.mapToDBOMeta(harvestDate, it.second)
-                        .also { updatedMeta -> conceptMetaRepository.save(updatedMeta) }
-                } else dbMeta
+        concepts.mapNotNull {
+            it.updateDBOs(harvestDate, forceUpdate)
+                ?.let { meta -> FdkIdAndUri(fdkId = meta.fdkId, uri = it.resourceURI) }
+        }
 
+    private fun ConceptRDFModel.updateDBOs(harvestDate: Calendar, forceUpdate: Boolean): ConceptMeta? {
+        val dbMeta = conceptMetaRepository.findByIdOrNull(resourceURI)
+        return when {
+            dbMeta == null || dbMeta.removed || conceptHasChanges(dbMeta.fdkId) -> {
+                val updatedMeta = mapToDBOMeta(harvestDate, dbMeta)
+                conceptMetaRepository.save(updatedMeta)
                 turtleService.saveAsConcept(
-                    model = it.first.harvested,
-                    fdkId = modelMeta.fdkId,
+                    model = harvested,
+                    fdkId = updatedMeta.fdkId,
                     withRecords = false
                 )
-
-                FdkIdAndUri(fdkId = modelMeta.fdkId, uri = it.first.resourceURI)
+                updatedMeta
             }
+            forceUpdate -> {
+                turtleService.saveAsConcept(
+                    model = harvested,
+                    fdkId = dbMeta.fdkId,
+                    withRecords = false
+                )
+                dbMeta
+            }
+            else -> null
+        }
+    }
 
     private fun updateCollections(collections: List<CollectionRDFModel>, harvestDate: Calendar, forceUpdate: Boolean): List<FdkIdAndUri> =
         collections
