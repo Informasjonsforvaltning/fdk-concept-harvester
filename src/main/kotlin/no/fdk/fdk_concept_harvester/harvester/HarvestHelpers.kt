@@ -10,9 +10,13 @@ import org.apache.jena.riot.Lang
 import org.apache.jena.util.ResourceUtils
 import org.apache.jena.vocabulary.*
 import org.slf4j.LoggerFactory
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 private val LOGGER = LoggerFactory.getLogger(Application::class.java)
+private const val dateFormat: String = "yyyy-MM-dd HH:mm:ss Z"
 
 fun CollectionRDFModel.harvestDiff(dboNoRecords: String?): Boolean =
     if (dboNoRecords == null) true
@@ -280,5 +284,13 @@ private fun Resource.isMemberOfAnyCollection(): Boolean {
 
 fun List<ConceptRDFModel>.containsFreeConcepts(): Boolean =
     firstOrNull { !it.isMemberOfAnyCollection } != null
+
+fun formatNowWithOsloTimeZone(): String =
+    ZonedDateTime.now(ZoneId.of("Europe/Oslo"))
+        .format(DateTimeFormatter.ofPattern(dateFormat))
+
+fun Calendar.formatWithOsloTimeZone(): String =
+    ZonedDateTime.from(toInstant().atZone(ZoneId.of("Europe/Oslo")))
+        .format(DateTimeFormatter.ofPattern(dateFormat))
 
 class HarvestException(url: String) : Exception("Harvest failed for $url")

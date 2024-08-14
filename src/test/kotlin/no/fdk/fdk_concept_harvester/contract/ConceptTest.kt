@@ -1,8 +1,11 @@
 package no.fdk.fdk_concept_harvester.contract
 
 import no.fdk.fdk_concept_harvester.utils.*
+import no.fdk.fdk_concept_harvester.utils.jwk.Access
+import no.fdk.fdk_concept_harvester.utils.jwk.JwtToken
 import org.apache.jena.riot.Lang
 import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
@@ -49,6 +52,45 @@ class ConceptTest: ApiTestContext() {
     fun unionDoesNotExist() {
         val response = apiGet(port, "/concepts", "text/turtle")
         Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response["status"])
+    }
+
+    @Nested
+    internal inner class RemoveConceptById {
+
+        @Test
+        fun unauthorizedForNoToken() {
+            val response = authorizedRequest(port, "/concepts/$CONCEPT_0_ID", null, "DELETE")
+            assertEquals(HttpStatus.UNAUTHORIZED.value(), response["status"])
+        }
+
+        @Test
+        fun forbiddenWithNonSysAdminRole() {
+            val response = authorizedRequest(
+                port,
+                "/concepts/$CONCEPT_0_ID",
+                JwtToken(Access.ORG_WRITE).toString(),
+                "DELETE"
+            )
+            assertEquals(HttpStatus.FORBIDDEN.value(), response["status"])
+        }
+
+        @Test
+        fun notFoundWhenIdNotInDB() {
+            val response =
+                authorizedRequest(port, "/concepts/123", JwtToken(Access.ROOT).toString(), "DELETE")
+            assertEquals(HttpStatus.NOT_FOUND.value(), response["status"])
+        }
+
+        @Test
+        fun okWithSysAdminRole() {
+            val response = authorizedRequest(
+                port,
+                "/concepts/$CONCEPT_0_ID",
+                JwtToken(Access.ROOT).toString(),
+                "DELETE"
+            )
+            assertEquals(HttpStatus.NO_CONTENT.value(), response["status"])
+        }
     }
 
 }

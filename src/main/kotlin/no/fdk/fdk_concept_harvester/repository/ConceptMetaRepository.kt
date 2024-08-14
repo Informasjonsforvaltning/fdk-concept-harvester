@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface ConceptMetaRepository : MongoRepository<ConceptMeta, String> {
     fun findAllByIsPartOf(isPartOf: String): List<ConceptMeta>
+    fun findAllByFdkId(fdkId: String): List<ConceptMeta>
 }
