@@ -1,5 +1,6 @@
 package no.fdk.fdk_concept_harvester.controller
 
+import no.fdk.fdk_concept_harvester.model.DuplicateIRI
 import no.fdk.fdk_concept_harvester.rdf.jenaTypeFromAcceptHeader
 import no.fdk.fdk_concept_harvester.service.ConceptService
 import no.fdk.fdk_concept_harvester.service.EndpointPermissions
@@ -52,6 +53,16 @@ open class ConceptsController(
         if (endpointPermissions.hasAdminPermission(jwt)) {
             conceptService.removeConcept(id)
             ResponseEntity(HttpStatus.NO_CONTENT)
+        } else ResponseEntity(HttpStatus.FORBIDDEN)
+
+    @PostMapping("/duplicates")
+    fun removeDuplicates(
+        @AuthenticationPrincipal jwt: Jwt,
+        @RequestBody duplicates: List<DuplicateIRI>
+    ): ResponseEntity<Void> =
+        if (endpointPermissions.hasAdminPermission(jwt)) {
+            conceptService.removeDuplicates(duplicates)
+            ResponseEntity(HttpStatus.OK)
         } else ResponseEntity(HttpStatus.FORBIDDEN)
 
 }
