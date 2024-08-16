@@ -1,6 +1,7 @@
 package no.fdk.fdk_concept_harvester.service
 
 import no.fdk.fdk_concept_harvester.model.ConceptMeta
+import no.fdk.fdk_concept_harvester.model.DuplicateIRI
 import no.fdk.fdk_concept_harvester.model.FdkIdAndUri
 import no.fdk.fdk_concept_harvester.model.HarvestReport
 import no.fdk.fdk_concept_harvester.rabbit.RabbitMQPublisher
@@ -14,12 +15,14 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.springframework.web.server.ResponseStatusException
+import java.util.*
 
 @Tag("unit")
 class ConceptServiceTest {
@@ -180,6 +183,154 @@ class ConceptServiceTest {
                     firstValue
                 )
             }
+        }
+
+    }
+
+    @Nested
+    internal inner class RemoveDuplicates {
+
+        @Test
+        fun throwsExceptionWhenRemoveIRINotFoundInDB() {
+            whenever(repository.findById("https://123.no"))
+                .thenReturn(Optional.empty())
+            whenever(repository.findById(CONCEPT_1.uri))
+                .thenReturn(Optional.of(CONCEPT_1))
+
+            val duplicateIRI = DuplicateIRI(
+                iriToRemove = "https://123.no",
+                iriToRetain = CONCEPT_1.uri
+            )
+            assertThrows<ResponseStatusException> { conceptService.removeDuplicates(listOf(duplicateIRI)) }
+        }
+
+        @Test
+        fun createsNewMetaWhenRetainIRINotFoundInDB() {
+            whenever(repository.findById(CONCEPT_0.uri))
+                .thenReturn(Optional.of(CONCEPT_0))
+            whenever(repository.findById(CONCEPT_1.uri))
+                .thenReturn(Optional.empty())
+
+            val duplicateIRI = DuplicateIRI(
+                iriToRemove = CONCEPT_0.uri,
+                iriToRetain = CONCEPT_1.uri
+            )
+            conceptService.removeDuplicates(listOf(duplicateIRI))
+
+            argumentCaptor<List<ConceptMeta>>().apply {
+                verify(repository, times(1)).saveAll(capture())
+                assertEquals(listOf(CONCEPT_0.copy(removed = true), CONCEPT_0.copy(uri = CONCEPT_1.uri)), firstValue)
+            }
+
+            verify(publisher, times(0)).send(any())
+        }
+
+        @Test
+        fun sendsRabbitReportWithRetainFdkIdWhenKeepingRemoveFdkId() {
+            whenever(repository.findById(CONCEPT_0.uri))
+                .thenReturn(Optional.of(CONCEPT_0))
+            whenever(repository.findById(CONCEPT_1.uri))
+                .thenReturn(Optional.of(CONCEPT_1))
+
+            val duplicateIRI = DuplicateIRI(
+                iriToRemove = CONCEPT_0.uri,
+                iriToRetain = CONCEPT_1.uri
+            )
+            conceptService.removeDuplicates(listOf(duplicateIRI))
+
+            argumentCaptor<List<ConceptMeta>>().apply {
+                verify(repository, times(1)).saveAll(capture())
+                assertEquals(listOf(
+                    CONCEPT_0.copy(removed = true),
+                    CONCEPT_0.copy(uri = CONCEPT_1.uri, isPartOf = CONCEPT_1.isPartOf)
+                ), firstValue)
+            }
+
+            val expectedReport = HarvestReport(
+                id = "duplicate-delete",
+                url = "https://fellesdatakatalog.digdir.no/duplicates",
+                harvestError = false,
+                startTime = "startTime",
+                endTime = "endTime",
+                removedResources = listOf(FdkIdAndUri(CONCEPT_1.fdkId, CONCEPT_1.uri))
+            )
+            argumentCaptor<List<HarvestReport>>().apply {
+                verify(publisher, times(1)).send(capture())
+
+                assertEquals(
+                    listOf(expectedReport.copy(
+                        startTime = firstValue.first().startTime,
+                        endTime = firstValue.first().endTime
+                    )),
+                    firstValue
+                )
+            }
+        }
+
+        @Test
+        fun sendsRabbitReportWithRemoveFdkIdWhenNotKeepingRemoveFdkId() {
+            whenever(repository.findById(CONCEPT_0.uri))
+                .thenReturn(Optional.of(CONCEPT_0))
+            whenever(repository.findById(CONCEPT_1.uri))
+                .thenReturn(Optional.of(CONCEPT_1))
+
+            val duplicateIRI = DuplicateIRI(
+                iriToRemove = CONCEPT_1.uri,
+                iriToRetain = CONCEPT_0.uri,
+                keepRemovedFdkId = false
+            )
+            conceptService.removeDuplicates(listOf(duplicateIRI))
+
+            argumentCaptor<List<ConceptMeta>>().apply {
+                verify(repository, times(1)).saveAll(capture())
+                assertEquals(listOf(
+                    CONCEPT_1.copy(removed = true),
+                    CONCEPT_0
+                ), firstValue)
+            }
+
+            val expectedReport = HarvestReport(
+                id = "duplicate-delete",
+                url = "https://fellesdatakatalog.digdir.no/duplicates",
+                harvestError = false,
+                startTime = "startTime",
+                endTime = "endTime",
+                removedResources = listOf(FdkIdAndUri(CONCEPT_1.fdkId, CONCEPT_1.uri))
+            )
+            argumentCaptor<List<HarvestReport>>().apply {
+                verify(publisher, times(1)).send(capture())
+
+                assertEquals(
+                    listOf(expectedReport.copy(
+                        startTime = firstValue.first().startTime,
+                        endTime = firstValue.first().endTime
+                    )),
+                    firstValue
+                )
+            }
+        }
+
+        @Test
+        fun throwsExceptionWhenTryingToReportAlreadyRemovedAsRemoved() {
+            whenever(repository.findById(CONCEPT_0.uri))
+                .thenReturn(Optional.of(CONCEPT_0.copy(removed = true)))
+            whenever(repository.findById(CONCEPT_1.uri))
+                .thenReturn(Optional.of(CONCEPT_1))
+
+            val duplicateIRI = DuplicateIRI(
+                iriToRemove = CONCEPT_0.uri,
+                iriToRetain = CONCEPT_1.uri,
+                keepRemovedFdkId = false
+            )
+
+            assertThrows<ResponseStatusException> { conceptService.removeDuplicates(listOf(duplicateIRI)) }
+
+            whenever(repository.findById(CONCEPT_0.uri))
+                .thenReturn(Optional.of(CONCEPT_0))
+            whenever(repository.findById(CONCEPT_1.uri))
+                .thenReturn(Optional.of(CONCEPT_1.copy(removed = true)))
+
+            assertThrows<ResponseStatusException> { conceptService.removeDuplicates(listOf(duplicateIRI.copy(keepRemovedFdkId = true))) }
         }
 
     }
