@@ -66,9 +66,9 @@ class ConceptTest : ApiTestContext() {
         fun unauthorizedForNoToken() {
             val response = authorizedRequest(
                 port,
-                "/concepts/$CONCEPT_0_ID",
+                "/concepts/$CONCEPT_0_ID/remove",
                 null,
-                HttpMethod.DELETE
+                HttpMethod.POST
             )
             assertEquals(HttpStatus.UNAUTHORIZED.value(), response["status"])
         }
@@ -77,9 +77,9 @@ class ConceptTest : ApiTestContext() {
         fun forbiddenWithNonSysAdminRole() {
             val response = authorizedRequest(
                 port,
-                "/concepts/$CONCEPT_0_ID",
+                "/concepts/$CONCEPT_0_ID/remove",
                 JwtToken(Access.ORG_WRITE).toString(),
-                HttpMethod.DELETE
+                HttpMethod.POST
             )
             assertEquals(HttpStatus.FORBIDDEN.value(), response["status"])
         }
@@ -88,9 +88,9 @@ class ConceptTest : ApiTestContext() {
         fun notFoundWhenIdNotInDB() {
             val response = authorizedRequest(
                 port,
-                "/concepts/123",
+                "/concepts/123/remove",
                 JwtToken(Access.ROOT).toString(),
-                HttpMethod.DELETE
+                HttpMethod.POST
             )
             assertEquals(HttpStatus.NOT_FOUND.value(), response["status"])
         }
@@ -99,11 +99,11 @@ class ConceptTest : ApiTestContext() {
         fun okWithSysAdminRole() {
             val response = authorizedRequest(
                 port,
-                "/concepts/$CONCEPT_0_ID",
+                "/concepts/$CONCEPT_0_ID/remove",
                 JwtToken(Access.ROOT).toString(),
-                HttpMethod.DELETE
+                HttpMethod.POST
             )
-            assertEquals(HttpStatus.NO_CONTENT.value(), response["status"])
+            assertEquals(HttpStatus.OK.value(), response["status"])
         }
     }
 

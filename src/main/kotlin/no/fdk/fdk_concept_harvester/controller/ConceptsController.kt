@@ -45,14 +45,14 @@ open class ConceptsController(
         }
     }
 
-    @DeleteMapping("/{id}")
+    @PostMapping("/{id}/remove")
     fun removeConceptById(
         @AuthenticationPrincipal jwt: Jwt,
         @PathVariable id: String
     ): ResponseEntity<Void> =
         if (endpointPermissions.hasAdminPermission(jwt)) {
             conceptService.removeConcept(id)
-            ResponseEntity(HttpStatus.NO_CONTENT)
+            ResponseEntity(HttpStatus.OK)
         } else ResponseEntity(HttpStatus.FORBIDDEN)
 
     @PostMapping("/remove-duplicates")
