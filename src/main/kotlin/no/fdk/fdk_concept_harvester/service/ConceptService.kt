@@ -109,4 +109,13 @@ class ConceptService(
         }
     }
 
+    // Purges everything associated with a removed fdkID
+    fun purgeByFdkId(fdkId: String) {
+        conceptMetaRepository.findAllByFdkId(fdkId)
+            .also { concepts -> if (concepts.any { !it.removed }) throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Unable to purge files, concept with id $fdkId has not been removed") }
+            .run { conceptMetaRepository.deleteAll(this) }
+
+        turtleService.deleteTurtleFiles(fdkId)
+    }
+
 }

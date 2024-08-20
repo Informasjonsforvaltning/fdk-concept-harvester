@@ -55,6 +55,16 @@ open class ConceptsController(
             ResponseEntity(HttpStatus.OK)
         } else ResponseEntity(HttpStatus.FORBIDDEN)
 
+    @DeleteMapping("/{id}")
+    fun purgeConceptById(
+        @AuthenticationPrincipal jwt: Jwt,
+        @PathVariable id: String
+    ): ResponseEntity<Void> =
+        if (endpointPermissions.hasAdminPermission(jwt)) {
+            conceptService.purgeByFdkId(id)
+            ResponseEntity(HttpStatus.NO_CONTENT)
+        } else ResponseEntity(HttpStatus.FORBIDDEN)
+
     @PostMapping("/remove-duplicates")
     fun removeDuplicates(
         @AuthenticationPrincipal jwt: Jwt,
