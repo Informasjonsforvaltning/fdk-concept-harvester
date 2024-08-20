@@ -164,4 +164,54 @@ class ConceptTest : ApiTestContext() {
         }
     }
 
+    @Nested
+    internal inner class PurgeById {
+
+        @Test
+        fun unauthorizedForNoToken() {
+            val response = authorizedRequest(port, "/concepts/removed", null, HttpMethod.DELETE)
+            assertEquals(HttpStatus.UNAUTHORIZED.value(), response["status"])
+        }
+
+        @Test
+        fun forbiddenWithNonSysAdminRole() {
+            val response = authorizedRequest(
+                port,
+                "/concepts/removed",
+                JwtToken(Access.ORG_WRITE).toString(),
+                HttpMethod.DELETE
+            )
+            assertEquals(HttpStatus.FORBIDDEN.value(), response["status"])
+        }
+
+        @Test
+        fun badRequestWhenNotAlreadyRemoved() {
+            val response = authorizedRequest(
+                port,
+                "/concepts/$CONCEPT_1_ID",
+                JwtToken(Access.ROOT).toString(),
+                HttpMethod.DELETE
+            )
+            assertEquals(HttpStatus.BAD_REQUEST.value(), response["status"])
+        }
+
+        @Test
+        fun purgingStopsDeepLinking() {
+            val pre = apiGet(port, "/concepts/removed", "text/turtle")
+            assertEquals(HttpStatus.OK.value(), pre["status"])
+
+            val response = authorizedRequest(
+                port,
+                "/concepts/removed",
+                JwtToken(Access.ROOT).toString(),
+                HttpMethod.DELETE
+            )
+            assertEquals(HttpStatus.NO_CONTENT.value(), response["status"])
+
+            val post = apiGet(port, "/concepts/removed", "text/turtle")
+            assertEquals(HttpStatus.NOT_FOUND.value(), post["status"])
+        }
+
+    }
+
 }

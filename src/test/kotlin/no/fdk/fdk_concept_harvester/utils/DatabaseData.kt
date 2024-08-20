@@ -27,6 +27,12 @@ val CONCEPT_1 = ConceptMeta(
     issued = 1609852539831, modified = 1609852539831
 )
 
+val REMOVED_CONCEPT = ConceptMeta(
+    uri = "https://example.com/begrep/removed", fdkId = "removed",
+    isPartOf = "http://localhost:5050/collections/9b8f1c42-1161-33b1-9d43-a733ee94ddfc",
+    removed = true, issued = 1609852539831, modified = 1609852539831
+)
+
 val CONCEPT_2 = ConceptMeta(
     uri = "https://example.com/begrep/2", fdkId = "no-collection",
     isPartOf = null,
@@ -50,6 +56,16 @@ val CONCEPT_TURTLE_1_META = TurtleDBO(
 
 val CONCEPT_TURTLE_1_NO_META = TurtleDBO(
     id = "concept-no-records-$CONCEPT_1_ID",
+    turtle = gzip(responseReader.readFile("no_meta_concept_1.ttl"))
+)
+
+val REMOVED_CONCEPT_TURTLE_META = TurtleDBO(
+    id = "concept-removed",
+    turtle = gzip(responseReader.readFile("concept_1.ttl"))
+)
+
+val REMOVED_CONCEPT_TURTLE_NO_META = TurtleDBO(
+    id = "concept-no-records-removed",
     turtle = gzip(responseReader.readFile("no_meta_concept_1.ttl"))
 )
 
@@ -93,12 +109,12 @@ fun turleDBPopulation(): List<Document> =
         COLLECTION_UNION_TURTLE, HARVESTED_TURTLE, CONCEPT_TURTLE_0_META,
         CONCEPT_TURTLE_0_NO_META, CONCEPT_TURTLE_1_META, CONCEPT_TURTLE_1_NO_META, COLLECTION_TURTLE_META,
         COLLECTION_TURTLE_NO_META, CONCEPT_TURTLE_2_META, CONCEPT_TURTLE_2_NO_META,
-        COLLECTION_UNION_TURTLE_NO_RECORDS
+        COLLECTION_UNION_TURTLE_NO_RECORDS, REMOVED_CONCEPT_TURTLE_META, REMOVED_CONCEPT_TURTLE_NO_META
     )
         .map { it.mapDBO() }
 
 fun conceptDBPopulation(): List<Document> =
-    listOf(CONCEPT_0, CONCEPT_1, CONCEPT_2)
+    listOf(CONCEPT_0, CONCEPT_1, CONCEPT_2, REMOVED_CONCEPT)
         .map { it.mapDBO() }
 
 fun collectionDBPopulation(): List<Document> =
@@ -118,6 +134,7 @@ private fun ConceptMeta.mapDBO(): Document =
         .append("_id", uri)
         .append("fdkId", fdkId)
         .append("isPartOf", isPartOf)
+        .append("removed", removed)
         .append("issued", issued)
         .append("modified", modified)
 
