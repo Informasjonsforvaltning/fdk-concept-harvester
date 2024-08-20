@@ -115,7 +115,7 @@ class ConceptTest : ApiTestContext() {
             val body = listOf(DuplicateIRI(iriToRemove = CONCEPT_0.uri, iriToRetain = CONCEPT_1.uri))
             val response = authorizedRequest(
                 port,
-                "/concepts/duplicates",
+                "/concepts/remove-duplicates",
                 null,
                 HttpMethod.POST,
                 mapper.writeValueAsString(body)
@@ -128,7 +128,7 @@ class ConceptTest : ApiTestContext() {
             val body = listOf(DuplicateIRI(iriToRemove = CONCEPT_0.uri, iriToRetain = CONCEPT_1.uri))
             val response = authorizedRequest(
                 port,
-                "/concepts/duplicates",
+                "/concepts/remove-duplicates",
                 JwtToken(Access.ORG_WRITE).toString(),
                 HttpMethod.POST,
                 mapper.writeValueAsString(body)
@@ -142,7 +142,7 @@ class ConceptTest : ApiTestContext() {
             val response =
                 authorizedRequest(
                     port,
-                    "/concepts/duplicates",
+                    "/concepts/remove-duplicates",
                     JwtToken(Access.ROOT).toString(),
                     HttpMethod.POST,
                     mapper.writeValueAsString(body)
@@ -155,7 +155,7 @@ class ConceptTest : ApiTestContext() {
             val body = listOf(DuplicateIRI(iriToRemove = CONCEPT_0.uri, iriToRetain = CONCEPT_1.uri))
             val response = authorizedRequest(
                 port,
-                "/concepts/duplicates",
+                "/concepts/remove-duplicates",
                 JwtToken(Access.ROOT).toString(),
                 HttpMethod.POST,
                 mapper.writeValueAsString(body)

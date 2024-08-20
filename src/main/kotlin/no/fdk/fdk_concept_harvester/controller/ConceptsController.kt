@@ -55,7 +55,7 @@ open class ConceptsController(
             ResponseEntity(HttpStatus.NO_CONTENT)
         } else ResponseEntity(HttpStatus.FORBIDDEN)
 
-    @PostMapping("/duplicates")
+    @PostMapping("/remove-duplicates")
     fun removeDuplicates(
         @AuthenticationPrincipal jwt: Jwt,
         @RequestBody duplicates: List<DuplicateIRI>
