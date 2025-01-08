@@ -22,6 +22,7 @@ application:
   organizationsUri: ${ORGANIZATION_CATALOG_URI:https://organization-catalog.staging.fellesdatakatalog.digdir.no}/organizations
   harvestAdminRootUrl: ${HARVEST_ADMIN_ROOT_URL:http://new-harvest-admin:8080}
   harvestAdminApiKey: ${ADMIN_API_KEY}
+  cors.originPatterns: "${CORS_ORIGIN_PATTERNS}"
 management:
   endpoints:
     web:
@@ -48,6 +49,7 @@ application:
   organizationsUri: https://organization-catalog.staging.fellesdatakatalog.digdir.no/organizations
   harvestAdminRootUrl: https://admin-api.staging.fellesdatakatalog.digdir.no
   harvestAdminApiKey: test-key
+  cors.originPatterns: "*"
 
 ---
 spring:
@@ -67,3 +69,4 @@ application:
   organizationsUri: http://localhost:5050/organizations
   harvestAdminRootUrl: http://localhost:5050
   harvestAdminApiKey: test-key
+  cors.originPatterns: "*"
