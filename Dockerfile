@@ -6,4 +6,4 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 VOLUME /tmp
 COPY /target/fdk-concept-harvester.jar app.jar
 
-CMD java -jar -Xmx3g $JAVA_OPTS app.jar
+CMD ["sh", "-c", "java -jar -Xmx3g $JAVA_OPTS app.jar"]
