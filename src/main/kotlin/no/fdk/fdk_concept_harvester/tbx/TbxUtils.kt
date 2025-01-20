@@ -13,8 +13,11 @@ import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.Node
 import org.w3c.dom.NodeList
+import org.xml.sax.SAXException
 import java.io.ByteArrayInputStream
+import java.io.IOException
 import javax.xml.parsers.DocumentBuilderFactory
+import javax.xml.parsers.ParserConfigurationException
 import javax.xml.xpath.XPath
 import javax.xml.xpath.XPathConstants
 import javax.xml.xpath.XPathFactory
@@ -30,32 +33,62 @@ fun parseTBXResponse(tbxContent: String, rdfSource: String?, orgAdapter: Organiz
         .setPrefixes()
 
     // Parse TBX
-    val doc = DocumentBuilderFactory
-        .newInstance()
-        .newDocumentBuilder()
-        .parse(ByteArrayInputStream(tbxContent.toByteArray()))
+    val builder = DocumentBuilderFactory.newInstance()
+
+    try {
+        // This is the PRIMARY defense. If DTDs (doctypes) are disallowed, almost all
+        // XML entity attacks are prevented
+        // Xerces 2 only - http://xerces.apache.org/xerces2-j/features.html#disallow-doctype-decl
+
+        builder.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+
+        // and these as well, per Timothy Morgan's 2014 paper: "XML Schema, DTD, and Entity Attacks"
+        builder.isXIncludeAware = false;
+    } catch (e: ParserConfigurationException) {
+        // This should catch a failed setFeature feature
+        // NOTE: Each call to setFeature() should be in its own try/catch otherwise subsequent calls will be skipped.
+        // This is only important if you're ignoring errors for multi-provider support.
+
+        logger.info("ParserConfigurationException was thrown, 'http://apache.org/xml/features/disallow-doctype-decl' is not supported by your XML processor.");
+    } catch (e: SAXException) {
+        // On Apache, this should be thrown when disallowing DOCTYPE
+
+        logger.warn("A DOCTYPE was passed into the XML document");
+    } catch (e: IOException) {
+        // XXE that points to a file that doesn't exist
+        logger.error("IOException occurred, XXE may still possible: " + e.message);
+    }
+
+    val safeBuilder = builder.newDocumentBuilder()
+
+    val document = safeBuilder.parse(ByteArrayInputStream(tbxContent.toByteArray()))
 
     val xpath = XPathFactory.newInstance().newXPath()
 
     // reading tbxHeader
-    val collectionResource = model.createResource(xpath.collectionUri(doc))
-    val publisherResource = xpath.publisherUri(doc, orgAdapter)?.let { model.createResource(it) }
+    val collectionResource = model.createResource(xpath.collectionUri(document))
+    val publisherResource = xpath.publisherUri(document, orgAdapter)?.let { model.createResource(it) }
 
     model.add(model.createStatement(collectionResource, RDF.type, SKOS.Collection))
     model.add(
-        model.createStatement(collectionResource, RDFS.label,
-        model.createLiteral(xpath.collectionName(doc), "en")))
+        model.createStatement(
+            collectionResource, RDFS.label,
+            model.createLiteral(xpath.collectionName(document), "en")
+        )
+    )
     model.addPublisher(collectionResource, publisherResource)
 
     // reading conceptEntry
-    xpath.conceptEntries(doc)
-        .forEach { addConceptEntryNodeToModel(it as Element, doc, collectionResource, publisherResource, model) }
+    xpath.conceptEntries(document)
+        .forEach { addConceptEntryNodeToModel(it as Element, document, collectionResource, publisherResource, model) }
 
     return model
 }
 
-private fun addConceptEntryNodeToModel(conceptEntry: Element, doc: Document, collectionResource: Resource,
-                                       publisher: Resource?, model: Model) {
+private fun addConceptEntryNodeToModel(
+    conceptEntry: Element, doc: Document, collectionResource: Resource,
+    publisher: Resource?, model: Model
+) {
     val xpath = XPathFactory.newInstance().newXPath()
     val conceptUri = xpath.conceptUri(conceptEntry, doc)
 
@@ -79,7 +112,7 @@ private fun addConceptEntryNodeToModel(conceptEntry: Element, doc: Document, col
             it
                 .let { it as Element }
                 .let {
-                    if(it.getAttribute("type").equals("definisjon")) {
+                    if (it.getAttribute("type").equals("definisjon")) {
                         model.addDefinitionLabel(it, definition, lang)
                     }
                 }
@@ -143,7 +176,8 @@ private fun XPath.publisherUri(doc: Document, orgAdapter: OrganizationsAdapter):
  */
 private fun XPath.conceptEntries(doc: Document): NodeList =
     compile(
-        "/tbx/text/body/conceptEntry")
+        "/tbx/text/body/conceptEntry"
+    )
         .evaluate(doc, XPathConstants.NODESET) as NodeList
 
 /**
@@ -154,7 +188,8 @@ private fun XPath.conceptEntries(doc: Document): NodeList =
  */
 private fun XPath.conceptUri(conceptEntry: Element, doc: Document): String {
     val conceptUri = (compile(
-        "/tbx/text/body/conceptEntry[@id='${conceptEntry.getAttribute("id")}']/admin[@type='identifikator']")
+        "/tbx/text/body/conceptEntry[@id='${conceptEntry.getAttribute("id")}']/admin[@type='identifikator']"
+    )
         .evaluate(doc, XPathConstants.STRING) as String)
         .trim()
 
@@ -175,12 +210,12 @@ private fun XPath.langSections(conceptEntry: Element, doc: Document): NodeList =
  * Set model namespace prefixes.
  */
 private fun Model.setPrefixes(): Model {
-    setNsPrefix("dct",DCTerms.getURI())
-    setNsPrefix("skos",SKOS.getURI())
-    setNsPrefix("skosxl",SKOSXL.getURI())
-    setNsPrefix("vcard",VCARD.getURI())
+    setNsPrefix("dct", DCTerms.getURI())
+    setNsPrefix("skos", SKOS.getURI())
+    setNsPrefix("skosxl", SKOSXL.getURI())
+    setNsPrefix("vcard", VCARD.getURI())
     setNsPrefix("skosno", SKOSNO_NS)
-    setNsPrefix("dcat",DCAT.getURI())
+    setNsPrefix("dcat", DCAT.getURI())
     setNsPrefix("rdfs", RDFS.getURI())
     return this
 }
@@ -193,7 +228,8 @@ private fun Model.addConcept(resource: Resource) {
         createStatement(
             resource,
             RDF.type,
-            SKOS.Concept)
+            SKOS.Concept
+        )
     )
 }
 
@@ -206,7 +242,8 @@ private fun Model.addPublisher(resource: Resource, publisher: RDFNode?) {
             createStatement(
                 resource,
                 DCTerms.publisher,
-                publisher)
+                publisher
+            )
         )
     }
 }
@@ -228,7 +265,8 @@ private fun Model.addCollectionMember(collectionResource: Resource, conceptResou
         createStatement(
             collectionResource,
             SKOS.member,
-            conceptResource)
+            conceptResource
+        )
     )
 }
 
@@ -249,7 +287,8 @@ private fun Model.addDescription(concept: Resource, definition: RDFNode) {
         createStatement(
             concept,
             createProperty("${SKOSNO_NS}${SKOSNO_DEFINISJON_PROPERTY}"),
-            definition)
+            definition
+        )
     )
 }
 
@@ -261,7 +300,8 @@ private fun Model.addDefinition(definition: Resource) {
         createStatement(
             definition,
             RDF.type,
-            createResource("${SKOSNO_NS}${SKOSNO_DEFINISJON}"))
+            createResource("${SKOSNO_NS}${SKOSNO_DEFINISJON}")
+        )
     )
 }
 
@@ -282,7 +322,7 @@ private fun Model.addPrefLabelLiteralForm(el: Element, prefLabel: Resource, lang
  * Add definition literForm to model.
  */
 private fun Model.addDefinitionLabel(el: Element, definition: Resource, lang: String) {
-    if(el.getAttribute("type").equals("definisjon")) {
+    if (el.getAttribute("type").equals("definisjon")) {
         add(
             createStatement(
                 definition,
