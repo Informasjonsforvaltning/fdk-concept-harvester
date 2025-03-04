@@ -15,6 +15,7 @@ import no.fdk.fdk_concept_harvester.service.UpdateService
 import org.slf4j.LoggerFactory
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.event.EventListener
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import java.util.Calendar
 import kotlin.time.measureTimedValue
@@ -34,6 +35,10 @@ class HarvesterActivity(
 
     @EventListener
     fun fullHarvestOnStartup(event: ApplicationReadyEvent) = initiateHarvest(HarvestAdminParameters(null, null, null), false)
+
+    @Scheduled(cron = "0 30 * * * *")
+    fun scheduledHarvest() =
+        initiateHarvest(HarvestAdminParameters(null, null, null), false)
 
     fun initiateHarvest(params: HarvestAdminParameters, forceUpdate: Boolean) {
         if (params.harvestAllConcepts()) LOGGER.debug("starting harvest of all concept collections, force update: $forceUpdate")
