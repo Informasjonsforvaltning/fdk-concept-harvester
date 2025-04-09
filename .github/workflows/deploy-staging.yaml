@@ -21,11 +21,11 @@ jobs:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   deploy:
+    environment: dev
     name: Deploy to staging environment
     if: ${{ github.actor != 'dependabot[bot]' && github.event.pull_request.draft == false }}
     needs: [ build-fdk-concept-harvester ]
     uses: Informasjonsforvaltning/workflows/.github/workflows/kustomize-deploy.yaml@chore/hos/namespace
-    environment: dev
     with:
       app_name: fdk-concept-harvester
       namespace: staging
