@@ -16,12 +16,12 @@ jobs:
       java_version: '17'
       coverage_file_path: ./target/site/jacoco/jacoco.xml
       namespace: staging
+      environment: dev
     secrets:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   deploy:
-    environment: dev
     name: Deploy to staging environment
     if: ${{ github.actor != 'dependabot[bot]' && github.event.pull_request.draft == false }}
     needs: [ build-fdk-concept-harvester ]
@@ -30,10 +30,8 @@ jobs:
       app_name: fdk-concept-harvester
       namespace: staging
       cluster: digdir-fdk-dev
-    secrets:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      DIGDIR_FDK_AUTODEPLOY: ${{ secrets.DIGDIR_FDK_DEV_AUTODEPLOY }}
-      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      environment: dev
+    secrets: inherit
 
   dependabot-build:
     name: Build image on PR from dependabot
