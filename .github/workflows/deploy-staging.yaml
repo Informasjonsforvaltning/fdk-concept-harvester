@@ -15,7 +15,7 @@ jobs:
       app_name: fdk-concept-harvester
       java_version: '17'
       coverage_file_path: ./target/site/jacoco/jacoco.xml
-      environment: staging
+      namesoace: staging
     secrets:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
@@ -24,10 +24,11 @@ jobs:
     name: Deploy to staging environment
     if: ${{ github.actor != 'dependabot[bot]' && github.event.pull_request.draft == false }}
     needs: [ build-fdk-concept-harvester ]
+    environment: dev
     uses: Informasjonsforvaltning/workflows/.github/workflows/kustomize-deploy.yaml@main
     with:
       app_name: fdk-concept-harvester
-      environment: staging
+      namespace: staging
       cluster: digdir-fdk-dev
     secrets:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

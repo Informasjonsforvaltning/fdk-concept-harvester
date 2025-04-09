@@ -13,7 +13,7 @@ jobs:
       app_name: fdk-concept-harvester
       java_version: '17'
       coverage_file_path: ./target/site/jacoco/jacoco.xml
-      environment: prod
+      namespace: prod
     secrets:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
@@ -21,10 +21,11 @@ jobs:
   deploy-prod:
     name: Deploy to prod environment
     needs: [ build-fdk-concept-harvester ]
+    environment: prod
     uses: Informasjonsforvaltning/workflows/.github/workflows/kustomize-deploy.yaml@main
     with:
       app_name: fdk-concept-harvester
-      environment: prod
+      namespace: prod
       cluster: digdir-fdk-prod
     secrets:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -34,10 +35,11 @@ jobs:
   deploy-to-demo:
     needs: deploy-prod
     name: Deploy to demo if prod-deploy is successful
+    environment: dev
     uses: Informasjonsforvaltning/workflows/.github/workflows/kustomize-deploy.yaml@main
     with:
       app_name: fdk-concept-harvester
-      environment: demo
+      namespace: demo
       cluster: digdir-fdk-dev
     secrets:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
