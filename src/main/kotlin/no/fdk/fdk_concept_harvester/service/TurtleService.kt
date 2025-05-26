@@ -1,8 +1,17 @@
 package no.fdk.fdk_concept_harvester.service
 
+import no.fdk.fdk_concept_harvester.model.CollectionTurtle
+import no.fdk.fdk_concept_harvester.model.ConceptTurtle
+import no.fdk.fdk_concept_harvester.model.FDKCollectionTurtle
+import no.fdk.fdk_concept_harvester.model.FDKConceptTurtle
+import no.fdk.fdk_concept_harvester.model.HarvestSourceTurtle
 import no.fdk.fdk_concept_harvester.model.TurtleDBO
 import no.fdk.fdk_concept_harvester.rdf.createRDFResponse
-import no.fdk.fdk_concept_harvester.repository.TurtleRepository
+import no.fdk.fdk_concept_harvester.repository.CollectionTurtleRepository
+import no.fdk.fdk_concept_harvester.repository.ConceptTurtleRepository
+import no.fdk.fdk_concept_harvester.repository.FDKCollectionTurtleRepository
+import no.fdk.fdk_concept_harvester.repository.FDKConceptTurtleRepository
+import no.fdk.fdk_concept_harvester.repository.HarvestSourceTurtleRepository
 import org.apache.jena.rdf.model.Model
 import org.apache.jena.riot.Lang
 import org.springframework.data.repository.findByIdOrNull
@@ -13,78 +22,95 @@ import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
 import kotlin.text.Charsets.UTF_8
 
-private const val NO_RECORDS_ID_PREFIX = "no-records-"
 const val UNION_ID = "union-graph"
-private const val COLLECTION_ID_PREFIX = "collection-"
-private const val CONCEPT_ID_PREFIX = "concept-"
 
 @Service
-class TurtleService(private val turtleRepository: TurtleRepository) {
+class TurtleService(
+    private val collectionTurtleRepository: CollectionTurtleRepository,
+    private val conceptTurtleRepository: ConceptTurtleRepository,
+    private val fdkCollectionTurtleRepository: FDKCollectionTurtleRepository,
+    private val fdkConceptTurtleRepository: FDKConceptTurtleRepository,
+    private val harvestSourceTurtleRepository: HarvestSourceTurtleRepository
+) {
 
     fun saveAsCollectionUnion(model: Model, withRecords: Boolean): TurtleDBO =
-        turtleRepository.save(model.createCollectionTurtleDBO(UNION_ID, withRecords))
+        if (withRecords) fdkCollectionTurtleRepository.save(model.createFDKCollectionTurtleDBO(UNION_ID))
+        else collectionTurtleRepository.save(model.createCollectionTurtleDBO(UNION_ID))
 
     fun getCollectionUnion(withRecords: Boolean): String? =
-        turtleRepository.findByIdOrNull(collectionTurtleID(UNION_ID, withRecords))
+        if (withRecords) fdkCollectionTurtleRepository.findByIdOrNull(UNION_ID)
+            ?.turtle
+            ?.let { ungzip(it) }
+        else collectionTurtleRepository.findByIdOrNull(UNION_ID)
             ?.turtle
             ?.let { ungzip(it) }
 
     fun saveAsCollection(model: Model, fdkId: String, withRecords: Boolean): TurtleDBO =
-        turtleRepository.save(model.createCollectionTurtleDBO(fdkId, withRecords))
+        if (withRecords) fdkCollectionTurtleRepository.save(model.createFDKCollectionTurtleDBO(fdkId))
+        else collectionTurtleRepository.save(model.createCollectionTurtleDBO(fdkId))
 
     fun getCollection(fdkId: String, withRecords: Boolean): String? =
-        turtleRepository.findByIdOrNull(collectionTurtleID(fdkId, withRecords))
+        if (withRecords) fdkCollectionTurtleRepository.findByIdOrNull(fdkId)
+            ?.turtle
+            ?.let { ungzip(it) }
+        else collectionTurtleRepository.findByIdOrNull(fdkId)
             ?.turtle
             ?.let { ungzip(it) }
 
     fun saveAsConcept(model: Model, fdkId: String, withRecords: Boolean): TurtleDBO =
-        turtleRepository.save(model.createConceptTurtleDBO(fdkId, withRecords))
+        if (withRecords) fdkConceptTurtleRepository.save(model.createFDKConceptTurtleDBO(fdkId))
+        else conceptTurtleRepository.save(model.createConceptTurtleDBO(fdkId))
 
     fun getConcept(fdkId: String, withRecords: Boolean): String? =
-        turtleRepository.findByIdOrNull(conceptTurtleID(fdkId, withRecords))
+        if (withRecords) fdkConceptTurtleRepository.findByIdOrNull(fdkId)
+            ?.turtle
+            ?.let { ungzip(it) }
+        else conceptTurtleRepository.findByIdOrNull(fdkId)
             ?.turtle
             ?.let { ungzip(it) }
 
     fun saveAsHarvestSource(model: Model, uri: String): TurtleDBO =
-        turtleRepository.save(model.createHarvestSourceTurtleDBO(uri))
+        harvestSourceTurtleRepository.save(model.createHarvestSourceTurtleDBO(uri))
 
     fun getHarvestSource(uri: String): String? =
-        turtleRepository.findByIdOrNull(uri)
+        harvestSourceTurtleRepository.findByIdOrNull(uri)
             ?.turtle
             ?.let { ungzip(it) }
 
     fun deleteTurtleFiles(fdkId: String) {
-        turtleRepository.findAllById(
-            listOf(
-                conceptTurtleID(fdkId, true),
-                conceptTurtleID(fdkId, false)
-            )
-        ).run { turtleRepository.deleteAll(this) }
+        conceptTurtleRepository.deleteById(fdkId)
+        fdkConceptTurtleRepository.deleteById(fdkId)
     }
 
 }
 
-private fun collectionTurtleID(fdkId: String, withFDKRecords: Boolean): String =
-    "$COLLECTION_ID_PREFIX${if (withFDKRecords) "" else NO_RECORDS_ID_PREFIX}$fdkId"
-
-private fun conceptTurtleID(fdkId: String, withFDKRecords: Boolean): String =
-    "$CONCEPT_ID_PREFIX${if (withFDKRecords) "" else NO_RECORDS_ID_PREFIX}$fdkId"
-
-private fun Model.createHarvestSourceTurtleDBO(uri: String): TurtleDBO =
-    TurtleDBO(
+private fun Model.createHarvestSourceTurtleDBO(uri: String): HarvestSourceTurtle =
+    HarvestSourceTurtle(
         id = uri,
         turtle = gzip(createRDFResponse(Lang.TURTLE))
     )
 
-private fun Model.createCollectionTurtleDBO(fdkId: String, withRecords: Boolean): TurtleDBO =
-    TurtleDBO(
-        id = collectionTurtleID(fdkId, withRecords),
+private fun Model.createCollectionTurtleDBO(fdkId: String): CollectionTurtle =
+    CollectionTurtle(
+        id = fdkId,
         turtle = gzip(createRDFResponse(Lang.TURTLE))
     )
 
-private fun Model.createConceptTurtleDBO(fdkId: String, withRecords: Boolean): TurtleDBO =
-    TurtleDBO(
-        id = conceptTurtleID(fdkId, withRecords),
+private fun Model.createConceptTurtleDBO(fdkId: String): ConceptTurtle =
+    ConceptTurtle(
+        id = fdkId,
+        turtle = gzip(createRDFResponse(Lang.TURTLE))
+    )
+
+private fun Model.createFDKCollectionTurtleDBO(fdkId: String): FDKCollectionTurtle =
+    FDKCollectionTurtle(
+        id = fdkId,
+        turtle = gzip(createRDFResponse(Lang.TURTLE))
+    )
+
+private fun Model.createFDKConceptTurtleDBO(fdkId: String): FDKConceptTurtle =
+    FDKConceptTurtle(
+        id = fdkId,
         turtle = gzip(createRDFResponse(Lang.TURTLE))
     )
 
