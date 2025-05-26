@@ -1,7 +1,12 @@
 package no.fdk.fdk_concept_harvester.utils
 
 import no.fdk.fdk_concept_harvester.model.CollectionMeta
+import no.fdk.fdk_concept_harvester.model.CollectionTurtle
 import no.fdk.fdk_concept_harvester.model.ConceptMeta
+import no.fdk.fdk_concept_harvester.model.ConceptTurtle
+import no.fdk.fdk_concept_harvester.model.FDKCollectionTurtle
+import no.fdk.fdk_concept_harvester.model.FDKConceptTurtle
+import no.fdk.fdk_concept_harvester.model.HarvestSourceTurtle
 import no.fdk.fdk_concept_harvester.model.TurtleDBO
 import no.fdk.fdk_concept_harvester.service.UNION_ID
 import no.fdk.fdk_concept_harvester.service.gzip
@@ -39,78 +44,89 @@ val CONCEPT_2 = ConceptMeta(
     issued = 1609852539831, modified = 1609852539831
 )
 
-val CONCEPT_TURTLE_0_META = TurtleDBO(
-    id = "concept-$CONCEPT_0_ID",
+val CONCEPT_TURTLE_0_META = FDKConceptTurtle(
+    id = CONCEPT_0_ID,
     turtle = gzip(responseReader.readFile("concept_0.ttl"))
 )
 
-val CONCEPT_TURTLE_0_NO_META = TurtleDBO(
-    id = "concept-no-records-$CONCEPT_0_ID",
+val CONCEPT_TURTLE_0_NO_META = ConceptTurtle(
+    id = CONCEPT_0_ID,
     turtle = gzip(responseReader.readFile("no_meta_concept_0.ttl"))
 )
 
-val CONCEPT_TURTLE_1_META = TurtleDBO(
-    id = "concept-$CONCEPT_1_ID",
+val CONCEPT_TURTLE_1_META = FDKConceptTurtle(
+    id = CONCEPT_1_ID,
     turtle = gzip(responseReader.readFile("concept_1.ttl"))
 )
 
-val CONCEPT_TURTLE_1_NO_META = TurtleDBO(
-    id = "concept-no-records-$CONCEPT_1_ID",
+val CONCEPT_TURTLE_1_NO_META = ConceptTurtle(
+    id = CONCEPT_1_ID,
     turtle = gzip(responseReader.readFile("no_meta_concept_1.ttl"))
 )
 
-val REMOVED_CONCEPT_TURTLE_META = TurtleDBO(
-    id = "concept-removed",
+val REMOVED_CONCEPT_TURTLE_META = FDKConceptTurtle(
+    id = "removed",
     turtle = gzip(responseReader.readFile("concept_1.ttl"))
 )
 
-val REMOVED_CONCEPT_TURTLE_NO_META = TurtleDBO(
-    id = "concept-no-records-removed",
+val REMOVED_CONCEPT_TURTLE_NO_META = ConceptTurtle(
+    id = "removed",
     turtle = gzip(responseReader.readFile("no_meta_concept_1.ttl"))
 )
 
-val CONCEPT_TURTLE_2_META = TurtleDBO(
-    id = "concept-no-collection",
+val CONCEPT_TURTLE_2_META = FDKConceptTurtle(
+    id = "no-collection",
     turtle = gzip(responseReader.readFile("concept_2.ttl"))
 )
 
-val CONCEPT_TURTLE_2_NO_META = TurtleDBO(
-    id = "concept-no-records-no-collection",
+val CONCEPT_TURTLE_2_NO_META = ConceptTurtle(
+    id = "no-collection",
     turtle = gzip(responseReader.readFile("no_meta_concept_2.ttl"))
 )
 
-val COLLECTION_TURTLE_META = TurtleDBO(
-    id = "collection-$COLLECTION_0_ID",
+val COLLECTION_TURTLE_META = FDKCollectionTurtle(
+    id = COLLECTION_0_ID,
     turtle = gzip(responseReader.readFile("collection_0.ttl"))
 )
 
-val COLLECTION_TURTLE_NO_META = TurtleDBO(
-    id = "collection-no-records-$COLLECTION_0_ID",
+val COLLECTION_TURTLE_NO_META = CollectionTurtle(
+    id = COLLECTION_0_ID,
     turtle = gzip(responseReader.readFile("no_meta_collection_0.ttl"))
 )
 
-val COLLECTION_UNION_TURTLE = TurtleDBO(
-    id = "collection-$UNION_ID",
+val COLLECTION_UNION_TURTLE = FDKCollectionTurtle(
+    id = UNION_ID,
     turtle = gzip(responseReader.readFile("collection_0.ttl"))
 )
 
-val COLLECTION_UNION_TURTLE_NO_RECORDS = TurtleDBO(
-    id = "collection-no-records-$UNION_ID",
+val COLLECTION_UNION_TURTLE_NO_RECORDS = CollectionTurtle(
+    id = UNION_ID,
     turtle = gzip(responseReader.readFile("no_meta_collection_0.ttl"))
 )
 
-val HARVESTED_TURTLE = TurtleDBO(
+val HARVESTED_TURTLE = HarvestSourceTurtle(
     id = TEST_HARVEST_SOURCE_0.url!!,
     turtle = gzip(responseReader.readFile("harvest_response_0.ttl"))
 )
 
-fun turleDBPopulation(): List<Document> =
-    listOf(
-        COLLECTION_UNION_TURTLE, HARVESTED_TURTLE, CONCEPT_TURTLE_0_META,
-        CONCEPT_TURTLE_0_NO_META, CONCEPT_TURTLE_1_META, CONCEPT_TURTLE_1_NO_META, COLLECTION_TURTLE_META,
-        COLLECTION_TURTLE_NO_META, CONCEPT_TURTLE_2_META, CONCEPT_TURTLE_2_NO_META,
-        COLLECTION_UNION_TURTLE_NO_RECORDS, REMOVED_CONCEPT_TURTLE_META, REMOVED_CONCEPT_TURTLE_NO_META
-    )
+fun sourceTurtlePopulation(): List<Document> =
+    listOf(HARVESTED_TURTLE)
+        .map { it.mapDBO() }
+
+fun collectionTurtlePopulation(): List<Document> =
+    listOf(COLLECTION_TURTLE_NO_META, COLLECTION_UNION_TURTLE_NO_RECORDS)
+        .map { it.mapDBO() }
+
+fun fdkCollectionTurtlePopulation(): List<Document> =
+    listOf(COLLECTION_UNION_TURTLE, COLLECTION_TURTLE_META)
+        .map { it.mapDBO() }
+
+fun conceptTurtlePopulation(): List<Document> =
+    listOf(CONCEPT_TURTLE_0_NO_META, CONCEPT_TURTLE_1_NO_META, CONCEPT_TURTLE_2_NO_META, REMOVED_CONCEPT_TURTLE_NO_META)
+        .map { it.mapDBO() }
+
+fun fdkConceptTurtlePopulation(): List<Document> =
+    listOf(CONCEPT_TURTLE_0_META, CONCEPT_TURTLE_1_META, CONCEPT_TURTLE_2_META, REMOVED_CONCEPT_TURTLE_META)
         .map { it.mapDBO() }
 
 fun conceptDBPopulation(): List<Document> =
