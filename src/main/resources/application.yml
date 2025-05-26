@@ -15,7 +15,15 @@ spring:
     port: 5672
     username: ${RABBIT_USERNAME}
     password: ${RABBIT_PASSWORD}
-  data.mongodb.uri: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@mongodb:27017/conceptHarvester?authSource=admin&authMechanism=SCRAM-SHA-1
+  data.mongodb:
+    host: ${MONGODB_HOST}
+    username: ${MONGODB_USER}
+    password: ${MONGODB_PASSWORD}
+    authentication-database: ${MONGODB_AUTH}
+    replica-set-name: ${MONGODB_REPLICASET}
+    port: 27017
+    database: conceptHarvester
+    auto-index-creation: true
 application:
   conceptsUri: ${FDK_CONCEPT_HARVESTER_URI:https://concepts.staging.fellesdatakatalog.digdir.no}/concepts
   collectionsUri: ${FDK_CONCEPT_HARVESTER_URI:https://concepts.staging.fellesdatakatalog.digdir.no}/collections
@@ -42,7 +50,12 @@ spring:
     port: 5672
     username: guest
     password: guest
-  data.mongodb.uri: mongodb://admin:admin@localhost:27017/conceptHarvester?authSource=admin&authMechanism=SCRAM-SHA-1
+  data.mongodb:
+    host: localhost
+    username: admin
+    password: admin
+    authentication-database: admin
+    replica-set-name: null
 application:
   conceptsUri: https://concepts.staging.fellesdatakatalog.digdir.no/concepts
   collectionsUri: https://concepts.staging.fellesdatakatalog.digdir.no/collections
@@ -62,7 +75,12 @@ spring:
     port: 5672
     username: guest
     password: guest
-  data.mongodb.uri: mongodb://admin:admin@localhost:27017/conceptHarvester?authSource=admin&authMechanism=SCRAM-SHA-1
+  data.mongodb:
+    host: localhost
+    username: testuser
+    password: testpassword
+    authentication-database: admin
+    replica-set-name: null
 application:
   conceptsUri: http://localhost:5050/concepts
   collectionsUri: http://localhost:5050/collections
