@@ -27,7 +27,7 @@ fun startMockServer() {
             .willReturn(aResponse().withStatus(200))
         )
 
-        mockserver.stubFor(get(urlEqualTo("/auth/realms/fdk/protocol/openid-connect/certs"))
+        mockserver.stubFor(get(urlEqualTo("/realms/fdk/protocol/openid-connect/certs"))
             .willReturn(okJson(JwkStore.get())))
 
         mockserver.start()
