@@ -28,7 +28,7 @@
         <maven.exec.skip>false</maven.exec.skip>
         <!--end standard properties-->
 
-        <kotlin.version>2.2.20</kotlin.version>
+        <kotlin.version>2.2.21</kotlin.version>
         <testcontainers.version>1.21.3</testcontainers.version>
         <jena.version>5.5.0</jena.version>
     </properties>
