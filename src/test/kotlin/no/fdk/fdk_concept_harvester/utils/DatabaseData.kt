@@ -8,7 +8,6 @@ import no.fdk.fdk_concept_harvester.model.FDKCollectionTurtle
 import no.fdk.fdk_concept_harvester.model.FDKConceptTurtle
 import no.fdk.fdk_concept_harvester.model.HarvestSourceTurtle
 import no.fdk.fdk_concept_harvester.model.TurtleDBO
-import no.fdk.fdk_concept_harvester.service.UNION_ID
 import no.fdk.fdk_concept_harvester.service.gzip
 import org.bson.Document
 
@@ -94,16 +93,6 @@ val COLLECTION_TURTLE_NO_META = CollectionTurtle(
     turtle = gzip(responseReader.readFile("no_meta_collection_0.ttl"))
 )
 
-val COLLECTION_UNION_TURTLE = FDKCollectionTurtle(
-    id = UNION_ID,
-    turtle = gzip(responseReader.readFile("collection_0.ttl"))
-)
-
-val COLLECTION_UNION_TURTLE_NO_RECORDS = CollectionTurtle(
-    id = UNION_ID,
-    turtle = gzip(responseReader.readFile("no_meta_collection_0.ttl"))
-)
-
 val HARVESTED_TURTLE = HarvestSourceTurtle(
     id = TEST_HARVEST_SOURCE_0.url!!,
     turtle = gzip(responseReader.readFile("harvest_response_0.ttl"))
@@ -114,11 +103,11 @@ fun sourceTurtlePopulation(): List<Document> =
         .map { it.mapDBO() }
 
 fun collectionTurtlePopulation(): List<Document> =
-    listOf(COLLECTION_TURTLE_NO_META, COLLECTION_UNION_TURTLE_NO_RECORDS)
+    listOf(COLLECTION_TURTLE_NO_META)
         .map { it.mapDBO() }
 
 fun fdkCollectionTurtlePopulation(): List<Document> =
-    listOf(COLLECTION_UNION_TURTLE, COLLECTION_TURTLE_META)
+    listOf(COLLECTION_TURTLE_META)
         .map { it.mapDBO() }
 
 fun conceptTurtlePopulation(): List<Document> =

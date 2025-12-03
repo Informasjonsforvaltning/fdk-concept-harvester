@@ -42,11 +42,6 @@ open class CollectionsController(private val conceptService: ConceptService) {
     fun getCollections(
         @RequestHeader(HttpHeaders.ACCEPT) accept: String?,
         @RequestParam(value = "catalogrecords", required = false) catalogrecords: Boolean = false
-    ): ResponseEntity<String> {
-        LOGGER.info("get all concept collections")
-        val returnType = jenaTypeFromAcceptHeader(accept)
-
-        return if (returnType == Lang.RDFNULL) ResponseEntity(HttpStatus.NOT_ACCEPTABLE)
-        else ResponseEntity(conceptService.getAllCollections(returnType ?: Lang.TURTLE, catalogrecords), HttpStatus.OK)
-    }
+    ): ResponseEntity<String> =
+        ResponseEntity(HttpStatus.MOVED_PERMANENTLY)
 }

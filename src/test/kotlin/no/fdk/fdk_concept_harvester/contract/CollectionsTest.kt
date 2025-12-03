@@ -45,24 +45,4 @@ class CollectionsTest: ApiTestContext() {
         Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response["status"])
     }
 
-    @Test
-    fun findAllWithRecords() {
-        val response = apiGet(port, "/collections?catalogrecords=true", "text/turtle")
-        Assumptions.assumeTrue(HttpStatus.OK.value() == response["status"])
-
-        val expected = responseReader.parseFile("collection_0.ttl", "TURTLE")
-        val responseModel = responseReader.parseResponse(response["body"] as String, "TURTLE")
-        assertTrue(expected.isIsomorphicWith(responseModel))
-    }
-
-    @Test
-    fun findAllNoRecords() {
-        val response = apiGet(port, "/collections", "application/trig")
-        Assumptions.assumeTrue(HttpStatus.OK.value() == response["status"])
-
-        val expected = responseReader.parseFile("no_meta_collection_0.ttl", "TURTLE")
-        val responseModel = responseReader.parseResponse(response["body"] as String, Lang.TRIG.name)
-        assertTrue(expected.isIsomorphicWith(responseModel))
-    }
-
 }

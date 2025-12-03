@@ -34,42 +34,6 @@ class ConceptServiceTest {
     private val responseReader = TestResponseReader()
 
     @Nested
-    internal inner class AllCollections {
-
-        @Test
-        fun responseIsomorphicWithEmptyModelForEmptyDB() {
-            whenever(turtleService.getCollectionUnion(true))
-                .thenReturn(null)
-
-            val expected = responseReader.parseResponse("", "TURTLE")
-
-            val response = conceptService.getAllCollections(Lang.TURTLE, true)
-
-            assertTrue(expected.isIsomorphicWith(responseReader.parseResponse(response, "TURTLE")))
-        }
-
-        @Test
-        fun responseIsIsomorphicWithExpectedModel() {
-            whenever(turtleService.getCollectionUnion(true))
-                .thenReturn(javaClass.classLoader.getResource("collection_0.ttl")!!.readText())
-            whenever(turtleService.getCollectionUnion(false))
-                .thenReturn(javaClass.classLoader.getResource("harvest_response_0.ttl")!!.readText())
-
-            val expected = responseReader.parseFile("collection_0.ttl", "TURTLE")
-            val expectedNoRecords = responseReader.parseFile("harvest_response_0.ttl", "TURTLE")
-
-            val responseTurtle = conceptService.getAllCollections(Lang.TURTLE, true)
-            val responseN3 = conceptService.getAllCollections(Lang.N3, true)
-            val responseNTriples = conceptService.getAllCollections(Lang.NTRIPLES, false)
-
-            assertTrue(expected.isIsomorphicWith(responseReader.parseResponse(responseTurtle, "TURTLE")))
-            assertTrue(expected.isIsomorphicWith(responseReader.parseResponse(responseN3, "N3")))
-            assertTrue(expectedNoRecords.isIsomorphicWith(responseReader.parseResponse(responseNTriples, "N-TRIPLES")))
-        }
-
-    }
-
-    @Nested
     internal inner class CollectionById {
 
         @Test

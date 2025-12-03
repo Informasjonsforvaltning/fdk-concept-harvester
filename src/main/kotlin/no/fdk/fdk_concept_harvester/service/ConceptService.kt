@@ -8,7 +8,6 @@ import no.fdk.fdk_concept_harvester.rabbit.RabbitMQPublisher
 import no.fdk.fdk_concept_harvester.rdf.createRDFResponse
 import no.fdk.fdk_concept_harvester.rdf.parseRDFResponse
 import no.fdk.fdk_concept_harvester.repository.ConceptMetaRepository
-import org.apache.jena.rdf.model.ModelFactory
 import org.apache.jena.riot.Lang
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
@@ -21,14 +20,6 @@ class ConceptService(
     private val rabbitPublisher: RabbitMQPublisher,
     private val turtleService: TurtleService
 ) {
-
-    fun getAllCollections(returnType: Lang, withRecords: Boolean): String =
-        turtleService.getCollectionUnion(withRecords)
-            ?.let {
-                if (returnType == Lang.TURTLE) it
-                else parseRDFResponse(it, Lang.TURTLE).createRDFResponse(returnType)
-            }
-            ?: ModelFactory.createDefaultModel().createRDFResponse(returnType)
 
     fun getCollectionById(id: String, returnType: Lang, withRecords: Boolean): String? =
         turtleService.getCollection(id, withRecords)
