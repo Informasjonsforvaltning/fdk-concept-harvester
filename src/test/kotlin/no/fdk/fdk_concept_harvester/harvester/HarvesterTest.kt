@@ -61,6 +61,8 @@ class HarvesterTest {
         val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE, false)
 
         val expectedReport = HarvestReport(
+            dataSourceId = "concept-harvest-source-0",
+            dataSourceUrl = "http://localhost:5000/concept-harvest-source-0",
             id = "concept-harvest-source-0",
             url = "http://localhost:5050/concept-harvest-source-0",
             harvestError = false,
@@ -123,6 +125,8 @@ class HarvesterTest {
         val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE, false)
 
         val expectedReport = HarvestReport(
+            dataSourceId = "concept-harvest-source-0",
+            dataSourceUrl = "http://localhost:5000/concept-harvest-source-0",
             id = "concept-harvest-source-0",
             url = "http://localhost:5050/concept-harvest-source-0",
             harvestError = false,
@@ -167,6 +171,8 @@ class HarvesterTest {
         val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE, true)
 
         val expectedReport = HarvestReport(
+            dataSourceId = "concept-harvest-source-0",
+            dataSourceUrl = "http://localhost:5000/concept-harvest-source-0",
             id = "concept-harvest-source-0",
             url = "http://localhost:5050/concept-harvest-source-0",
             harvestError = false,
@@ -226,6 +232,8 @@ class HarvesterTest {
         val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, NEW_TEST_HARVEST_DATE, false)
 
         val expectedReport = HarvestReport(
+            dataSourceId = "concept-harvest-source-0",
+            dataSourceUrl = "http://localhost:5000/concept-harvest-source-0",
             id = "concept-harvest-source-0",
             url = "http://localhost:5050/concept-harvest-source-0",
             harvestError = false,
@@ -277,6 +285,8 @@ class HarvesterTest {
         val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE, false)
 
         val expectedReport = HarvestReport(
+            dataSourceId = "concept-harvest-source-0",
+            dataSourceUrl = "http://localhost:5000/concept-harvest-source-0",
             id = "concept-harvest-source-0",
             url = "http://localhost:5050/concept-harvest-source-0",
             harvestError = true,
@@ -313,6 +323,8 @@ class HarvesterTest {
         val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE, false)
 
         val expectedReport = HarvestReport(
+            dataSourceId = "concept-harvest-source-0",
+            dataSourceUrl = "http://localhost:5000/concept-harvest-source-0",
             id = "concept-harvest-source-0",
             url = "http://localhost:5050/concept-harvest-source-0",
             harvestError = false,
@@ -381,6 +393,8 @@ class HarvesterTest {
         val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE, false)
 
         val expectedReport = HarvestReport(
+            dataSourceId = "concept-harvest-source-0",
+            dataSourceUrl = TEST_HARVEST_SOURCE_0.url!!,
             id = "concept-harvest-source-0",
             url = TEST_HARVEST_SOURCE_0.url!!,
             harvestError = false,
@@ -425,6 +439,8 @@ class HarvesterTest {
         val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE, false)
 
         val expectedReport = HarvestReport(
+            dataSourceId = "concept-harvest-source-0",
+            dataSourceUrl = TEST_HARVEST_SOURCE_0.url!!,
             id = "concept-harvest-source-0",
             url = TEST_HARVEST_SOURCE_0.url!!,
             harvestError = false,

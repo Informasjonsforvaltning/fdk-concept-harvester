@@ -40,6 +40,8 @@ class ConceptHarvester(
                     contentType == null -> {
                         LOGGER.error("Unable to harvest ${source.url}, source contains an unsupported accept header", HarvestException("unsupported accept header"))
                         HarvestReport(
+                            dataSourceId = source.id,
+                            dataSourceUrl = source.url,
                             id = source.id,
                             url = source.url,
                             harvestError = true,
@@ -53,6 +55,8 @@ class ConceptHarvester(
                     else -> {
                         LOGGER.error("Harvest source contains an unsupported content-type", HarvestException("unsupported content-type"))
                         HarvestReport(
+                            dataSourceId = source.id,
+                            dataSourceUrl = source.url,
                             id = source.id,
                             url = source.url,
                             harvestError = true,
@@ -65,6 +69,8 @@ class ConceptHarvester(
             } catch (ex: Exception) {
                 LOGGER.error("Harvest of ${source.url} failed", ex)
                 HarvestReport(
+                    dataSourceId = source.id,
+                    dataSourceUrl = source.url,
                     id = source.id,
                     url = source.url,
                     harvestError = true,
@@ -85,6 +91,8 @@ class ConceptHarvester(
         return if (jenaWriterType == null || jenaWriterType == Lang.RDFNULL) {
             LOGGER.error("Unable to harvest ${source.url}, source contains an unsupported accept header", HarvestException("unsupported accept header"))
             HarvestReport(
+                dataSourceId = source.id ?: "unknown-id",
+                dataSourceUrl = source.url ?: "https://example.com",
                 id = source.id ?: "unknown-id",
                 url = source.url ?: "https://example.com",
                 harvestError = true,
@@ -123,6 +131,8 @@ class ConceptHarvester(
         return if (!forceUpdate && dbData != null && harvested.isIsomorphicWith(dbData)) {
             LOGGER.info("No changes from last harvest of $sourceURL")
             HarvestReport(
+                dataSourceId = sourceId,
+                dataSourceUrl = sourceURL,
                 id = sourceId,
                 url = sourceURL,
                 harvestError = false,
@@ -163,6 +173,8 @@ class ConceptHarvester(
             .run { conceptMetaRepository.saveAll(this) }
 
         return HarvestReport(
+            dataSourceId = sourceId,
+            dataSourceUrl = sourceURL,
             id = sourceId,
             url = sourceURL,
             harvestError = false,
