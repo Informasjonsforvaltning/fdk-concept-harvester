@@ -31,7 +31,7 @@ class ConceptHarvester(
     private val applicationProperties: ApplicationProperties
 ) {
 
-    fun harvestConceptCollection(source: HarvestDataSource, harvestDate: Calendar, forceUpdate: Boolean): HarvestReport? =
+    fun harvestConceptCollection(source: HarvestDataSource, harvestDate: Calendar, forceUpdate: Boolean, runId: String? = null): HarvestReport? =
         if (source.id != null && source.url != null) {
             try {
                 LOGGER.debug("Starting harvest of ${source.url}")
@@ -40,6 +40,7 @@ class ConceptHarvester(
                     contentType == null -> {
                         LOGGER.error("Unable to harvest ${source.url}, source contains an unsupported accept header", HarvestException("unsupported accept header"))
                         HarvestReport(
+                            runId = runId,
                             dataSourceId = source.id,
                             dataSourceUrl = source.url,
                             id = source.id,
@@ -50,11 +51,12 @@ class ConceptHarvester(
                             endTime = formatNowWithOsloTimeZone()
                         )
                     }
-                    contentType.isRDF() -> harvestConceptCollectionFromRDF(source, harvestDate, forceUpdate)
-                    contentType.isTBX() -> harvestConceptCollectionFromTBX(source, harvestDate, forceUpdate)
+                    contentType.isRDF() -> harvestConceptCollectionFromRDF(source, harvestDate, forceUpdate, runId)
+                    contentType.isTBX() -> harvestConceptCollectionFromTBX(source, harvestDate, forceUpdate, runId)
                     else -> {
                         LOGGER.error("Harvest source contains an unsupported content-type", HarvestException("unsupported content-type"))
                         HarvestReport(
+                            runId = runId,
                             dataSourceId = source.id,
                             dataSourceUrl = source.url,
                             id = source.id,
@@ -69,6 +71,7 @@ class ConceptHarvester(
             } catch (ex: Exception) {
                 LOGGER.error("Harvest of ${source.url} failed", ex)
                 HarvestReport(
+                    runId = runId,
                     dataSourceId = source.id,
                     dataSourceUrl = source.url,
                     id = source.id,
@@ -85,12 +88,13 @@ class ConceptHarvester(
             null
         }
 
-    private fun harvestConceptCollectionFromRDF(source: HarvestDataSource, harvestDate: Calendar, forceUpdate: Boolean): HarvestReport {
+    private fun harvestConceptCollectionFromRDF(source: HarvestDataSource, harvestDate: Calendar, forceUpdate: Boolean, runId: String?): HarvestReport {
         val jenaWriterType = jenaTypeFromAcceptHeader(source.acceptHeaderValue)
 
         return if (jenaWriterType == null || jenaWriterType == Lang.RDFNULL) {
             LOGGER.error("Unable to harvest ${source.url}, source contains an unsupported accept header", HarvestException("unsupported accept header"))
             HarvestReport(
+                runId = runId,
                 dataSourceId = source.id ?: "unknown-id",
                 dataSourceUrl = source.url ?: "https://example.com",
                 id = source.id ?: "unknown-id",
@@ -107,14 +111,15 @@ class ConceptHarvester(
                 source.url!!,
                 harvestDate,
                 source.publisherId,
-                forceUpdate
+                forceUpdate,
+                runId
             )
         }
     }
 
-    private fun harvestConceptCollectionFromTBX(source: HarvestDataSource, harvestDate: Calendar, forceUpdate: Boolean): HarvestReport {
+    private fun harvestConceptCollectionFromTBX(source: HarvestDataSource, harvestDate: Calendar, forceUpdate: Boolean, runId: String?): HarvestReport {
         val harvested = parseTBXResponse(adapter.getConcepts(source), source.url, orgAdapter)
-        return saveIfHarvestedContainsChanges(harvested, source.id!!, source.url!!, harvestDate, source.publisherId, forceUpdate)
+        return saveIfHarvestedContainsChanges(harvested, source.id!!, source.url!!, harvestDate, source.publisherId, forceUpdate, runId)
     }
 
     private fun saveIfHarvestedContainsChanges(
@@ -123,7 +128,8 @@ class ConceptHarvester(
         sourceURL: String,
         harvestDate: Calendar,
         publisherId: String?,
-        forceUpdate: Boolean
+        forceUpdate: Boolean,
+        runId: String?
     ): HarvestReport {
         val dbData = turtleService.getHarvestSource(sourceURL)
             ?.let { safeParseRDF(it, Lang.TURTLE) }
@@ -131,6 +137,7 @@ class ConceptHarvester(
         return if (!forceUpdate && dbData != null && harvested.isIsomorphicWith(dbData)) {
             LOGGER.info("No changes from last harvest of $sourceURL")
             HarvestReport(
+                runId = runId,
                 dataSourceId = sourceId,
                 dataSourceUrl = sourceURL,
                 id = sourceId,
@@ -143,7 +150,7 @@ class ConceptHarvester(
             LOGGER.info("Saving data from $sourceURL and updating FDK meta data")
             turtleService.saveAsHarvestSource(harvested, sourceURL)
 
-            updateDB(harvested, sourceId, sourceURL, harvestDate, publisherId, forceUpdate)
+            updateDB(harvested, sourceId, sourceURL, harvestDate, publisherId, forceUpdate, runId)
         }
     }
 
@@ -153,7 +160,8 @@ class ConceptHarvester(
         sourceURL: String,
         harvestDate: Calendar,
         publisherId: String?,
-        forceUpdate: Boolean
+        forceUpdate: Boolean,
+        runId: String?
     ): HarvestReport {
         val concepts = splitConceptsFromRDF(harvested, sourceURL)
         val updatedConcepts = updateConcepts(concepts, harvestDate, forceUpdate)
@@ -173,6 +181,7 @@ class ConceptHarvester(
             .run { conceptMetaRepository.saveAll(this) }
 
         return HarvestReport(
+            runId = runId,
             dataSourceId = sourceId,
             dataSourceUrl = sourceURL,
             id = sourceId,
