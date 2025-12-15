@@ -3,7 +3,7 @@ package no.fdk.fdk_concept_harvester.model
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 @JsonIgnoreProperties(ignoreUnknown=true)
-data class RabbitHarvestTrigger(
+data class HarvestTrigger(
     val runId: String? = null,
     val dataSourceId: String? = null,
     val dataSourceUrl: String? = null,

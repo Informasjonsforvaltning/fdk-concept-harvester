@@ -11,7 +11,7 @@ import java.io.BufferedReader
 import java.net.HttpURLConnection
 import java.net.URI
 
-private val logger = LoggerFactory.getLogger(HarvestAdminAdapter::class.java)
+private val logger = LoggerFactory.getLogger(DefaultOrganizationsAdapter::class.java)
 
 @Service
 class DefaultOrganizationsAdapter(private val applicationProperties: ApplicationProperties): OrganizationsAdapter {

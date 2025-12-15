@@ -39,7 +39,7 @@ class HarvesterTest {
 
     @Test
     fun harvestDataSourceSavedWhenDBIsEmpty() {
-        whenever(adapter.getConcepts(TEST_HARVEST_SOURCE_0))
+        whenever(adapter.getConcepts(TEST_HARVEST_SOURCE_0.dataSourceUrl!!, TEST_HARVEST_SOURCE_0.acceptHeader!!))
             .thenReturn(responseReader.readFile("harvest_response_0.ttl"))
         whenever(conceptRepository.findAllByIsPartOf("http://localhost:5050/collections/$COLLECTION_0_ID"))
             .thenReturn(listOf(CONCEPT_0, CONCEPT_1))
@@ -58,13 +58,12 @@ class HarvesterTest {
         whenever(valuesMock.conceptsUri)
             .thenReturn("http://localhost:5050/concepts")
 
-        val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE, false)
+        val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE)
 
         val expectedReport = HarvestReport(
+            runId="run-0",
             dataSourceId = "concept-harvest-source-0",
             dataSourceUrl = "http://localhost:5050/concept-harvest-source-0",
-            id = "concept-harvest-source-0",
-            url = "http://localhost:5050/concept-harvest-source-0",
             harvestError = false,
             startTime = "2021-01-05 14:15:39 +0100",
             endTime = report!!.endTime,
@@ -80,7 +79,7 @@ class HarvesterTest {
         argumentCaptor<Model, String>().apply {
             verify(turtleService, times(1)).saveAsHarvestSource(first.capture(), second.capture())
             assertTrue(first.firstValue.isIsomorphicWith(responseReader.parseFile("harvest_response_0.ttl", "TURTLE")))
-            Assertions.assertEquals(TEST_HARVEST_SOURCE_0.url, second.firstValue)
+            Assertions.assertEquals(TEST_HARVEST_SOURCE_0.dataSourceUrl, second.firstValue)
         }
 
         argumentCaptor<Model, String, Boolean>().apply {
@@ -117,18 +116,17 @@ class HarvesterTest {
     @Test
     fun harvestDataSourceNotPersistedWhenNoChangesFromDB() {
         val harvested = responseReader.readFile("harvest_response_0.ttl")
-        whenever(adapter.getConcepts(TEST_HARVEST_SOURCE_0))
+        whenever(adapter.getConcepts(TEST_HARVEST_SOURCE_0.dataSourceUrl!!, TEST_HARVEST_SOURCE_0.acceptHeader!!))
             .thenReturn(harvested)
-        whenever(turtleService.getHarvestSource(TEST_HARVEST_SOURCE_0.url!!))
+        whenever(turtleService.getHarvestSource(TEST_HARVEST_SOURCE_0.dataSourceUrl))
             .thenReturn(harvested)
 
-        val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE, false)
+        val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE)
 
         val expectedReport = HarvestReport(
+            runId="run-0",
             dataSourceId = "concept-harvest-source-0",
             dataSourceUrl = "http://localhost:5050/concept-harvest-source-0",
-            id = "concept-harvest-source-0",
-            url = "http://localhost:5050/concept-harvest-source-0",
             harvestError = false,
             startTime = "2021-01-05 14:15:39 +0100",
             endTime = report!!.endTime
@@ -145,9 +143,9 @@ class HarvesterTest {
     @Test
     fun noChangesIgnoredWhenForceUpdateIsTrue() {
         val harvested = responseReader.readFile("harvest_response_0.ttl")
-        whenever(adapter.getConcepts(TEST_HARVEST_SOURCE_0))
+        whenever(adapter.getConcepts(TEST_HARVEST_SOURCE_0.dataSourceUrl!!, TEST_HARVEST_SOURCE_0.acceptHeader!!))
             .thenReturn(harvested)
-        whenever(turtleService.getHarvestSource(TEST_HARVEST_SOURCE_0.url!!))
+        whenever(turtleService.getHarvestSource(TEST_HARVEST_SOURCE_0.dataSourceUrl))
             .thenReturn(harvested)
         whenever(conceptRepository.findById(CONCEPT_0.uri))
             .thenReturn(Optional.of(CONCEPT_0))
@@ -168,13 +166,12 @@ class HarvesterTest {
         whenever(valuesMock.conceptsUri)
             .thenReturn("http://localhost:5050/concepts")
 
-        val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE, true)
+        val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0.copy(forceUpdate = true), TEST_HARVEST_DATE)
 
         val expectedReport = HarvestReport(
+            runId="run-0",
             dataSourceId = "concept-harvest-source-0",
             dataSourceUrl = "http://localhost:5050/concept-harvest-source-0",
-            id = "concept-harvest-source-0",
-            url = "http://localhost:5050/concept-harvest-source-0",
             harvestError = false,
             startTime = "2021-01-05 14:15:39 +0100",
             endTime = report!!.endTime,
@@ -196,9 +193,9 @@ class HarvesterTest {
 
     @Test
     fun onlyRelevantUpdatedWhenHarvestedFromDB() {
-        whenever(adapter.getConcepts(TEST_HARVEST_SOURCE_0))
+        whenever(adapter.getConcepts(TEST_HARVEST_SOURCE_0.dataSourceUrl!!, TEST_HARVEST_SOURCE_0.acceptHeader!!))
             .thenReturn(responseReader.readFile("harvest_response_0.ttl"))
-        whenever(turtleService.getHarvestSource(TEST_HARVEST_SOURCE_0.url!!))
+        whenever(turtleService.getHarvestSource(TEST_HARVEST_SOURCE_0.dataSourceUrl))
             .thenReturn(responseReader.readFile("harvest_response_0_diff.ttl"))
 
         whenever(valuesMock.collectionsUri)
@@ -229,13 +226,12 @@ class HarvesterTest {
         whenever(turtleService.getConcept(CONCEPT_1_ID, false))
             .thenReturn(responseReader.readFile("no_meta_concept_1.ttl"))
 
-        val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, NEW_TEST_HARVEST_DATE, false)
+        val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, NEW_TEST_HARVEST_DATE)
 
         val expectedReport = HarvestReport(
+            runId="run-0",
             dataSourceId = "concept-harvest-source-0",
             dataSourceUrl = "http://localhost:5050/concept-harvest-source-0",
-            id = "concept-harvest-source-0",
-            url = "http://localhost:5050/concept-harvest-source-0",
             harvestError = false,
             startTime = "2021-02-15 12:52:16 +0100",
             endTime = report!!.endTime,
@@ -247,7 +243,7 @@ class HarvesterTest {
         argumentCaptor<Model, String>().apply {
             verify(turtleService, times(1)).saveAsHarvestSource(first.capture(), second.capture())
             assertTrue(first.firstValue.isIsomorphicWith(responseReader.parseFile("harvest_response_0.ttl", "TURTLE")))
-            Assertions.assertEquals(TEST_HARVEST_SOURCE_0.url, second.firstValue)
+            Assertions.assertEquals(TEST_HARVEST_SOURCE_0.dataSourceUrl, second.firstValue)
         }
 
         argumentCaptor<CollectionMeta>().apply {
@@ -279,16 +275,15 @@ class HarvesterTest {
 
     @Test
     fun harvestWithErrorsIsNotPersisted() {
-        whenever(adapter.getConcepts(TEST_HARVEST_SOURCE_0))
+        whenever(adapter.getConcepts(TEST_HARVEST_SOURCE_0.dataSourceUrl!!, TEST_HARVEST_SOURCE_0.acceptHeader!!))
             .thenReturn(responseReader.readFile("harvest_error_response.ttl"))
 
-        val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE, false)
+        val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE)
 
         val expectedReport = HarvestReport(
+            runId="run-0",
             dataSourceId = "concept-harvest-source-0",
             dataSourceUrl = "http://localhost:5050/concept-harvest-source-0",
-            id = "concept-harvest-source-0",
-            url = "http://localhost:5050/concept-harvest-source-0",
             harvestError = true,
             errorMessage = "[line: 11, col: 5 ] Undefined prefix: rdfs",
             startTime = "2021-01-05 14:15:39 +0100",
@@ -305,7 +300,7 @@ class HarvesterTest {
 
     @Test
     fun conceptsWithNoCollectionIsAddedToHarvestSourceCollection() {
-        whenever(adapter.getConcepts(TEST_HARVEST_SOURCE_0))
+        whenever(adapter.getConcepts(TEST_HARVEST_SOURCE_0.dataSourceUrl!!, TEST_HARVEST_SOURCE_0.acceptHeader!!))
             .thenReturn(responseReader.readFile("no_meta_concept_0.ttl"))
         whenever(conceptRepository.findById(CONCEPT_0.uri))
             .thenReturn(Optional.of(CONCEPT_0.copy(isPartOf = null)))
@@ -320,13 +315,12 @@ class HarvesterTest {
         whenever(valuesMock.conceptsUri)
             .thenReturn("http://localhost:5050/concepts")
 
-        val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE, false)
+        val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE)
 
         val expectedReport = HarvestReport(
+            runId="run-0",
             dataSourceId = "concept-harvest-source-0",
             dataSourceUrl = "http://localhost:5050/concept-harvest-source-0",
-            id = "concept-harvest-source-0",
-            url = "http://localhost:5050/concept-harvest-source-0",
             harvestError = false,
             startTime = "2021-01-05 14:15:39 +0100",
             endTime = report!!.endTime,
@@ -338,7 +332,7 @@ class HarvesterTest {
         argumentCaptor<Model, String>().apply {
             verify(turtleService, times(1)).saveAsHarvestSource(first.capture(), second.capture())
             assertTrue(first.firstValue.isIsomorphicWith(responseReader.parseFile("no_meta_concept_0.ttl", "TURTLE")))
-            Assertions.assertEquals(TEST_HARVEST_SOURCE_0.url, second.firstValue)
+            Assertions.assertEquals(TEST_HARVEST_SOURCE_0.dataSourceUrl, second.firstValue)
         }
 
         argumentCaptor<Model, String, Boolean>().apply {
@@ -370,9 +364,9 @@ class HarvesterTest {
     fun harvestReportContainsRemovedConcepts() {
         val prev = responseReader.readFile("harvest_response_0.ttl")
         val harvested = responseReader.readFile("harvest_response_0_missing_concept1.ttl")
-        whenever(adapter.getConcepts(TEST_HARVEST_SOURCE_0))
+        whenever(adapter.getConcepts(TEST_HARVEST_SOURCE_0.dataSourceUrl!!, TEST_HARVEST_SOURCE_0.acceptHeader!!))
             .thenReturn(harvested)
-        whenever(turtleService.getHarvestSource(TEST_HARVEST_SOURCE_0.url!!))
+        whenever(turtleService.getHarvestSource(TEST_HARVEST_SOURCE_0.dataSourceUrl))
             .thenReturn(prev)
         whenever(collectionRepository.findById(GENERATED_COLLECTION.uri))
             .thenReturn(Optional.of(GENERATED_COLLECTION.copy(concepts = emptySet())))
@@ -390,13 +384,12 @@ class HarvesterTest {
         whenever(valuesMock.conceptsUri)
             .thenReturn("http://localhost:5050/concepts")
 
-        val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE, false)
+        val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE)
 
         val expectedReport = HarvestReport(
+            runId="run-0",
             dataSourceId = "concept-harvest-source-0",
-            dataSourceUrl = TEST_HARVEST_SOURCE_0.url!!,
-            id = "concept-harvest-source-0",
-            url = TEST_HARVEST_SOURCE_0.url!!,
+            dataSourceUrl = TEST_HARVEST_SOURCE_0.dataSourceUrl,
             harvestError = false,
             startTime = "2021-01-05 14:15:39 +0100",
             endTime = report!!.endTime,
@@ -416,9 +409,9 @@ class HarvesterTest {
     fun ableToHarvestEmptyCollection() {
         val prev = responseReader.readFile("harvest_response_0.ttl")
         val harvested = responseReader.readFile("harvest_response_empty.ttl")
-        whenever(adapter.getConcepts(TEST_HARVEST_SOURCE_0))
+        whenever(adapter.getConcepts(TEST_HARVEST_SOURCE_0.dataSourceUrl!!, TEST_HARVEST_SOURCE_0.acceptHeader!!))
             .thenReturn(harvested)
-        whenever(turtleService.getHarvestSource(TEST_HARVEST_SOURCE_0.url!!))
+        whenever(turtleService.getHarvestSource(TEST_HARVEST_SOURCE_0.dataSourceUrl))
             .thenReturn(prev)
         whenever(collectionRepository.findById(GENERATED_COLLECTION.uri))
             .thenReturn(Optional.of(GENERATED_COLLECTION.copy(concepts = emptySet())))
@@ -436,13 +429,12 @@ class HarvesterTest {
         whenever(valuesMock.conceptsUri)
             .thenReturn("http://localhost:5050/concepts")
 
-        val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE, false)
+        val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE)
 
         val expectedReport = HarvestReport(
+            runId="run-0",
             dataSourceId = "concept-harvest-source-0",
-            dataSourceUrl = TEST_HARVEST_SOURCE_0.url!!,
-            id = "concept-harvest-source-0",
-            url = TEST_HARVEST_SOURCE_0.url!!,
+            dataSourceUrl = TEST_HARVEST_SOURCE_0.dataSourceUrl,
             harvestError = false,
             startTime = "2021-01-05 14:15:39 +0100",
             endTime = report!!.endTime,
@@ -461,9 +453,9 @@ class HarvesterTest {
     @Test
     fun earlierRemovedConceptWithNoChangesAddedToReport() {
         val harvested = responseReader.readFile("harvest_response_0.ttl")
-        whenever(adapter.getConcepts(TEST_HARVEST_SOURCE_0))
+        whenever(adapter.getConcepts(TEST_HARVEST_SOURCE_0.dataSourceUrl!!, TEST_HARVEST_SOURCE_0.acceptHeader!!))
             .thenReturn(harvested)
-        whenever(turtleService.getHarvestSource(TEST_HARVEST_SOURCE_0.url!!))
+        whenever(turtleService.getHarvestSource(TEST_HARVEST_SOURCE_0.dataSourceUrl))
             .thenReturn(responseReader.readFile("harvest_response_empty.ttl"))
         whenever(collectionRepository.findById(GENERATED_COLLECTION.uri))
             .thenReturn(Optional.of(GENERATED_COLLECTION.copy(concepts = emptySet())))
@@ -485,7 +477,7 @@ class HarvesterTest {
         whenever(valuesMock.conceptsUri)
             .thenReturn("http://localhost:5050/concepts")
 
-        val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE, false)
+        val report = harvester.harvestConceptCollection(TEST_HARVEST_SOURCE_0, TEST_HARVEST_DATE)
 
         argumentCaptor<ConceptMeta>().apply {
             verify(conceptRepository, times(1)).save(capture())
@@ -493,10 +485,9 @@ class HarvesterTest {
         }
 
         val expectedReport = HarvestReport(
+            runId="run-0",
             dataSourceId = "concept-harvest-source-0",
-            dataSourceUrl = TEST_HARVEST_SOURCE_0.url!!,
-            id = "concept-harvest-source-0",
-            url = TEST_HARVEST_SOURCE_0.url!!,
+            dataSourceUrl = TEST_HARVEST_SOURCE_0.dataSourceUrl!!,
             harvestError = false,
             startTime = "2021-01-05 14:15:39 +0100",
             endTime = report!!.endTime,

@@ -94,7 +94,7 @@ val COLLECTION_TURTLE_NO_META = CollectionTurtle(
 )
 
 val HARVESTED_TURTLE = HarvestSourceTurtle(
-    id = TEST_HARVEST_SOURCE_0.url!!,
+    id = TEST_HARVEST_SOURCE_0.dataSourceUrl!!,
     turtle = gzip(responseReader.readFile("harvest_response_0.ttl"))
 )
 

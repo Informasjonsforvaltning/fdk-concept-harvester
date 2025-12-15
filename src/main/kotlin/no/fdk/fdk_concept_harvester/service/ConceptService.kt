@@ -48,8 +48,6 @@ class ConceptService(
             val uri = meta.first().uri
             rabbitPublisher.send(listOf(
                 HarvestReport(
-                    id = "manual-delete-$id",
-                    url = uri,
                     harvestError = false,
                     startTime = start,
                     endTime = formatNowWithOsloTimeZone(),
@@ -89,8 +87,6 @@ class ConceptService(
         if (reportAsRemoved.isNotEmpty()) {
             rabbitPublisher.send(listOf(
                 HarvestReport(
-                    id = "duplicate-delete",
-                    url = "https://fellesdatakatalog.digdir.no/duplicates",
                     harvestError = false,
                     startTime = start,
                     endTime = formatNowWithOsloTimeZone(),

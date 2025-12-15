@@ -31,36 +31,32 @@ class ConceptHarvester(
     private val applicationProperties: ApplicationProperties
 ) {
 
-    fun harvestConceptCollection(source: HarvestDataSource, harvestDate: Calendar, forceUpdate: Boolean, runId: String? = null): HarvestReport? =
-        if (source.id != null && source.url != null) {
+    fun harvestConceptCollection(trigger: HarvestTrigger, harvestDate: Calendar): HarvestReport? =
+        if (trigger.runId != null && trigger.dataSourceUrl != null) {
             try {
-                LOGGER.debug("Starting harvest of ${source.url}")
-                val contentType = ContentType.fromValue(source.acceptHeaderValue)
+                LOGGER.debug("Starting harvest of ${trigger.dataSourceUrl}")
+                val contentType = ContentType.fromValue(trigger.acceptHeader)
                 when {
                     contentType == null -> {
-                        LOGGER.error("Unable to harvest ${source.url}, source contains an unsupported accept header", HarvestException("unsupported accept header"))
+                        LOGGER.error("Unable to harvest ${trigger.dataSourceUrl}, source contains an unsupported accept header", HarvestException("unsupported accept header"))
                         HarvestReport(
-                            runId = runId,
-                            dataSourceId = source.id,
-                            dataSourceUrl = source.url,
-                            id = source.id,
-                            url = source.url,
+                            runId = trigger.runId,
+                            dataSourceId = trigger.dataSourceId,
+                            dataSourceUrl = trigger.dataSourceUrl,
                             harvestError = true,
                             errorMessage = "Not able to harvest, unsupported accept header",
                             startTime = harvestDate.formatWithOsloTimeZone(),
                             endTime = formatNowWithOsloTimeZone()
                         )
                     }
-                    contentType.isRDF() -> harvestConceptCollectionFromRDF(source, harvestDate, forceUpdate, runId)
-                    contentType.isTBX() -> harvestConceptCollectionFromTBX(source, harvestDate, forceUpdate, runId)
+                    contentType.isRDF() -> harvestConceptCollectionFromRDF(trigger, harvestDate)
+                    contentType.isTBX() -> harvestConceptCollectionFromTBX(trigger, harvestDate)
                     else -> {
                         LOGGER.error("Harvest source contains an unsupported content-type", HarvestException("unsupported content-type"))
                         HarvestReport(
-                            runId = runId,
-                            dataSourceId = source.id,
-                            dataSourceUrl = source.url,
-                            id = source.id,
-                            url = source.url,
+                            runId = trigger.runId,
+                            dataSourceId = trigger.dataSourceId,
+                            dataSourceUrl = trigger.dataSourceUrl,
                             harvestError = true,
                             errorMessage = "Not able to harvest, unsupported accept header",
                             startTime = harvestDate.formatWithOsloTimeZone(),
@@ -69,13 +65,11 @@ class ConceptHarvester(
                     }
                 }
             } catch (ex: Exception) {
-                LOGGER.error("Harvest of ${source.url} failed", ex)
+                LOGGER.error("Harvest of ${trigger.dataSourceUrl} failed", ex)
                 HarvestReport(
-                    runId = runId,
-                    dataSourceId = source.id,
-                    dataSourceUrl = source.url,
-                    id = source.id,
-                    url = source.url,
+                    runId = trigger.runId,
+                    dataSourceId = trigger.dataSourceId,
+                    dataSourceUrl = trigger.dataSourceUrl,
                     harvestError = true,
                     errorMessage = ex.message,
                     startTime = harvestDate.formatWithOsloTimeZone(),
@@ -88,17 +82,15 @@ class ConceptHarvester(
             null
         }
 
-    private fun harvestConceptCollectionFromRDF(source: HarvestDataSource, harvestDate: Calendar, forceUpdate: Boolean, runId: String?): HarvestReport {
-        val jenaWriterType = jenaTypeFromAcceptHeader(source.acceptHeaderValue)
+    private fun harvestConceptCollectionFromRDF(trigger: HarvestTrigger, harvestDate: Calendar): HarvestReport {
+        val jenaWriterType = jenaTypeFromAcceptHeader(trigger.acceptHeader)
 
         return if (jenaWriterType == null || jenaWriterType == Lang.RDFNULL) {
-            LOGGER.error("Unable to harvest ${source.url}, source contains an unsupported accept header", HarvestException("unsupported accept header"))
+            LOGGER.error("Unable to harvest ${trigger.dataSourceUrl}, source contains an unsupported accept header", HarvestException("unsupported accept header"))
             HarvestReport(
-                runId = runId,
-                dataSourceId = source.id ?: "unknown-id",
-                dataSourceUrl = source.url ?: "https://example.com",
-                id = source.id ?: "unknown-id",
-                url = source.url ?: "https://example.com",
+                runId = trigger.runId,
+                dataSourceId = trigger.dataSourceId ?: "unknown-id",
+                dataSourceUrl = trigger.dataSourceUrl ?: "https://example.com",
                 harvestError = true,
                 errorMessage = "Not able to harvest, unsupported accept header",
                 startTime = harvestDate.formatWithOsloTimeZone(),
@@ -106,20 +98,28 @@ class ConceptHarvester(
             )
         } else {
             saveIfHarvestedContainsChanges(
-                parseRDFResponse(adapter.getConcepts(source), jenaWriterType),
-                source.id!!,
-                source.url!!,
+                parseRDFResponse(adapter.getConcepts(trigger.dataSourceUrl!!, trigger.acceptHeader!!), jenaWriterType),
+                trigger.dataSourceId!!,
+                trigger.dataSourceUrl!!,
                 harvestDate,
-                source.publisherId,
-                forceUpdate,
-                runId
+                trigger.publisherId,
+                trigger.forceUpdate,
+                trigger.runId
             )
         }
     }
 
-    private fun harvestConceptCollectionFromTBX(source: HarvestDataSource, harvestDate: Calendar, forceUpdate: Boolean, runId: String?): HarvestReport {
-        val harvested = parseTBXResponse(adapter.getConcepts(source), source.url, orgAdapter)
-        return saveIfHarvestedContainsChanges(harvested, source.id!!, source.url!!, harvestDate, source.publisherId, forceUpdate, runId)
+    private fun harvestConceptCollectionFromTBX(trigger: HarvestTrigger, harvestDate: Calendar): HarvestReport {
+        val harvested = parseTBXResponse(adapter.getConcepts(trigger.dataSourceUrl!!, trigger.acceptHeader!!), trigger.dataSourceUrl, orgAdapter)
+        return saveIfHarvestedContainsChanges(
+            harvested,
+            trigger.dataSourceId!!,
+            trigger.dataSourceUrl!!,
+            harvestDate,
+            trigger.publisherId,
+            trigger.forceUpdate,
+            trigger.runId
+        )
     }
 
     private fun saveIfHarvestedContainsChanges(
@@ -140,8 +140,6 @@ class ConceptHarvester(
                 runId = runId,
                 dataSourceId = sourceId,
                 dataSourceUrl = sourceURL,
-                id = sourceId,
-                url = sourceURL,
                 harvestError = false,
                 startTime = harvestDate.formatWithOsloTimeZone(),
                 endTime = formatNowWithOsloTimeZone()
@@ -184,8 +182,6 @@ class ConceptHarvester(
             runId = runId,
             dataSourceId = sourceId,
             dataSourceUrl = sourceURL,
-            id = sourceId,
-            url = sourceURL,
             harvestError = false,
             startTime = harvestDate.formatWithOsloTimeZone(),
             endTime = formatNowWithOsloTimeZone(),

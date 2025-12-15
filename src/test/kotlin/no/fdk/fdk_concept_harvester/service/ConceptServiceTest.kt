@@ -129,8 +129,6 @@ class ConceptServiceTest {
             }
 
             val expectedReport = HarvestReport(
-                id = "manual-delete-$CONCEPT_0_ID",
-                url = CONCEPT_0.uri,
                 harvestError = false,
                 startTime = "startTime",
                 endTime = "endTime",
@@ -211,8 +209,6 @@ class ConceptServiceTest {
             }
 
             val expectedReport = HarvestReport(
-                id = "duplicate-delete",
-                url = "https://fellesdatakatalog.digdir.no/duplicates",
                 harvestError = false,
                 startTime = "startTime",
                 endTime = "endTime",
@@ -254,8 +250,6 @@ class ConceptServiceTest {
             }
 
             val expectedReport = HarvestReport(
-                id = "duplicate-delete",
-                url = "https://fellesdatakatalog.digdir.no/duplicates",
                 harvestError = false,
                 startTime = "startTime",
                 endTime = "endTime",
