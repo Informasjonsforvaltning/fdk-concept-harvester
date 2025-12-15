@@ -3,10 +3,14 @@ permissions:
   contents: read
   packages: write
 
-on:
-  push:
-    branches:
-      - main
+permissions:
+  contents: read
+  packages: write
+#on:
+#  push:
+#    branches:
+#      - main
+#  workflow_dispatch:
 
 jobs:
   build-fdk-concept-harvester:

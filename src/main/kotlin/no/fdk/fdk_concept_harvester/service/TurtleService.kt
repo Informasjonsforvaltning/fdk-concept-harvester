@@ -22,8 +22,6 @@ import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
 import kotlin.text.Charsets.UTF_8
 
-const val UNION_ID = "union-graph"
-
 @Service
 class TurtleService(
     private val collectionTurtleRepository: CollectionTurtleRepository,
@@ -32,18 +30,6 @@ class TurtleService(
     private val fdkConceptTurtleRepository: FDKConceptTurtleRepository,
     private val harvestSourceTurtleRepository: HarvestSourceTurtleRepository
 ) {
-
-    fun saveAsCollectionUnion(model: Model, withRecords: Boolean): TurtleDBO =
-        if (withRecords) fdkCollectionTurtleRepository.save(model.createFDKCollectionTurtleDBO(UNION_ID))
-        else collectionTurtleRepository.save(model.createCollectionTurtleDBO(UNION_ID))
-
-    fun getCollectionUnion(withRecords: Boolean): String? =
-        if (withRecords) fdkCollectionTurtleRepository.findByIdOrNull(UNION_ID)
-            ?.turtle
-            ?.let { ungzip(it) }
-        else collectionTurtleRepository.findByIdOrNull(UNION_ID)
-            ?.turtle
-            ?.let { ungzip(it) }
 
     fun saveAsCollection(model: Model, fdkId: String, withRecords: Boolean): TurtleDBO =
         if (withRecords) fdkCollectionTurtleRepository.save(model.createFDKCollectionTurtleDBO(fdkId))

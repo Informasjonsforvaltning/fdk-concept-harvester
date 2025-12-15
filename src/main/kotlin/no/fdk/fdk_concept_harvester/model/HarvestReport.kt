@@ -4,8 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 @JsonIgnoreProperties(ignoreUnknown=true)
 data class HarvestReport(
-    val id: String,
-    val url: String,
+    val runId: String? = null,
+    val dataSourceId: String? = null,
+    val dataSourceUrl: String? = null,
     val dataType: String = "concept",
     val harvestError: Boolean,
     val startTime: String,

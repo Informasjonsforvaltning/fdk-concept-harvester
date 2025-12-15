@@ -107,31 +107,4 @@ class UpdateServiceTest {
         }
 
     }
-
-    @Nested
-    internal inner class UpdateUnionModel {
-
-        @Test
-        fun updateUnionModel() {
-            whenever(collectionMetaRepository.findAll())
-                .thenReturn(listOf(COLLECTION_0))
-
-            whenever(turtleService.getCollection(COLLECTION_0_ID, true))
-                .thenReturn(responseReader.readFile("collection_0.ttl"))
-            whenever(turtleService.getCollection(COLLECTION_0_ID, false))
-                .thenReturn(responseReader.readFile("harvest_response_0.ttl"))
-
-            updateService.updateUnionModels()
-
-            val collectionUnion = responseReader.parseFile("collection_0.ttl", "TURTLE")
-            val collectionUnionNoRecords = responseReader.parseFile("harvest_response_0.ttl", "TURTLE")
-
-            argumentCaptor<Model, Boolean>().apply {
-                verify(turtleService, times(2)).saveAsCollectionUnion(first.capture(), second.capture())
-                assertTrue(checkIfIsomorphicAndPrintDiff(first.firstValue, collectionUnion, "updateUnionModel-collection"))
-                assertTrue(checkIfIsomorphicAndPrintDiff(first.secondValue, collectionUnionNoRecords, "updateUnionModel-collection-norecords"))
-                assertEquals(listOf(true, false), second.allValues)
-            }
-        }
-    }
 }

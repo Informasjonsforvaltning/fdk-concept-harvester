@@ -1,7 +1,7 @@
 package no.fdk.fdk_concept_harvester.utils
 
 import no.fdk.fdk_concept_harvester.model.CollectionMeta
-import no.fdk.fdk_concept_harvester.model.HarvestDataSource
+import no.fdk.fdk_concept_harvester.model.HarvestTrigger
 import no.fdk.fdk_concept_harvester.model.Organization
 import no.fdk.fdk_concept_harvester.model.PrefLabel
 import org.testcontainers.shaded.com.google.common.collect.ImmutableMap
@@ -22,19 +22,21 @@ val MONGO_ENV_VALUES: Map<String, String> = ImmutableMap.of(
 val TEST_HARVEST_DATE: Calendar = Calendar.Builder().setTimeZone(TimeZone.getTimeZone("UTC")).setDate(2021, 0, 5).setTimeOfDay(13, 15, 39, 831).build()
 val NEW_TEST_HARVEST_DATE: Calendar = Calendar.Builder().setTimeZone(TimeZone.getTimeZone("UTC")).setDate(2021, 1, 15).setTimeOfDay(11, 52, 16, 122).build()
 
-val TEST_HARVEST_SOURCE_0 = HarvestDataSource(
-    id = "concept-harvest-source-0",
-    url = "http://localhost:5050/concept-harvest-source-0",
-    acceptHeaderValue = "text/turtle",
+val TEST_HARVEST_SOURCE_0 = HarvestTrigger(
+    runId = "run-0",
+    dataSourceId = "concept-harvest-source-0",
+    dataSourceUrl = "http://localhost:5050/concept-harvest-source-0",
+    acceptHeader = "text/turtle",
     dataType = "concept",
     dataSourceType = "SKOS-AP-NO",
     publisherId = "123456789"
 )
 
-val TEST_HARVEST_SOURCE_1 = HarvestDataSource(
-    id = "concept-harvest-source-1",
-    url = "http://localhost:5050/concept-harvest-source-1",
-    acceptHeaderValue = "text/turtle",
+val TEST_HARVEST_SOURCE_1 = HarvestTrigger(
+    runId = "run-1",
+    dataSourceId = "concept-harvest-source-1",
+    dataSourceUrl = "http://localhost:5050/concept-harvest-source-1",
+    acceptHeader = "text/turtle",
     dataType = "concept",
     dataSourceType = "SKOS-AP-NO",
     publisherId = "987654321"

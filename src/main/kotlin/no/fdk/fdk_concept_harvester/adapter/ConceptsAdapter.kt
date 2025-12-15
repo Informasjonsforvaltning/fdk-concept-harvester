@@ -1,7 +1,6 @@
 package no.fdk.fdk_concept_harvester.adapter
 
 import no.fdk.fdk_concept_harvester.harvester.HarvestException
-import no.fdk.fdk_concept_harvester.model.HarvestDataSource
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -13,14 +12,13 @@ import java.nio.charset.Charset
 @Service
 class ConceptsAdapter {
 
-    fun getConcepts(source: HarvestDataSource): String {
-        val connection = URI(source.url).toURL().openConnection() as HttpURLConnection
+    fun getConcepts(url: String, acceptHeader: String): String {
+        val connection = URI(url).toURL().openConnection() as HttpURLConnection
         try {
-            connection.setRequestProperty(HttpHeaders.ACCEPT, source.acceptHeaderValue)
-            source.authHeader?.run { connection.setRequestProperty(name, value) }
+            connection.setRequestProperty(HttpHeaders.ACCEPT, acceptHeader)
 
             return if (connection.responseCode != HttpStatus.OK.value()) {
-                throw HarvestException("${source.url} responded with ${connection.responseCode}, harvest will be aborted")
+                throw HarvestException("${url} responded with ${connection.responseCode}, harvest will be aborted")
             } else {
                 val charset = if(connection.contentEncoding != null)
                     Charset.forName(connection.contentEncoding) else Charsets.UTF_8
