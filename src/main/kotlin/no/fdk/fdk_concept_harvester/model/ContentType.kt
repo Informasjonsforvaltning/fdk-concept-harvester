@@ -9,15 +9,10 @@ enum class ContentType(vararg val headers: String) {
     JSONLD("application/ld+json"),
     NTRIPLES("application/n-triples", "text/plain"),
     NQUADS("application/n-quads", "text/n-quads"),
-    TRIX("application/trix", "application/trix+xml"),
-    TBX("application/x-tbx");
+    TRIX("application/trix", "application/trix+xml");
 
     fun isRDF(): Boolean {
         return listOf(TURTLE, N3, TRIG, RDFXML, RDFJSON, JSONLD, NTRIPLES, NQUADS, TRIX).contains(this)
-    }
-
-    fun isTBX(): Boolean {
-        return listOf(TBX).contains(this)
     }
 
     companion object{

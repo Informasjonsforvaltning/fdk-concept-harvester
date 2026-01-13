@@ -11,7 +11,6 @@ import no.fdk.fdk_concept_harvester.rdf.safeParseRDF
 import no.fdk.fdk_concept_harvester.repository.CollectionMetaRepository
 import no.fdk.fdk_concept_harvester.repository.ConceptMetaRepository
 import no.fdk.fdk_concept_harvester.service.TurtleService
-import no.fdk.fdk_concept_harvester.tbx.parseTBXResponse
 import org.apache.jena.rdf.model.Model
 import org.apache.jena.riot.Lang
 import org.slf4j.LoggerFactory
@@ -49,7 +48,6 @@ class ConceptHarvester(
                         )
                     }
                     contentType.isRDF() -> harvestConceptCollectionFromRDF(source, harvestDate, forceUpdate)
-                    contentType.isTBX() -> harvestConceptCollectionFromTBX(source, harvestDate, forceUpdate)
                     else -> {
                         LOGGER.error("Harvest source contains an unsupported content-type", HarvestException("unsupported content-type"))
                         HarvestReport(
@@ -102,11 +100,6 @@ class ConceptHarvester(
                 forceUpdate
             )
         }
-    }
-
-    private fun harvestConceptCollectionFromTBX(source: HarvestDataSource, harvestDate: Calendar, forceUpdate: Boolean): HarvestReport {
-        val harvested = parseTBXResponse(adapter.getConcepts(source), source.url, orgAdapter)
-        return saveIfHarvestedContainsChanges(harvested, source.id!!, source.url!!, harvestDate, source.publisherId, forceUpdate)
     }
 
     private fun saveIfHarvestedContainsChanges(
