@@ -18,7 +18,7 @@ The body of the trigger message has 3 relevant parameters:
 - `forceUpdate` - Indicates that the harvest should be performed, even when no changes are detected in the source
 
 A triggered harvest will download all relevant sources from fdk-harvest-admin, download everything from the source and
-try to read it as a RDF graph via a jena Model, TBX-sources will be transformed to RDF. If the source is successfully
+try to read it as a RDF graph via a jena Model will be transformed to RDF. If the source is successfully
 parsed as a jena Model it will be compared to the last harvest of the same source. The harvest process will continue if
 the source is not isomorphic to the last harvest or `forceUpdate` is true.
 
